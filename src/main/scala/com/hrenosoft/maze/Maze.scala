@@ -17,11 +17,23 @@ class Maze(private val roadPoints: Array[Point], targetPoint: Point) {
     y = roadPoints.maxBy{_.y}.y
   )
 
-/*
-  def toString():String = {
-    val maxX = roadPoints.maxBy {_.x}
+  override def toString():String = {
+    val rows = for(y <- topLeft.y to bottomRight.y)
+      yield {
+        for (x <- topLeft.x to bottomRight.x)
+          yield {
+            val pnt: Point = Point(x, y)
+            if (isTargetPoint(pnt)) {
+              '$'
+            } else if (isRoadPoint(pnt)) {
+              'X'
+            } else {
+              ' '
+            }
+          }
+      }.mkString("")
+    rows.mkString("\n")
   }
-*/
 
 }
 

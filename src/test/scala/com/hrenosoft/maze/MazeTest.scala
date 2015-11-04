@@ -38,4 +38,8 @@ class MazeTest extends FlatSpec {
   it should "not have road point at (1, 3)" in {
     assert(!testMaze.isRoadPoint(Point(1, 3)))
   }
+
+  it should "be able to produce map string it is presenting" in {
+    assert(testMaze.toString() == "X  X\nXXXX\n  X \nXXX$")
+  }
 }
