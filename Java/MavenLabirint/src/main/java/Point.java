@@ -34,7 +34,7 @@ public class Point {
 		return pointRight;
 	}
 	public Point getBottomPoint() {
-		Point pointBottom = new Point (this.x, this.y-1);
+		Point pointBottom = new Point (this.x, this.y+1);
 		return pointBottom;
 	}
 	
@@ -45,5 +45,10 @@ public class Point {
 		Integer ix = new Integer(this.x);
 		Integer iy = new Integer(this.y);
 		return (ix.equals(pnt.x) & iy.equals(pnt.y)); 
+	}
+	
+	@Override
+	public String toString() {
+		return "("+x+"; "+y+")";
 	}
 }

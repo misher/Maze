@@ -17,7 +17,7 @@ public class StrategyRecursion {
 		this.map = map;
 	}
 
-	public boolean findNewWay(int startX, int startY) {
+	public boolean findNewWay(Point sp) {
 
 
 		// Calculate sizes of map
@@ -33,61 +33,75 @@ public class StrategyRecursion {
 		ArrayList<Point> traceList = new ArrayList<Point>();
 //		Point currentPoint = new Point(0,0);
 
-		System.out.println("Coordinates X, Y "+startX+" "+startY);
+		System.out.println("Coordinates X, Y "+sp.getX()+" "+sp.getY());
 
-		if (map[startY][startX] == '$'){
-			System.out.println("Found money Coordinates X, Y "+startX+" "+startY);
+		
+		
+		if (map[sp.getY()][sp.getX()] == '$'){
+			System.out.println("Found money Coordinates X, Y "+sp.getX()+" "+sp.getY());
 			return true;
 		}
+		
 
-		if ((startX+1) < (borderX)) {
-			state1 = ((map[startY][startX+1] == '0') | (map[startY][startX+1] == '$'));
-			Point currentPoint = new Point(startX+1,startY);
+		
+		
+		Point rightP = sp.getRightPoint();
+		if (rightP.getX() < (borderX)) {
+			state1 = ((map[rightP.getY()][rightP.getX()] == '0') | (map[rightP.getY()][rightP.getX()] == '$'));
+			Point currentPoint = new Point(rightP.getX(),rightP.getY());
 //			currentPoint.setXY(startX+1,startY);
-			if (state1 & ((startX+1) != previousPoint.x) & !(traceList.contains(currentPoint))){
-				Point previousPoint = new Point(startX, startY);
+			if (state1 & (rightP.getX() != previousPoint.x) & !(traceList.contains(currentPoint))){
+				Point previousPoint = new Point(sp.getX(), sp.getY());
 //				previousPoint.setXY(startX, startY);
 				traceList.add(previousPoint);
-				if (findNewWay(startX+1, startY)) {
+				if (findNewWay(rightP)) {
 					return true;
 				}
 			}
 		}
-		if ((startY+1) < (borderY)) {
-			state2 = ((map[startY+1][startX] == '0') | (map[startY+1][startX] == '$'));
-			Point currentPoint = new Point(startX,startY+1);
+	
+		
+		Point bottomP = sp.getBottomPoint();
+		if (bottomP.getY() < (borderY)) {
+			state2 = ((map[bottomP.getY()][bottomP.getX()] == '0') | (map[bottomP.getY()][bottomP.getX()] == '$'));
+			Point currentPoint = new Point(bottomP.getX(),bottomP.getY());
 //			currentPoint.setXY(startX,startY+1);
-			if (state2 & ((startY+1) != previousPoint.y) & !(traceList.contains(currentPoint))){
-				Point previousPoint = new Point(startX, startY);
+			if (state2 & (bottomP.getY() != previousPoint.y) & !(traceList.contains(currentPoint))){
+				Point previousPoint = new Point(sp.getX(), sp.getY());
 //				previousPoint.setXY(startX, startY);
 				traceList.add(previousPoint);
-				if (findNewWay(startX, startY+1)) {
+				if (findNewWay(bottomP)) {
 					return true;
 				}
 			}
 		}
-		if ((startX-1) != -1) {
-			state3 = ((map[startY][startX-1] == '0') | (map[startY][startX-1] == '$'));
-			Point currentPoint = new Point(startX-1,startY);
+		
+		
+		Point leftP = sp.getLeftPoint();
+		if (leftP.getX() != -1) {
+			state3 = ((map[leftP.getY()][leftP.getX()] == '0') | (map[leftP.getY()][leftP.getX()] == '$'));
+			Point currentPoint = new Point(leftP.getX(),leftP.getY());
 //			currentPoint.setXY(startX-1,startY);
-			if (state3 & ((startX-1) != previousPoint.x) & !(traceList.contains(currentPoint))){
-				Point previousPoint = new Point(startX, startY);
+			if (state3 & (leftP.getX() != previousPoint.x) & !(traceList.contains(currentPoint))){
+				Point previousPoint = new Point(sp.getX(), sp.getY());
 //				previousPoint.setXY(startX, startY);
 				traceList.add(previousPoint);
-				if (findNewWay(startX-1, startY)) {
+				if (findNewWay(leftP)) {
 					return true;
 				}
 			}
 		}
-		if ((startY-1) != -1) {
-			state4 = ((map[startY-1][startX] == '0') | (map[startY-1][startX] == '$'));
-			Point currentPoint = new Point(startX,startY-1);
+		
+		Point topP = sp.getTopPoint();
+		if ((topP.getY()) != -1) {
+			state4 = ((map[topP.getY()][topP.getX()] == '0') | (map[topP.getY()][topP.getX()] == '$'));
+			Point currentPoint = new Point(topP.getX(),topP.getY());
 //			currentPoint.setXY(startX,startY-1);
-			if (state4 & ((startY-1) != previousPoint.y) & !(traceList.contains(currentPoint))){
-				Point previousPoint = new Point(startX, startY);
+			if (state4 & (topP.getY() != previousPoint.y) & !(traceList.contains(currentPoint))){
+				Point previousPoint = new Point(sp.getX(), sp.getY());
 //				previousPoint.setXY(startX, startY);
 				traceList.add(previousPoint);
-				if (findNewWay(startX, startY-1)) {
+				if (findNewWay(topP)) {
 					return true;
 				}
 			}
