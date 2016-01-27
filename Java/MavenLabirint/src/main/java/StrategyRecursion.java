@@ -16,6 +16,8 @@ public class StrategyRecursion {
 		super();
 		this.map = map;
 	}
+	
+	ArrayList<Point> traceList = new ArrayList<Point>();
 
 	public boolean findNewWay(Point sp) {
 
@@ -30,7 +32,7 @@ public class StrategyRecursion {
 		boolean state4 = false;
 		
 
-		ArrayList<Point> traceList = new ArrayList<Point>();
+//		ArrayList<Point> traceList = new ArrayList<Point>();
 //		Point currentPoint = new Point(0,0);
 
 		System.out.println("Coordinates X, Y "+sp.getX()+" "+sp.getY());
