@@ -31,7 +31,7 @@ public class StrategyRecursion {
 		
 
 		ArrayList<Point> traceList = new ArrayList<Point>();
-		Point currentPoint = new Point(0,0);
+//		Point currentPoint = new Point(0,0);
 
 		System.out.println("Coordinates X, Y "+startX+" "+startY);
 
@@ -42,9 +42,11 @@ public class StrategyRecursion {
 
 		if ((startX+1) < (borderX)) {
 			state1 = ((map[startY][startX+1] == '0') | (map[startY][startX+1] == '$'));
-			currentPoint.setXY(startX+1,startY);
+			Point currentPoint = new Point(startX+1,startY);
+//			currentPoint.setXY(startX+1,startY);
 			if (state1 & ((startX+1) != previousPoint.x) & !(traceList.contains(currentPoint))){
-				previousPoint.setXY(startX, startY);
+				Point previousPoint = new Point(startX, startY);
+//				previousPoint.setXY(startX, startY);
 				traceList.add(previousPoint);
 				if (findNewWay(startX+1, startY)) {
 					return true;
@@ -53,9 +55,11 @@ public class StrategyRecursion {
 		}
 		if ((startY+1) < (borderY)) {
 			state2 = ((map[startY+1][startX] == '0') | (map[startY+1][startX] == '$'));
-			currentPoint.setXY(startX,startY+1);
+			Point currentPoint = new Point(startX,startY+1);
+//			currentPoint.setXY(startX,startY+1);
 			if (state2 & ((startY+1) != previousPoint.y) & !(traceList.contains(currentPoint))){
-				previousPoint.setXY(startX, startY);
+				Point previousPoint = new Point(startX, startY);
+//				previousPoint.setXY(startX, startY);
 				traceList.add(previousPoint);
 				if (findNewWay(startX, startY+1)) {
 					return true;
@@ -64,9 +68,11 @@ public class StrategyRecursion {
 		}
 		if ((startX-1) != -1) {
 			state3 = ((map[startY][startX-1] == '0') | (map[startY][startX-1] == '$'));
-			currentPoint.setXY(startX-1,startY);
+			Point currentPoint = new Point(startX-1,startY);
+//			currentPoint.setXY(startX-1,startY);
 			if (state3 & ((startX-1) != previousPoint.x) & !(traceList.contains(currentPoint))){
-				previousPoint.setXY(startX, startY);
+				Point previousPoint = new Point(startX, startY);
+//				previousPoint.setXY(startX, startY);
 				traceList.add(previousPoint);
 				if (findNewWay(startX-1, startY)) {
 					return true;
@@ -75,9 +81,11 @@ public class StrategyRecursion {
 		}
 		if ((startY-1) != -1) {
 			state4 = ((map[startY-1][startX] == '0') | (map[startY-1][startX] == '$'));
-			currentPoint.setXY(startX,startY-1);
+			Point currentPoint = new Point(startX,startY-1);
+//			currentPoint.setXY(startX,startY-1);
 			if (state4 & ((startY-1) != previousPoint.y) & !(traceList.contains(currentPoint))){
-				previousPoint.setXY(startX, startY);
+				Point previousPoint = new Point(startX, startY);
+//				previousPoint.setXY(startX, startY);
 				traceList.add(previousPoint);
 				if (findNewWay(startX, startY-1)) {
 					return true;

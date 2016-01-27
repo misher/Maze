@@ -2,8 +2,8 @@
 
 public class Point {
 
-	public int x;
-	public int y;
+	public final int x;
+	public final int y;
 	
 	public Point(int x, int y) {
 		super();
@@ -14,19 +14,30 @@ public class Point {
 	public int getX() {
 		return x;
 	}
-	public void setX(int x) {
-		this.x = x;
-	}
+
 	public int getY() {
 		return y;
 	}
-	public void setY(int y) {
-		this.y = y;
+
+	public Point getLeftPoint() {
+		Point pointLeft = new Point (this.x-1, this.y);
+		return pointLeft;
 	}
-	public void setXY(int x, int y) {
-		this.x = x;
-		this.y = y;
+	
+	public Point getTopPoint() {
+		Point pointTop = new Point (this.x, this.y-1);
+		return pointTop;
 	}
+	
+	public Point getRightPoint() {
+		Point pointRight = new Point (this.x+1, this.y);
+		return pointRight;
+	}
+	public Point getBottomPoint() {
+		Point pointBottom = new Point (this.x, this.y-1);
+		return pointBottom;
+	}
+	
 	
 	@Override
 	public boolean equals(Object obj) {
