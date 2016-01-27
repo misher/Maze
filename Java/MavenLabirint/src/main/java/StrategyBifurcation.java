@@ -78,8 +78,9 @@ public class StrategyBifurcation {
 	
 			// Find bifurcation point
 			if ((state1 & state2) | (state1 & state3) | (state1 & state4) | (state2 & state3) | (state2 & state4) | (state3 & state4)){
-				bifurcationPoint.setX(currentPoint.x);
-				bifurcationPoint.setY(currentPoint.y);
+//				bifurcationPoint.setX(currentPoint.x);
+//				bifurcationPoint.setY(currentPoint.y);
+				bifurcationPoint = currentPoint;
 				pointsOfBifurcation.add(bifurcationPoint);
 				bifurcationDelta = 1;
 			}
@@ -88,32 +89,36 @@ public class StrategyBifurcation {
 			if (stateMoney1 == true){
 				System.out.println("Moneys are found 1"+"\n"+"Coordinates: "+"\n"+(currentPoint.x+1)+" "+(currentPoint.y));
 				stateOfWhile = false;
-				moneyPoint.x = currentPoint.x+1;
-				moneyPoint.y = currentPoint.y;
+//				moneyPoint.x = currentPoint.x+1;
+//				moneyPoint.y = currentPoint.y;
+				moneyPoint = currentPoint.getRightPoint();
 			}
 			
 			// Moneys founded in state 2
 			if (stateMoney2 == true){
 				System.out.println("Moneys are found 2"+"\n"+"Coordinates: "+"\n"+(currentPoint.x)+" "+(currentPoint.y+1));
 				stateOfWhile = false;
-				moneyPoint.x = currentPoint.x;
-				moneyPoint.y = currentPoint.y+1;
+//				moneyPoint.x = currentPoint.x;
+//				moneyPoint.y = currentPoint.y+1;
+				moneyPoint = currentPoint.getBottomPoint();
 			}
 			
 			// Moneys founded in state 3
 			if (stateMoney3 == true){
 				System.out.println("Moneys are found 2"+"\n"+"Coordinates: "+"\n"+(currentPoint.x-1)+" "+(currentPoint.y));
 				stateOfWhile = false;
-				moneyPoint.x = currentPoint.x-1;
-				moneyPoint.y = currentPoint.y;
+//				moneyPoint.x = currentPoint.x-1;
+//				moneyPoint.y = currentPoint.y;
+				moneyPoint = currentPoint.getLeftPoint();
 			}
 			
 			// Moneys founded in state 4
 			if (stateMoney4 == true){
 				System.out.println("Moneys are found 2"+"\n"+"Coordinates: "+"\n"+(currentPoint.x)+" "+(currentPoint.y-1));
 				stateOfWhile = false;
-				moneyPoint.x = currentPoint.x;
-				moneyPoint.y = currentPoint.y-1;
+//				moneyPoint.x = currentPoint.x;
+//				moneyPoint.y = currentPoint.y-1;
+				moneyPoint = currentPoint.getTopPoint();
 			}
 
 			// Way state 1 handler
@@ -122,10 +127,12 @@ public class StrategyBifurcation {
 					map[currentPoint.y][currentPoint.x+1]='X';
 				}
 				traceList.add(currentPoint);
-				previousPoint.setX(currentPoint.x); 
-				previousPoint.setY(currentPoint.y); 
-				currentPoint.setX(currentPoint.x+1);
-				currentPoint.setY(currentPoint.y);
+				previousPoint = currentPoint;
+				currentPoint = currentPoint.getRightPoint();
+//				previousPoint.setX(currentPoint.x); 
+//				previousPoint.setY(currentPoint.y); 
+//				currentPoint.setX(currentPoint.x+1);
+//				currentPoint.setY(currentPoint.y);
 				state2 = false;
 				state3 = false;
 				state4 = false;
@@ -137,10 +144,12 @@ public class StrategyBifurcation {
 					map[currentPoint.y+1][currentPoint.x]='X';
 				}
 				traceList.add(currentPoint);
-				previousPoint.setX(currentPoint.x); 
-				previousPoint.setY(currentPoint.y); 
-				currentPoint.setX(currentPoint.x);
-				currentPoint.setY(currentPoint.y+1);
+				previousPoint = currentPoint;
+				currentPoint = currentPoint.getBottomPoint();
+//				previousPoint.setX(currentPoint.x); 
+//				previousPoint.setY(currentPoint.y); 
+//				currentPoint.setX(currentPoint.x);
+//				currentPoint.setY(currentPoint.y+1);
 				state1 = false;
 				state3 = false;
 				state4 = false;
@@ -152,10 +161,12 @@ public class StrategyBifurcation {
 					map[currentPoint.y][currentPoint.x-1]='X';
 				}
 				traceList.add(currentPoint);
-				previousPoint.setX(currentPoint.x); 
-				previousPoint.setY(currentPoint.y); 
-				currentPoint.setX(currentPoint.x-1);
-				currentPoint.setY(currentPoint.y);
+				previousPoint = currentPoint;
+				currentPoint = currentPoint.getLeftPoint();
+//				previousPoint.setX(currentPoint.x); 
+//				previousPoint.setY(currentPoint.y); 
+//				currentPoint.setX(currentPoint.x-1);
+//				currentPoint.setY(currentPoint.y);
 				state1 = false;
 				state2 = false;
 				state4 = false;
@@ -167,10 +178,12 @@ public class StrategyBifurcation {
 					map[currentPoint.y-1][currentPoint.x]='X';
 				}
 				traceList.add(currentPoint);
-				previousPoint.setX(currentPoint.x); 
-				previousPoint.setY(currentPoint.y); 
-				currentPoint.setX(currentPoint.x);
-				currentPoint.setY(currentPoint.y-1);
+				previousPoint = currentPoint;
+				currentPoint = currentPoint.getTopPoint();
+//				previousPoint.setX(currentPoint.x); 
+//				previousPoint.setY(currentPoint.y); 
+//				currentPoint.setX(currentPoint.x);
+//				currentPoint.setY(currentPoint.y-1);
 				state1 = false;
 				state2 = false;
 				state3 = false;
@@ -180,8 +193,14 @@ public class StrategyBifurcation {
 			if ((state1 == false) & (state2 == false) & (state3 == false) & (state4 == false) & (stateMoney1 == false) & (stateMoney2 == false) & (stateMoney3 == false) & (stateMoney4 == false)){
 				if (pointsOfBifurcation.size() > 0){
 					bifurcationPoint = pointsOfBifurcation.get(pointsOfBifurcation.size()-bifurcationDelta);
-					currentPoint.x = bifurcationPoint.x;
-					currentPoint.y = bifurcationPoint.y;
+//					currentPoint.x = bifurcationPoint.x;
+//					currentPoint.y = bifurcationPoint.y;
+					currentPoint = bifurcationPoint;
+				}
+				if (pointsOfBifurcation.size() == bifurcationDelta) {
+					Point resultPoint = new Point(-1,-1);
+					System.out.println("Labirinit has not ways to money");
+					return resultPoint;
 				}
 				bifurcationDelta++;
 			}

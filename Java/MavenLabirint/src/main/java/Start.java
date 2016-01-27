@@ -21,10 +21,10 @@ public class Start {
 	}
 	
 	public static void main(String[] args) {
-//		StrategyBifurcation startStrategy = new StrategyBifurcation(mapNew);
-//		startStrategy.findNewWay(2, 0);
-		Point start = new Point(2,0);
-		StrategyRecursion startRecursion = new StrategyRecursion(mapNew);
-		startRecursion.findNewWay(start);
+		StrategyBifurcation startStrategy = new StrategyBifurcation(mapNew);
+		startStrategy.findNewWay(2, 0);
+//		Point start = new Point(2,0);
+//		StrategyRecursion startRecursion = new StrategyRecursion(mapNew);
+//		startRecursion.findNewWay(start);
 	}
 }
