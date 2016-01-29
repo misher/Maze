@@ -4,7 +4,7 @@ import org.junit.Test;
 
 
 
-public class PointTests {
+public class PointTest {
 
 	Direction dirTestLeft = Direction.left;
 	

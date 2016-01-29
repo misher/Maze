@@ -3,7 +3,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 
-public class PassabilityOfLabiritntsTests {
+public class PassabilityOfLabiritntsTest {
 
 	@Test
 //	public void test() {
