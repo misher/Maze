@@ -3,17 +3,21 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 
+
 public class PointTests {
 
+	Direction dirTestLeft = Direction.left;
+	
 	@Test
 //	public void test() {
 //		fail("Not yet implemented");
 //	}
-
+	
+	
 	public void pointTestEqual() {
 		int x = 0;
 		int y = 0;
-		// MyClass is tested
+		// Some points
 		Point tester = new Point(x, y);
 		Point example = new Point(0,0);
 		Point exampleTwo = new Point(1,1);
@@ -22,13 +26,16 @@ public class PointTests {
 		Point expectedTop = new Point(5,4);
 		Point expectedRight = new Point(6,5);
 		Point expectedBottom = new Point(5,6);
-		// assert statements
+		// tests for overrided method equals
 		assertEquals("equal true", true, tester.equals(example));
 		assertEquals("equal false", false, tester.equals(exampleTwo));
+		// test for neighbors points
 		assertEquals("equal left", expectedLeft, testPoint.getLeftPoint());
 		assertEquals("equal top", expectedTop, testPoint.getTopPoint());
 		assertEquals("equal rigth", expectedRight, testPoint.getRightPoint());
 		assertEquals("equal bottom", expectedBottom, testPoint.getBottomPoint());
+		// test for enum method
+		assertEquals("equal left", expectedLeft, testPoint.getDirPoint(dirTestLeft));
 	}
 }
 

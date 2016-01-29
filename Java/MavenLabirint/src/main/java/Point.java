@@ -1,3 +1,4 @@
+enum Direction { left, top, right, bottom }
 
 
 public class Point {
@@ -5,30 +6,30 @@ public class Point {
 	public final int x;
 	public final int y;
 	
+	
 	public Point(int x, int y) {
 		super();
 		this.x = x;
 		this.y = y;
 	}
 	
+	
 	public int getX() {
 		return x;
 	}
-
 	public int getY() {
 		return y;
 	}
+	
 
 	public Point getLeftPoint() {
 		Point pointLeft = new Point (this.x-1, this.y);
 		return pointLeft;
 	}
-	
 	public Point getTopPoint() {
 		Point pointTop = new Point (this.x, this.y-1);
 		return pointTop;
 	}
-	
 	public Point getRightPoint() {
 		Point pointRight = new Point (this.x+1, this.y);
 		return pointRight;
@@ -36,6 +37,23 @@ public class Point {
 	public Point getBottomPoint() {
 		Point pointBottom = new Point (this.x, this.y+1);
 		return pointBottom;
+	}
+	
+	
+	public Point getDirPoint(Direction dir){
+		if (dir == Direction.left) {
+			getLeftPoint();
+		}
+		if (dir == Direction.top) {
+			getTopPoint();
+		}
+		if (dir == Direction.right) {
+			getRightPoint();
+		}
+		if (dir == Direction.bottom) {
+			getBottomPoint();
+		}
+		return null;
 	}
 	
 	

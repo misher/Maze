@@ -1,11 +1,11 @@
-
-
 import java.util.ArrayList;
 
 
 public class StrategyBifurcation {
 
+	
 	public char[][] map;
+	
 	
 	public StrategyBifurcation(char[][] map){
 		super();
@@ -57,6 +57,7 @@ public class StrategyBifurcation {
 			
 			Point bifurcationPoint = new Point(-1, -1);
 			
+			
 			// Look out for a new ways
 			if ((currentPoint.x+1) < (borderX)) {
 				stateMoney1 = (map[currentPoint.y][currentPoint.x+1] == '$');
@@ -78,8 +79,6 @@ public class StrategyBifurcation {
 	
 			// Find bifurcation point
 			if ((state1 & state2) | (state1 & state3) | (state1 & state4) | (state2 & state3) | (state2 & state4) | (state3 & state4)){
-//				bifurcationPoint.setX(currentPoint.x);
-//				bifurcationPoint.setY(currentPoint.y);
 				bifurcationPoint = currentPoint;
 				pointsOfBifurcation.add(bifurcationPoint);
 				bifurcationDelta = 1;
@@ -89,8 +88,6 @@ public class StrategyBifurcation {
 			if (stateMoney1 == true){
 				System.out.println("Moneys are found 1"+"\n"+"Coordinates: "+"\n"+(currentPoint.x+1)+" "+(currentPoint.y));
 				stateOfWhile = false;
-//				moneyPoint.x = currentPoint.x+1;
-//				moneyPoint.y = currentPoint.y;
 				moneyPoint = currentPoint.getRightPoint();
 			}
 			
@@ -98,8 +95,6 @@ public class StrategyBifurcation {
 			if (stateMoney2 == true){
 				System.out.println("Moneys are found 2"+"\n"+"Coordinates: "+"\n"+(currentPoint.x)+" "+(currentPoint.y+1));
 				stateOfWhile = false;
-//				moneyPoint.x = currentPoint.x;
-//				moneyPoint.y = currentPoint.y+1;
 				moneyPoint = currentPoint.getBottomPoint();
 			}
 			
@@ -107,8 +102,6 @@ public class StrategyBifurcation {
 			if (stateMoney3 == true){
 				System.out.println("Moneys are found 2"+"\n"+"Coordinates: "+"\n"+(currentPoint.x-1)+" "+(currentPoint.y));
 				stateOfWhile = false;
-//				moneyPoint.x = currentPoint.x-1;
-//				moneyPoint.y = currentPoint.y;
 				moneyPoint = currentPoint.getLeftPoint();
 			}
 			
@@ -116,8 +109,6 @@ public class StrategyBifurcation {
 			if (stateMoney4 == true){
 				System.out.println("Moneys are found 2"+"\n"+"Coordinates: "+"\n"+(currentPoint.x)+" "+(currentPoint.y-1));
 				stateOfWhile = false;
-//				moneyPoint.x = currentPoint.x;
-//				moneyPoint.y = currentPoint.y-1;
 				moneyPoint = currentPoint.getTopPoint();
 			}
 
@@ -129,10 +120,6 @@ public class StrategyBifurcation {
 				traceList.add(currentPoint);
 				previousPoint = currentPoint;
 				currentPoint = currentPoint.getRightPoint();
-//				previousPoint.setX(currentPoint.x); 
-//				previousPoint.setY(currentPoint.y); 
-//				currentPoint.setX(currentPoint.x+1);
-//				currentPoint.setY(currentPoint.y);
 				state2 = false;
 				state3 = false;
 				state4 = false;
@@ -146,10 +133,6 @@ public class StrategyBifurcation {
 				traceList.add(currentPoint);
 				previousPoint = currentPoint;
 				currentPoint = currentPoint.getBottomPoint();
-//				previousPoint.setX(currentPoint.x); 
-//				previousPoint.setY(currentPoint.y); 
-//				currentPoint.setX(currentPoint.x);
-//				currentPoint.setY(currentPoint.y+1);
 				state1 = false;
 				state3 = false;
 				state4 = false;
@@ -163,10 +146,6 @@ public class StrategyBifurcation {
 				traceList.add(currentPoint);
 				previousPoint = currentPoint;
 				currentPoint = currentPoint.getLeftPoint();
-//				previousPoint.setX(currentPoint.x); 
-//				previousPoint.setY(currentPoint.y); 
-//				currentPoint.setX(currentPoint.x-1);
-//				currentPoint.setY(currentPoint.y);
 				state1 = false;
 				state2 = false;
 				state4 = false;
@@ -180,10 +159,6 @@ public class StrategyBifurcation {
 				traceList.add(currentPoint);
 				previousPoint = currentPoint;
 				currentPoint = currentPoint.getTopPoint();
-//				previousPoint.setX(currentPoint.x); 
-//				previousPoint.setY(currentPoint.y); 
-//				currentPoint.setX(currentPoint.x);
-//				currentPoint.setY(currentPoint.y-1);
 				state1 = false;
 				state2 = false;
 				state3 = false;
@@ -193,8 +168,6 @@ public class StrategyBifurcation {
 			if ((state1 == false) & (state2 == false) & (state3 == false) & (state4 == false) & (stateMoney1 == false) & (stateMoney2 == false) & (stateMoney3 == false) & (stateMoney4 == false)){
 				if (pointsOfBifurcation.size() > 0){
 					bifurcationPoint = pointsOfBifurcation.get(pointsOfBifurcation.size()-bifurcationDelta);
-//					currentPoint.x = bifurcationPoint.x;
-//					currentPoint.y = bifurcationPoint.y;
 					currentPoint = bifurcationPoint;
 				}
 				if (pointsOfBifurcation.size() == bifurcationDelta) {
