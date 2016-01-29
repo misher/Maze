@@ -6,7 +6,7 @@ import org.junit.Test;
 
 public class PointTest {
 
-	Direction dirTestLeft = Direction.left;
+
 	
 	@Test
 //	public void test() {
@@ -35,7 +35,7 @@ public class PointTest {
 		assertEquals("equal rigth", expectedRight, testPoint.getRightPoint());
 		assertEquals("equal bottom", expectedBottom, testPoint.getBottomPoint());
 		// test for enum method
-		assertEquals("equal left", expectedLeft, testPoint.getDirPoint(dirTestLeft));
+		assertEquals("equal left", expectedLeft, testPoint.getDirPoint(Direction.left));
 	}
 }
 

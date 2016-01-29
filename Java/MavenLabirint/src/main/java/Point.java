@@ -1,4 +1,4 @@
-enum Direction { left, top, right, bottom }
+enum Direction { left, top, right, bottom,  } //TODO: rename enum fields with CAPITAL_CASE
 
 
 public class Point {
@@ -40,11 +40,12 @@ public class Point {
 	}
 	
 	
-	public Point getDirPoint(Direction dir){
-		if (dir == Direction.left) {
+	public Point getDirPoint(Direction dir) {
+		if (Direction.left.equals(dir)) {
 			getLeftPoint();
 		}
-		if (dir == Direction.top) {
+
+		if (dir == Direction.top) {//TODO: refactor as above
 			getTopPoint();
 		}
 		if (dir == Direction.right) {
@@ -53,16 +54,28 @@ public class Point {
 		if (dir == Direction.bottom) {
 			getBottomPoint();
 		}
-		return null;
+		throw new RuntimeException("Programming Error");
 	}
 	
 	
 	@Override
 	public boolean equals(Object obj) {
+		if (obj == null || !(obj instanceof Point)) {
+			return false;
+		}
 		Point pnt = (Point) obj;
 		Integer ix = new Integer(this.x);
 		Integer iy = new Integer(this.y);
-		return (ix.equals(pnt.x) & iy.equals(pnt.y)); 
+		if (obj == null) {
+			throw new NullPointerException();
+		}
+		if (ix == null) {
+			throw new NullPointerException("Pizdets");
+		}
+
+		boolean xEquals = ix.equals(pnt.x);
+		boolean yEquals = iy.equals(pnt.y);
+		return (xEquals && yEquals);
 	}
 	
 	@Override

@@ -43,6 +43,7 @@ public class StrategyRecursion {
 		
 		
 		Point rightP = sp.getRightPoint();
+
 		if (rightP.getX() < (borderX)) {
 			state1 = ((map[rightP.getY()][rightP.getX()] == '0') | (map[rightP.getY()][rightP.getX()] == '$'));
 			Point currentPoint = new Point(rightP.getX(),rightP.getY());
