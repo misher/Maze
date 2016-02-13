@@ -5,9 +5,7 @@ public class StrategyRecursion {
 
 	
 	public char[][] map;
-	public Point bifurcationPoint = new Point(0,0);
 	public Point previousPoint = new Point(-1,-1);
-	public int counter;
 
 
 	public StrategyRecursion(char[][] map){
@@ -103,4 +101,6 @@ public class StrategyRecursion {
 		
 		
 	}
+	
+	
 }
