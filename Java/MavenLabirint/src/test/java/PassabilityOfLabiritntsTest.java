@@ -24,8 +24,8 @@ public class PassabilityOfLabiritntsTest {
 			   {'1', '1', '0', '1', '0', '1', '1', '1', '1'},
 			   {'1', '1', '1', '1', '1', '1', '1', '1', '1'}};
 
-	private StrategyRecursion startTestPassRecursion = new StrategyRecursion(mapPass);
-	private StrategyRecursion startTestNonPassRecursion = new StrategyRecursion(mapNonPass);
+	private StrategyRecursion startTestPassRecursion = new StrategyRecursion();
+	private StrategyRecursion startTestNonPassRecursion = new StrategyRecursion();
 	private StrategyBifurcation startTestPassBif = new StrategyBifurcation(mapPass);
 	private StrategyBifurcation startTestNonPassBif = new StrategyBifurcation(mapNonPass);
 	
@@ -33,18 +33,20 @@ public class PassabilityOfLabiritntsTest {
 	private Point moneyCoordinate = new Point(4,7);
 	private Point deadRes = new Point(-1,-1);	
 	
+	MapMaze recMapPassMaze = new MapMaze(mapPass);
+	MapMaze recMapNonPassMaze = new MapMaze(mapNonPass);
 
 	
 	@Test
 	public void pointTestRecPass() {	
 		// assert statements	
-		assertEquals("equal true", true, startTestPassRecursion.findNewWay(start));
+		assertEquals("equal true", true, startTestPassRecursion.findNewWay(recMapPassMaze, start));
 	}
 	
 	@Test
 	public void pointTestRecNonPass() {	
 		// assert statements	
-		assertEquals("equal false", false, startTestNonPassRecursion.findNewWay(start));
+		assertEquals("equal false", false, startTestNonPassRecursion.findNewWay(recMapNonPassMaze, start));
 	}
 	
 	@Test

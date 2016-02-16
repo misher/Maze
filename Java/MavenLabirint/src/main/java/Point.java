@@ -1,4 +1,4 @@
-enum Direction { left, top, right, bottom,  } //TODO: rename enum fields with CAPITAL_CASE
+enum Direction { left, top, right, bottom  } //TODO: rename enum fields with CAPITAL_CASE
 
 
 public class Point {
