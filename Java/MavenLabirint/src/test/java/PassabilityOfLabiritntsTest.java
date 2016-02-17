@@ -26,39 +26,39 @@ public class PassabilityOfLabiritntsTest {
 
 	private StrategyRecursion startTestPassRecursion = new StrategyRecursion();
 	private StrategyRecursion startTestNonPassRecursion = new StrategyRecursion();
-	private StrategyBifurcation startTestPassBif = new StrategyBifurcation(mapPass);
-	private StrategyBifurcation startTestNonPassBif = new StrategyBifurcation(mapNonPass);
+	private StrategyBifurcation startTestPassBif = new StrategyBifurcation();
+	private StrategyBifurcation startTestNonPassBif = new StrategyBifurcation();
 	
 	private Point start = new Point(2,0);
 	private Point moneyCoordinate = new Point(4,7);
 	private Point deadRes = new Point(-1,-1);	
 	
-	MapMaze recMapPassMaze = new MapMaze(mapPass);
-	MapMaze recMapNonPassMaze = new MapMaze(mapNonPass);
+	MapMaze MapPassMaze = new MapMaze(mapPass);
+	MapMaze MapNonPassMaze = new MapMaze(mapNonPass);
 
 	
 	@Test
 	public void pointTestRecPass() {	
 		// assert statements	
-		assertEquals("equal true", true, startTestPassRecursion.findNewWay(recMapPassMaze, start));
+		assertEquals("equal true", true, startTestPassRecursion.findNewWay(MapPassMaze, start));
 	}
 	
 	@Test
 	public void pointTestRecNonPass() {	
 		// assert statements	
-		assertEquals("equal false", false, startTestNonPassRecursion.findNewWay(recMapNonPassMaze, start));
+		assertEquals("equal false", false, startTestNonPassRecursion.findNewWay(MapNonPassMaze, start));
 	}
 	
 	@Test
 	public void pointTestBifPass() {	
 		// assert statements	
-		assertEquals("equal money coordinate point", moneyCoordinate, startTestPassBif.findNewWay(2,0));
+		assertEquals("equal money coordinate point", moneyCoordinate, startTestPassBif.findNewWay(MapPassMaze, start));
 	}
 	
 	@Test
 	public void pointTestBifNonPass() {	
 		// assert statements	
-		assertEquals("equal dead result point", deadRes, startTestNonPassBif.findNewWay(2,0));
+		assertEquals("equal dead result point", deadRes, startTestNonPassBif.findNewWay(MapNonPassMaze, start));
 	}
 }
 

@@ -1,3 +1,3 @@
 public interface IStrategy {
-	boolean findWay(char[][] map, Point sp);
+	boolean findWay(IMaze maze, Point sp);
 }

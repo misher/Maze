@@ -3,15 +3,10 @@ import java.util.ArrayList;
 
 public class StrategyRecursion {
 
-//	IMaze maze;
-//	
-//	public StrategyRecursion(IMaze maze){
-//		super();
-//	}
-//	
 	
 	public Point previousPoint = new Point(-1,-1);
 	ArrayList<Point> traceList = new ArrayList<Point>();
+	
 
 	public boolean findNewWay(IMaze maze, Point sp) {
 	

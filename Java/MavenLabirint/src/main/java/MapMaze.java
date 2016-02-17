@@ -1,7 +1,7 @@
 
 public class MapMaze implements IMaze {
 
-	private char[][] map;
+	public char[][] map;
 	int borderY;
 	int borderX;
 
