@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 
-public class StrategyRecursion {
+public class StrategyRecursion implements IStrategy{
 
 	
 	public Point previousPoint = new Point(-1,-1);
