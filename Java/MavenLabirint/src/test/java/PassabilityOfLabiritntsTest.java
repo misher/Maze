@@ -26,11 +26,10 @@ public class PassabilityOfLabiritntsTest {
 	private StrategyRecursion startTestPassRecursion = new StrategyRecursion();
 	private StrategyRecursion startTestNonPassRecursion = new StrategyRecursion();
 	private StrategyBifurcation startTestPassBif = new StrategyBifurcation();
-//	private StrategyBifurcation startTestNonPassBif = new StrategyBifurcation();
+	private StrategyBifurcation startTestNonPassBif = new StrategyBifurcation();
 	
 	private Point start = new Point(2,0);
-//	private Point moneyCoordinate = new Point(4,7);
-//	private Point deadRes = new Point(-1,-1);	
+
 	
 	MapMaze MapPassMaze = new MapMaze(mapPass);
 	MapMaze MapNonPassMaze = new MapMaze(mapNonPass);
@@ -54,11 +53,11 @@ public class PassabilityOfLabiritntsTest {
 		assertEquals("equal money coordinate point", true, startTestPassBif.findNewWay(MapPassMaze, start));
 	}
 	
-//	@Test
-//	public void pointTestBifNonPass() {	
-//		// assert statements	
-//		assertEquals("equal dead result point", false, startTestNonPassBif.findNewWay(MapNonPassMaze, start));
-//	}
+	@Test
+	public void pointTestBifNonPass() {	
+		// assert statements	
+		assertEquals("equal dead result point", false, startTestNonPassBif.findNewWay(MapNonPassMaze, start));
+	}
 }
 
 

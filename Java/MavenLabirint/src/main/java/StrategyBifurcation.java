@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class StrategyBifurcation implements IStrategy{
 
-	static private boolean findNewWayOldest(MapMaze maze, Point sp) {
+	public boolean findNewWay(IMaze maze, Point sp) {
 
 		// Creating points of running
 		Point currentPoint = sp;
@@ -60,9 +60,9 @@ public class StrategyBifurcation implements IStrategy{
 				stateCorRoad = ((!(traceList.contains(currentPoint.getDirPoint(dir)))) && (maze.isRoadPoint(currentPoint.getDirPoint(dir))));
 				// Way state handler
 				if (stateCorRoad == true){
-					if (bifurcationPoint.equals(currentPoint)){
-						maze.map[currentPoint.getDirPoint(dir).getY()][currentPoint.getDirPoint(dir).getX()]='X';
-					}
+//					if (bifurcationPoint.equals(currentPoint)){
+//						maze.map[currentPoint.getDirPoint(dir).getY()][currentPoint.getDirPoint(dir).getX()]='X';
+//					}
 					traceList.add(currentPoint);
 					previousPoint = currentPoint;
 					currentPoint = currentPoint.getDirPoint(dir);
@@ -94,21 +94,21 @@ public class StrategyBifurcation implements IStrategy{
 		return true;
 	}
 
-	public boolean findNewWay(IMaze maze, Point sp) {
-		
-		char[][] mapNew = {{'1', '1', '0', '1', '1', '1', '1', '1', '1'},
-			  {'1', '0', '0', '0', '0', '0', '0', '0', '1'},
-			  {'1', '1', '1', '1', '0', '1', '1', '1', '1'},
-			  {'1', '1', '1', '1', '0', '0', '0', '0', '1'},
-			  {'1', '1', '0', '0', '0', '1', '0', '1', '1'},
-			  {'1', '1', '0', '1', '0', '1', '0', '$', '1'},
-			  {'1', '1', '0', '1', '0', '1', '1', '1', '1'},
-			  {'1', '1', '1', '1', '1', '1', '1', '1', '1'}};
-
-		MapMaze someMapMaze = new MapMaze(mapNew);
-		maze = someMapMaze;
-				
-		return findNewWayOldest(someMapMaze, sp);
-		
-	}
+//	public boolean findNewWay(IMaze maze, Point sp) {
+//		
+//		char[][] mapNew = {{'1', '1', '0', '1', '1', '1', '1', '1', '1'},
+//			  {'1', '0', '0', '0', '0', '0', '0', '0', '1'},
+//			  {'1', '1', '1', '1', '0', '1', '1', '1', '1'},
+//			  {'1', '1', '1', '1', '0', '0', '0', '0', '1'},
+//			  {'1', '1', '0', '0', '0', '1', '0', '1', '1'},
+//			  {'1', '1', '0', '1', '0', '1', '0', '0', '1'},
+//			  {'1', '1', '0', '1', '$', '1', '1', '1', '1'},
+//			  {'1', '1', '1', '1', '1', '1', '1', '1', '1'}};
+//
+//		MapMaze someMapMaze = new MapMaze(mapNew);
+//		maze = someMapMaze;
+//				
+//		return findNewWayOldest(someMapMaze, sp);
+//		
+//	}
 }
