@@ -21,8 +21,8 @@ public class StrategyRecursion implements IStrategy{
 		for (Direction dir : Direction.values()) {
 			Point curPnt = sp.getDirPoint(dir);
 			stateOfCorPnt = (maze.isRoadPoint(curPnt) || maze.isTargetPoint(curPnt));
-			if (stateOfCorPnt & (curPnt.getX() != previousPoint.x) & !(traceList.contains(new Point(curPnt.getX(),curPnt.getY())))){
-				Point previousPoint = new Point(sp.getX(), sp.getY());
+			if (stateOfCorPnt & !(traceList.contains(curPnt))){
+				Point previousPoint = sp;
 				traceList.add(previousPoint);
 				if (findNewWay(maze, curPnt)) {
 					return true;

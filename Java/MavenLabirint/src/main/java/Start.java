@@ -7,9 +7,9 @@ public class Start {
 							  {'1', '1', '1', '1', '0', '1', '1', '1', '1'},
 							  {'1', '1', '1', '1', '0', '0', '0', '0', '1'},
 							  {'1', '1', '0', '0', '0', '1', '0', '1', '1'},
-							  {'1', '1', '0', '1', '0', '1', '0', '0', '1'},
-							  {'1', '1', '0', '1', '0', '1', '1', '1', '1'},
-							  {'1', '1', '1', '1', '$', '1', '1', '1', '1'}};
+							  {'1', '1', '0', '1', '0', '1', '0', '0', '0'},
+							  {'1', '1', '0', '1', '0', '1', '1', '0', '$'},
+							  {'1', '1', '1', '1', '1', '1', '1', '1', '1'}};
 	
 	public void drawMap(){
 		for(char[] g1 : mapNew) {
@@ -20,13 +20,13 @@ public class Start {
 		}
 	}
 	
-	public static void main(String[] args) {
-		MapMaze someMapMaze = new MapMaze(mapNew);
-		StrategyBifurcation startStrategy = new StrategyBifurcation();
-		startStrategy.findNewWay(someMapMaze, new Point(2, 0));
-//		
+//	public static void main(String[] args) {
+////		MapMaze someMapMaze = new MapMaze(mapNew);
+////		StrategyBifurcation startStrategy = new StrategyBifurcation();
+////		startStrategy.findNewWay(someMapMaze, new Point(2, 0));
+////		
 //		MapMaze someMapMaze = new MapMaze(mapNew);
 //		StrategyRecursion startRecursion = new StrategyRecursion();
 //		startRecursion.findNewWay(someMapMaze, new Point(2,0));
-	}
+//	}
 }
