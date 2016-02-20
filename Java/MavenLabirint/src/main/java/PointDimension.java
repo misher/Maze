@@ -19,7 +19,7 @@ public class PointDimension{
 	}
 
 
-	public void setPoint(int dimension, int [] coordArray, int value) {
+	public void setPoint(int dimension, int [] coordArray) {
 		coordinates.clear();
 		coordinates.add(dimension);
 		if (coordArray.length != dimension) {
@@ -28,7 +28,7 @@ public class PointDimension{
 		for (int i=0; i<coordArray.length; i++){
 			coordinates.add(coordArray[i]);
 		}
-		coordinates.add(value);
+
 	}
 	
 
