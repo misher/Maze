@@ -3,56 +3,43 @@ import java.util.ArrayList;
 
 
 public class StrategyRecursionDimension {
-	
-	int dimension;//Why do you need to store dimension. Try to remove it.
-	PointDimension previousPoint;
-	ArrayList<PointDimension> traceList;
-	boolean stateContains = false;
-	
-	public StrategyRecursionDimension(int dimension) {
-		super();
-		this.dimension = dimension;
-		
-		ArrayList<Integer> prvPntArr = new ArrayList<Integer>();
-		prvPntArr.add(dimension);
-		for (int i = 1; i<=dimension; i++){
-			prvPntArr.add(-1);
-		}
-		this.previousPoint = new PointDimension(prvPntArr);
-		this.traceList = new ArrayList<PointDimension>();
-	}
-	
 
-	public boolean findNewWay(IMazeDimension maze, PointDimension sp) {
-	
-		boolean stateOfCorPnt = false;
-		System.out.println("Coordinates X, Y "+sp.getCoordinate(1)+" "+sp.getCoordinate(2));
+	ArrayList<PointDimension> traceList = new ArrayList<PointDimension>();
+
+	public boolean findNewWay(IMazeDimension maze, PointDimension startPoint) {
+
+		boolean stateCorrectPoint = false;
 		
-		if (maze.isTargetPoint(sp)){
-			System.out.println("Found money Coordinates X, Y "+sp.getCoordinate(1)+" "+sp.getCoordinate(2));
+		System.out.print("Coordinates X, Y, Z ... ");
+		for (int i = 0; i < startPoint.dimension; i++){
+			if (i == (startPoint.dimension - 1)){
+				System.out.println(startPoint.getAxis(i)+" ");
+				break;
+			}
+			System.out.print(startPoint.getAxis(i)+" ");
+		}
+
+		if (maze.isTargetPoint(startPoint)){
+			System.out.print("Found money Coordinates X, Y, Z ... ");
+			for (int i = 0; i < startPoint.dimension; i++){
+				System.out.print(startPoint.getAxis(i)+" ");
+			}
 			return true;
 		}
-		
-		for (int i = 1; i <= dimension; i++){
-			for (AbstractDirection dir : AbstractDirection.values()) {
-				stateContains = false;
-				PointDimension curPnt = sp.getDirPoint(i, dir);
-				stateOfCorPnt = (maze.isRoadPoint(curPnt) || maze.isTargetPoint(curPnt));
-				for (int counter = 0; counter < traceList.size(); counter++) { 		      
-					if ((traceList.get(counter).coordinates).equals(curPnt.coordinates)){
-						stateContains = true;
-					}
-				}   		
-				if (stateOfCorPnt && (!stateContains)){
-					PointDimension previousPoint = sp;
+
+		for (int i = 0; i < startPoint.dimension; i++){
+			for (AbstractDirection direction : AbstractDirection.values()) {
+				PointDimension currentPoint = startPoint.getDirPoint(i, direction);
+				stateCorrectPoint = (maze.isRoadPoint(currentPoint) || maze.isTargetPoint(currentPoint)); 		
+				if (stateCorrectPoint && (!traceList.contains(currentPoint))){
+					PointDimension previousPoint = startPoint;
 					traceList.add(previousPoint);
-					if (findNewWay(maze, curPnt)) {
+					if (findNewWay(maze, currentPoint)) {
 						return true;
 					}
 				}
 			}
 		}
 		return false;
-		
 	}
 }

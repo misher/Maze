@@ -15,14 +15,14 @@ public class MapMazeDimension implements IMazeDimension {
 
 
 	public boolean isRoadPoint(PointDimension point) {
-		if ((point.getCoordinate(1) < borderX) && (point.getCoordinate(2) < borderY) && (point.getCoordinate(1) != -1) && (point.getCoordinate(2) != -1)) {
-			return map[point.getCoordinate(2)][point.getCoordinate(1)] == '0' || map[point.getCoordinate(2)][point.getCoordinate(1)] == '$'; 
+		if ((point.getAxis(0) < borderX) && (point.getAxis(1) < borderY) && (point.getAxis(0) != -1) && (point.getAxis(1) != -1)) {
+			return map[point.getAxis(1)][point.getAxis(0)] == '0' || map[point.getAxis(1)][point.getAxis(0)] == '$'; 
 		}
 		return false; 
 	}
 	public boolean isTargetPoint(PointDimension point) {
-		if ((point.getCoordinate(1) < borderX) && (point.getCoordinate(2) < borderY) && (point.getCoordinate(1) != -1) && (point.getCoordinate(2) != -1)) {
-			return  map[point.getCoordinate(2)][point.getCoordinate(1)] == '$';
+		if ((point.getAxis(0) < borderX) && (point.getAxis(1) < borderY) && (point.getAxis(0) != -1) && (point.getAxis(1) != -1)) {
+			return  map[point.getAxis(1)][point.getAxis(0)] == '$';
 		}
 		return false; 
 	}

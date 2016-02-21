@@ -2,6 +2,7 @@ package DimensionPackage;
 
 
 public class StartDimension {
+	
 	static char[][] mapNew = {{'1', '1', '0', '1', '1', '1', '1', '1', '1'},
 		{'1', '0', '0', '0', '0', '0', '0', '0', '1'},
 		{'1', '1', '1', '1', '0', '1', '1', '1', '1'},
@@ -25,10 +26,10 @@ public class StartDimension {
 		//StrategyBifurcation startStrategy = new StrategyBifurcation();
 		//startStrategy.findNewWay(someMapMaze, new Point(2, 0));
 		//
-		int [] startPntArr = {2,2,0};
-		PointDimension sp = new PointDimension(startPntArr);
+		int [] startPointArray = {2,0};
+		PointDimension startPoint = new PointDimension(2, startPointArray);
 		MapMazeDimension someMapMaze = new MapMazeDimension(mapNew);
-		StrategyRecursionDimension startRecursion = new StrategyRecursionDimension(2);
-		startRecursion.findNewWay(someMapMaze, sp);
+		StrategyRecursionDimension startRecursion = new StrategyRecursionDimension();
+		startRecursion.findNewWay(someMapMaze, startPoint);
 	}
 }
