@@ -1,3 +1,4 @@
+package DimensionPackage;
 import java.util.ArrayList;
 
 
@@ -6,6 +7,7 @@ public class StrategyRecursionDimension {
 	int dimension;
 	PointDimension previousPoint;
 	ArrayList<PointDimension> traceList;
+	boolean stateContains = false;
 	
 	public StrategyRecursionDimension(int dimension) {
 		super();
@@ -32,10 +34,16 @@ public class StrategyRecursionDimension {
 		}
 		
 		for (int i = 1; i <= dimension; i++){
-			for (abstractDirection dir : abstractDirection.values()) {
+			for (AbstractDirection dir : AbstractDirection.values()) {
+				stateContains = false;
 				PointDimension curPnt = sp.getDirPoint(i, dir);
 				stateOfCorPnt = (maze.isRoadPoint(curPnt) || maze.isTargetPoint(curPnt));
-				if (stateOfCorPnt & !(traceList.contains(curPnt))){
+				for (int counter = 0; counter < traceList.size(); counter++) { 		      
+					if ((traceList.get(counter).coordinates).equals(curPnt.coordinates)){
+						stateContains = true;
+					}
+				}   		
+				if (stateOfCorPnt && (!stateContains)){
 					PointDimension previousPoint = sp;
 					traceList.add(previousPoint);
 					if (findNewWay(maze, curPnt)) {

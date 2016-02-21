@@ -1,3 +1,5 @@
+package DimensionPackage;
+
 
 public class StartDimension {
 	static char[][] mapNew = {{'1', '1', '0', '1', '1', '1', '1', '1', '1'},

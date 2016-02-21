@@ -1,3 +1,5 @@
+package DimensionPackage;
+
 public class MapMazeDimension implements IMazeDimension {
 
 	public char[][] map;
