@@ -66,7 +66,7 @@ public class PointDimension{
 			this.coordinates = coordinates;
 		}
 		
-		public PointDimension(int [] coordArray) {
+		public PointDimension(int [] coordArray) {//Test for this constructor is missing
 			super();
 			for (int i = 0; i < coordArray.length; i++){
 				this.coordinates.add(coordArray[i]);
@@ -76,9 +76,9 @@ public class PointDimension{
 	
 		public void setPoint(int dimension, int [] coordArray) {
 			coordinates.clear();
-			coordinates.add(dimension);
+			coordinates.add(dimension);//Why? what about responsibility?
 			if (coordArray.length != dimension) {
-				System.out.print("Size not match to quentity of coordinates, all missing coordinates will be field by null");
+				System.out.print("Size not match to quentity of coordinates, all missing coordinates will be field by null");//maybe it is better to throw exception
 			}
 			for (int i=0; i<coordArray.length; i++){
 				coordinates.add(coordArray[i]);
@@ -89,7 +89,7 @@ public class PointDimension{
 	
 		public int getCoordinate(int coord){
 			return coordinates.get(coord);
-		}
+		}//Better to remove coord to axis
 		
 		
 		public int getDimension(){
@@ -97,8 +97,8 @@ public class PointDimension{
 		}
 		
 	
-		public PointDimension getDirPoint(int dimension, AbstractDirection Dir) {
-			if (dimension>coordinates.get(0)){
+		public PointDimension getDirPoint(int dimension, AbstractDirection Dir) {//Better to rename dimension variable to something else, once dimension is treated by number of axis of Maze
+			if (dimension>coordinates.get(0)){//Isn't point dont knows the dimension? Why you supply dimension?
 				return null;
 			}
 			ArrayList<Integer> coordOfNewPnt = new ArrayList<Integer>();

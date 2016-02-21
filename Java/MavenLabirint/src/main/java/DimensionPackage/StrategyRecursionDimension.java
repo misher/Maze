@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class StrategyRecursionDimension {
 	
-	int dimension;
+	int dimension;//Why do you need to store dimension. Try to remove it.
 	PointDimension previousPoint;
 	ArrayList<PointDimension> traceList;
 	boolean stateContains = false;
