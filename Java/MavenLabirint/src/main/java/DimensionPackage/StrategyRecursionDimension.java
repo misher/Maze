@@ -2,7 +2,7 @@ package DimensionPackage;
 import java.util.ArrayList;
 
 
-public class StrategyRecursionDimension {
+public class StrategyRecursionDimension implements IStrategyDimension{
 
 	ArrayList<PointDimension> traceList = new ArrayList<PointDimension>();
 
