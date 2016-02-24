@@ -27,7 +27,8 @@ public class PassabilityDimensionTest {
 			   {'1', '1', '0', '1', '0', '1', '1', '1', '1'},
 			   {'1', '1', '1', '1', '1', '1', '1', '1', '1'}};
 
-	private StrategyRecursionDimension startTestRecursion = new StrategyRecursionDimension();
+	StrategyRecursionDimension startTestRecursion = new StrategyRecursionDimension();
+	StrategyRecursionDimension startTestBifurcation = new StrategyRecursionDimension();
 	
 	int [] startPointArray = {2,0};
 	PointDimension sp = new PointDimension(2, startPointArray);
@@ -44,5 +45,15 @@ public class PassabilityDimensionTest {
 	@Test
 	public void pointTestRecNonPass() {		
 		assertEquals("equal false", false, startTestRecursion.findNewWay(mapMazeNonPass, sp));
+	}
+	
+	@Test
+	public void pointTestBifPass() {	
+		assertEquals("equal true", true, startTestBifurcation.findNewWay(mapMazePass, sp));
+	}
+	
+	@Test
+	public void pointTestBifNonPass() {		
+		assertEquals("equal false", false, startTestBifurcation.findNewWay(mapMazeNonPass, sp));
 	}
 }
