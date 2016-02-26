@@ -1,12 +1,12 @@
-package DimensionPackage;
+package SomePackage;
 import java.util.ArrayList;
 
 
-public class StrategyRecursionDimension implements IStrategyDimension{
+public class StrategyRecursion implements IStrategy{
 
-	ArrayList<PointDimension> traceList = new ArrayList<PointDimension>();
+	ArrayList<Point> traceList = new ArrayList<Point>();
 
-	public boolean findNewWay(IMazeDimension maze, PointDimension startPoint) {
+	public boolean findNewWay(IMaze maze, Point startPoint) {
 
 		boolean stateCorrectPoint = false;
 		
@@ -29,10 +29,10 @@ public class StrategyRecursionDimension implements IStrategyDimension{
 
 		for (int i = 0; i < startPoint.dimension; i++){
 			for (AbstractDirection direction : AbstractDirection.values()) {
-				PointDimension currentPoint = startPoint.getDirPoint(i, direction);
+				Point currentPoint = startPoint.getDirPoint(i, direction);
 				stateCorrectPoint = (maze.isRoadPoint(currentPoint) || maze.isTargetPoint(currentPoint)); 		
 				if (stateCorrectPoint && (!traceList.contains(currentPoint))){
-					PointDimension previousPoint = startPoint;
+					Point previousPoint = startPoint;
 					traceList.add(previousPoint);
 					if (findNewWay(maze, currentPoint)) {
 						return true;

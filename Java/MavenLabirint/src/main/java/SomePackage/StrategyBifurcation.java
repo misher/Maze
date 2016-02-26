@@ -1,24 +1,24 @@
-package DimensionPackage;
+package SomePackage;
 
 import java.util.ArrayList;
 
 
-public class StrategyBifurcationDimension implements IStrategyDimension{
+public class StrategyBifurcation implements IStrategy{
 
-	public boolean findNewWay(IMazeDimension maze, PointDimension startPoint) {
+	public boolean findNewWay(IMaze maze, Point startPoint) {
 
 		// Creating points of running
-		PointDimension currentPoint = startPoint;
-		PointDimension previousPoint = startPoint;
+		Point currentPoint = startPoint;
+		Point previousPoint = startPoint;
 		int [] arrayBifurcationPoint = {-1, -1};
-		PointDimension bifurcationPoint = new PointDimension(2, arrayBifurcationPoint);
+		Point bifurcationPoint = new Point(2, arrayBifurcationPoint);
 
 		// Initialization of bifurcation points array		
-		ArrayList<PointDimension> pointsOfBifurcation = new ArrayList<PointDimension>();
+		ArrayList<Point> pointsOfBifurcation = new ArrayList<Point>();
 		pointsOfBifurcation.add(bifurcationPoint);
 
 		// Initialization of trace array
-		ArrayList<PointDimension> traceList = new ArrayList<PointDimension>();
+		ArrayList<Point> traceList = new ArrayList<Point>();
 		traceList.add(previousPoint);
 
 		// Initialization of bifurcation calculating counters

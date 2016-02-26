@@ -1,7 +1,7 @@
-package DimensionPackage;
+package SomePackage;
 
 
-public class StartDimension {
+public class Start {
 	
 	static char[][] mapNew = {{'1', '1', '0', '1', '1', '1', '1', '1', '1'},
 								{'1', '0', '0', '0', '0', '0', '0', '0', '1'},
@@ -23,16 +23,16 @@ public class StartDimension {
 
 	public static void main(String[] args) {
 		
-		int [] startPointArray = {2,0};
-		PointDimension startPoint = new PointDimension(2, startPointArray);
-		MapMazeDimension someMapMaze = new MapMazeDimension(mapNew);
-		StrategyBifurcationDimension startStrategy = new StrategyBifurcationDimension();
-		startStrategy.findNewWay(someMapMaze, startPoint);
-		
 //		int [] startPointArray = {2,0};
-//		PointDimension startPoint = new PointDimension(2, startPointArray);
-//		MapMazeDimension someMapMaze = new MapMazeDimension(mapNew);
-//		StrategyRecursionDimension startRecursion = new StrategyRecursionDimension();
-//		startRecursion.findNewWay(someMapMaze, startPoint);
+//		Point startPoint = new Point(2, startPointArray);
+//		MapMaze someMapMaze = new MapMaze(mapNew);
+//		StrategyBifurcation startStrategy = new StrategyBifurcation();
+//		startStrategy.findNewWay(someMapMaze, startPoint);
+		
+		int [] startPointArray = {2,0};
+		Point startPoint = new Point(2, startPointArray);
+		MapMaze someMapMaze = new MapMaze(mapNew);
+		StrategyRecursion startRecursion = new StrategyRecursion();
+		startRecursion.findNewWay(someMapMaze, startPoint);
 	}
 }

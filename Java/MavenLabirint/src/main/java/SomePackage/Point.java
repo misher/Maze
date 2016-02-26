@@ -1,22 +1,23 @@
-package DimensionPackage;
+package SomePackage;
+
 
 
 import java.util.ArrayList;
 
 enum AbstractDirection {LEFT, RIGHT}
 
-public class PointDimension{
+public class Point implements IPoint{
 
 		public final int dimension;
 		public final ArrayList<Integer> axes = new ArrayList<Integer>();
 		
-		public PointDimension(int dimension, ArrayList<Integer> axes) {
+		public Point(int dimension, ArrayList<Integer> axes) {
 			super();
 			this.dimension = dimension;
 			this.axes.addAll(axes);
 		}
 		
-		public PointDimension(int dimension, int [] axesArray) {//Test for this constructor is missing
+		public Point(int dimension, int [] axesArray) {//Test for this constructor is missing
 			super();
 			this.dimension = dimension;
 			this.axes.clear();
@@ -36,7 +37,7 @@ public class PointDimension{
 		}
 		
 	
-		public PointDimension getDirPoint(int numberOfAxis, AbstractDirection Dir) {//Better to rename dimension variable to something else, once dimension is treated by number of axis of Maze
+		public Point getDirPoint(int numberOfAxis, AbstractDirection Dir) {//Better to rename dimension variable to something else, once dimension is treated by number of axis of Maze
 			if (numberOfAxis > dimension){//Isn't point dont knows the dimension? Why you supply dimension?
 				return null;
 			}
@@ -50,17 +51,32 @@ public class PointDimension{
 				int currentAxis = newPointAxes.get(numberOfAxis);
 				newPointAxes.set(numberOfAxis, (currentAxis+1));
 			}
-			PointDimension returnPoint = new PointDimension(dimension, newPointAxes);
+			Point returnPoint = new Point(dimension, newPointAxes);
 			return returnPoint;
+		}
+		
+		public ArrayList<IPoint> getNeighborPoints() {
+			ArrayList<IPoint> neighborPointList = new ArrayList<IPoint>();
+			for (int i = 0; i < this.dimension; i++) {
+				ArrayList<Integer> newPointAxes = new ArrayList<Integer>();
+				newPointAxes.addAll(this.axes);
+				newPointAxes.set(i, this.axes.get(i)+1);
+				Point addPoint = new Point (this.dimension, newPointAxes);
+				neighborPointList.add(addPoint);
+				newPointAxes.set(i, this.axes.get(i)-1);
+				Point addPointSec = new Point (this.dimension, newPointAxes);
+				neighborPointList.add(addPointSec);
+			}
+			return neighborPointList;
 		}
 		
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (obj == null || !(obj instanceof PointDimension)) {
+			if (obj == null || !(obj instanceof Point)) {
 				return false;
 			}
-			PointDimension pnt = (PointDimension) obj;
+			Point pnt = (Point) obj;
 			ArrayList<Integer> iAxes = new ArrayList<Integer>();
 			iAxes.addAll(axes);
 			boolean axesEquals = iAxes.equals(pnt.axes);

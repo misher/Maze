@@ -1,13 +1,18 @@
-package DimensionPackage;
+package SomePackage;
 
 import static org.junit.Assert.assertEquals;
 
 
 
 
+
 import org.junit.Test;
 
-public class PassabilityDimensionTest {
+import SomePackage.MapMaze;
+import SomePackage.Point;
+import SomePackage.StrategyRecursion;
+
+public class PassabilityTest {
 	
 	char[][] mapPass =	{{'1', '1', '0', '1', '1', '1', '1', '1', '1'},
 			 {'1', '0', '0', '0', '0', '0', '0', '0', '1'},
@@ -27,14 +32,14 @@ public class PassabilityDimensionTest {
 			   {'1', '1', '0', '1', '0', '1', '1', '1', '1'},
 			   {'1', '1', '1', '1', '1', '1', '1', '1', '1'}};
 
-	StrategyRecursionDimension startTestRecursion = new StrategyRecursionDimension();
-	StrategyRecursionDimension startTestBifurcation = new StrategyRecursionDimension();
+	StrategyRecursion startTestRecursion = new StrategyRecursion();
+	StrategyRecursion startTestBifurcation = new StrategyRecursion();
 	
 	int [] startPointArray = {2,0};
-	PointDimension sp = new PointDimension(2, startPointArray);
+	Point sp = new Point(2, startPointArray);
 	
-	MapMazeDimension mapMazePass = new MapMazeDimension(mapPass);
-	MapMazeDimension mapMazeNonPass = new MapMazeDimension(mapNonPass);
+	MapMaze mapMazePass = new MapMaze(mapPass);
+	MapMaze mapMazeNonPass = new MapMaze(mapNonPass);
 
 
 	@Test
