@@ -26,17 +26,15 @@ public class StrategyRecursion implements IStrategy{
 			}
 			return true;
 		}
-
-		for (int i = 0; i < startPoint.dimension; i++){
-			for (AbstractDirection direction : AbstractDirection.values()) {
-				Point currentPoint = startPoint.getDirPoint(i, direction);
-				stateCorrectPoint = (maze.isRoadPoint(currentPoint) || maze.isTargetPoint(currentPoint)); 		
-				if (stateCorrectPoint && (!traceList.contains(currentPoint))){
-					Point previousPoint = startPoint;
-					traceList.add(previousPoint);
-					if (findNewWay(maze, currentPoint)) {
-						return true;
-					}
+		
+		for (IPoint somePoint : startPoint.getNeighborPoints()) {
+			Point currentPoint = (Point) somePoint;
+			stateCorrectPoint = (maze.isRoadPoint(currentPoint) || maze.isTargetPoint(currentPoint)); 		
+			if (stateCorrectPoint && (!traceList.contains(currentPoint))){
+				Point previousPoint = startPoint;
+				traceList.add(previousPoint);
+				if (findNewWay(maze, currentPoint)) {
+					return true;
 				}
 			}
 		}
