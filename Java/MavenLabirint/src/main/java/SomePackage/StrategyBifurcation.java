@@ -88,9 +88,6 @@ public class StrategyBifurcation implements IStrategy{
 					}
 					bifurcationDelta++;
 				}
-				if (startDirectionFinder == 4){
-					startDirectionFinder = 0;
-				}
 			}
 		}
 		return true;
