@@ -23,16 +23,16 @@ public class Start {
 
 	public static void main(String[] args) {
 		
-//		int [] startPointArray = {2,0};
-//		Point startPoint = new Point(2, startPointArray);
-//		MapMaze someMapMaze = new MapMaze(mapNew);
-//		StrategyBifurcation startStrategy = new StrategyBifurcation();
-//		startStrategy.findNewWay(someMapMaze, startPoint);
-		
 		int [] startPointArray = {2,0};
 		Point startPoint = new Point(2, startPointArray);
 		MapMaze someMapMaze = new MapMaze(mapNew);
-		StrategyRecursion startRecursion = new StrategyRecursion();
-		startRecursion.findNewWay(someMapMaze, startPoint);
+		StrategyBifurcation startStrategy = new StrategyBifurcation();
+		startStrategy.findNewWay(someMapMaze, startPoint);
+		
+//		int [] startPointArray = {2,0};
+//		Point startPoint = new Point(2, startPointArray);
+//		MapMaze someMapMaze = new MapMaze(mapNew);
+//		StrategyRecursion startRecursion = new StrategyRecursion();
+//		startRecursion.findNewWay(someMapMaze, startPoint);
 	}
 }

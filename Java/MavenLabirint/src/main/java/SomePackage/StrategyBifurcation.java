@@ -34,64 +34,62 @@ public class StrategyBifurcation implements IStrategy{
 
 		// Loop for finding moneys
 		while(stateOfWhile){
-			for (int i = 0; i < startPoint.dimension; i++) {
-				for (AbstractDirection dir : AbstractDirection.values()) {
-					startDirectionFinder++;
-					// Look out for a new ways
-					if (startDirectionFinder == 1){
-						for (int o = 0; o < startPoint.dimension; o++) {
-							for (AbstractDirection dir2 : AbstractDirection.values()) {
-								if (maze.isTargetPoint(currentPoint.getDirPoint(o, dir2))) {
-									System.out.println("Moneys are found. Coordinates: "+(currentPoint.getDirPoint(o, dir2).getAxis(0))+" "+(currentPoint.getDirPoint(o, dir2).getAxis(1)));
-									stateOfWhile = false;
-									break;
-								}
-								stateCorRoad = ((!(traceList.contains(currentPoint.getDirPoint(o, dir2)))) && (maze.isRoadPoint(currentPoint.getDirPoint(o, dir2))));
-								if (stateCorRoad == true){
-									onePointDirectionNumber++;
-								} 
-								if (stateCorRoad == false){
-									deadEndCounter++;
-								}
-							}
+			for (IPoint somePoint : currentPoint.getNeighborPoints()) {
+				startDirectionFinder++;
+				// Look out for a new ways
+				if (startDirectionFinder == 1){
+					for (IPoint somePointSecondLoop : currentPoint.getNeighborPoints()) {
+						if (maze.isTargetPoint((Point) somePointSecondLoop)) {
+							System.out.println("Moneys are found. Coordinates: "+(((Point) somePointSecondLoop).getAxis(0))+" "+(((Point) somePointSecondLoop).getAxis(1)));
+							stateOfWhile = false;
+							break;
+						}
+						stateCorRoad = ((!(traceList.contains(((Point) somePointSecondLoop)))) && (maze.isRoadPoint(((Point) somePointSecondLoop))));
+						if (stateCorRoad == true){
+							onePointDirectionNumber++;
+						} 
+						if (stateCorRoad == false){
+							deadEndCounter++;
 						}
 					}
-					// Find bifurcation point
-					if (onePointDirectionNumber > 1) {
-						bifurcationPoint = currentPoint;
-						pointsOfBifurcation.add(bifurcationPoint);
-						bifurcationDelta = 1;
-					}
-					stateCorRoad = ((!(traceList.contains(currentPoint.getDirPoint(i, dir)))) && (maze.isRoadPoint(currentPoint.getDirPoint(i, dir))));
-					// Way state handler
-					if (stateCorRoad == true){
+				}
+				// Find bifurcation point
+				if (onePointDirectionNumber > 1) {
+					bifurcationPoint = currentPoint;
+					pointsOfBifurcation.add(bifurcationPoint);
+					bifurcationDelta = 1;
+					onePointDirectionNumber = 0;
+				}
+				stateCorRoad = ((!(traceList.contains((Point) somePoint))) && (maze.isRoadPoint((Point) somePoint)));
+				// Way state handler
+				if (stateCorRoad == true){
+					traceList.add(currentPoint);
+					previousPoint = currentPoint;
+					currentPoint = (Point) somePoint;
+					startDirectionFinder = 0;
+					onePointDirectionNumber = 0;
+					deadEndCounter = 0;
+					System.out.println("Current point "+(currentPoint.getAxis(0))+" "+(currentPoint.getAxis(1)));
+					break;
+				}
+				// If hit a dead end
+				if (((maze.isRoadPoint((Point) somePoint) == false) || (traceList.contains((Point) somePoint)))  && (deadEndCounter == 4)){
+					if ((pointsOfBifurcation.size() > 0) && (bifurcationDelta <= pointsOfBifurcation.size())){
+						bifurcationPoint = pointsOfBifurcation.get(pointsOfBifurcation.size()-bifurcationDelta);
 						traceList.add(currentPoint);
-						previousPoint = currentPoint;
-						currentPoint = currentPoint.getDirPoint(i, dir);
+						currentPoint = bifurcationPoint;
 						startDirectionFinder = 0;
 						onePointDirectionNumber = 0;
 						deadEndCounter = 0;
-						System.out.println("Current point "+(currentPoint.getAxis(0))+" "+(currentPoint.getAxis(1)));
 					}
-					// If hit a dead end
-					if (((maze.isRoadPoint(currentPoint.getDirPoint(i, dir)) == false) || (traceList.contains(currentPoint.getDirPoint(i, dir))))  && (deadEndCounter == 4)){
-						if (pointsOfBifurcation.size() > 0){
-							bifurcationPoint = pointsOfBifurcation.get(pointsOfBifurcation.size()-bifurcationDelta);
-							traceList.add(currentPoint);
-							currentPoint = bifurcationPoint;
-							startDirectionFinder = 0;
-							onePointDirectionNumber = 0;
-							deadEndCounter = 0;
-						}
-						if (pointsOfBifurcation.size() == bifurcationDelta) {
-							System.out.println("Labirinit has not ways to money");
-							return false;
-						}
-						bifurcationDelta++;
+					if (bifurcationDelta > pointsOfBifurcation.size()) {
+						System.out.println("Labirinit has not ways to money");
+						return false;
 					}
-					if (startDirectionFinder == 4){
-						startDirectionFinder = 0;
-					}
+					bifurcationDelta++;
+				}
+				if (startDirectionFinder == 4){
+					startDirectionFinder = 0;
 				}
 			}
 		}
