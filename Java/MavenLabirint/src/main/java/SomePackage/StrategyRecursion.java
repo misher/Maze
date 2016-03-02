@@ -1,11 +1,15 @@
 package SomePackage;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 
 public class StrategyRecursion implements IStrategy{
 
-	ArrayList<Point> traceList = new ArrayList<Point>();
 
+	@SuppressWarnings("rawtypes")
+	HashSet<ArrayList> traceHashSet = new HashSet<ArrayList>();
+
+	
 	public boolean findNewWay(IMaze maze, Point startPoint) {
 
 		boolean stateCorrectPoint = false;
@@ -29,10 +33,8 @@ public class StrategyRecursion implements IStrategy{
 		
 		for (IPoint somePoint : startPoint.getNeighborPoints()) {
 			Point currentPoint = (Point) somePoint;
-			stateCorrectPoint = (maze.isRoadPoint(currentPoint) || maze.isTargetPoint(currentPoint)); 		
-			if (stateCorrectPoint && (!traceList.contains(currentPoint))){
-				Point previousPoint = startPoint;
-				traceList.add(previousPoint);
+			stateCorrectPoint = (maze.isRoadPoint(currentPoint) || maze.isTargetPoint(currentPoint)); 
+			if (stateCorrectPoint && (traceHashSet.add(currentPoint.axes))){
 				if (findNewWay(maze, currentPoint)) {
 					return true;
 				}
