@@ -1,5 +1,5 @@
 package SomePackage;
 
 public interface IStrategy {
-	boolean findNewWay(IMaze maze, Point sp);
+	boolean findNewWay(IMaze maze, IPoint sp);
 }

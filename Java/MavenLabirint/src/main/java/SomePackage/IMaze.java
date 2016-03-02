@@ -1,6 +1,6 @@
 package SomePackage;
 
 public interface IMaze {
-	boolean isRoadPoint(Point point);
-	boolean isTargetPoint(Point point);
+	boolean isRoadPoint(IPoint point);
+	boolean isTargetPoint(IPoint point);
 }

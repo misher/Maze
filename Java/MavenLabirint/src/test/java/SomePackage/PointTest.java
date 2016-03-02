@@ -3,6 +3,7 @@ package SomePackage;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.junit.Test;
 
@@ -68,6 +69,18 @@ public class PointTest {
 //			}
 //			b = !b;
 //		}
+	}
+
+	@Test
+	public void hashSetTest() {
+		int a [] = {1,2};
+		Point somePointOne = new Point (2, a);
+		Point somePointTwo = new Point (2, a);
+		HashSet<Point> traceHashSet = new HashSet<Point>();
+		traceHashSet.add(somePointOne);
+		traceHashSet.add(somePointTwo);
+		assertEquals("Test for set", 1, traceHashSet.size());
+
 	}
 	
 }
