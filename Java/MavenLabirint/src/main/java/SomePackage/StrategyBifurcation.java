@@ -1,28 +1,22 @@
 package SomePackage;
-
 import java.util.ArrayList;
 
 
 public class StrategyBifurcation implements IStrategy{
 
-//	public boolean findNewWay(IMaze maze, IPoint startPoint) {
-//		return true;
-//	}
-
 
 	public boolean findNewWay(IMaze maze, IPoint startPoint) {
 
 		// Creating points of running
-		Point currentPoint = (Point) startPoint;
-		int [] arrayBifurcationPoint = {-1, -1};
-		Point bifurcationPoint = new Point(2, arrayBifurcationPoint);
+		IPoint currentPoint = startPoint;
+		IPoint bifurcationPoint;
 
 		// Initialization of bifurcation points array
-		ArrayList<Point> pointsOfBifurcation = new ArrayList<Point>();
-		pointsOfBifurcation.add(bifurcationPoint);
+		ArrayList<IPoint> pointsOfBifurcation = new ArrayList<IPoint>();
+//		pointsOfBifurcation.add(bifurcationPoint);
 
 		// Initialization of trace array
-		ArrayList<Point> traceList = new ArrayList<Point>();
+		ArrayList<IPoint> traceList = new ArrayList<IPoint>();
 
 		// Initialization of bifurcation calculating counters
 		int bifurcationDelta = 0;
@@ -42,11 +36,11 @@ public class StrategyBifurcation implements IStrategy{
 				// Look out for a new ways
 				if (startDirectionFinder == 1){
 					for (IPoint somePointSecondLoop : currentPoint.getNeighborPoints()) {
-						if (maze.isTargetPoint((Point) somePointSecondLoop)) {
+						if (maze.isTargetPoint(somePointSecondLoop)) {
 							stateOfWhile = false;
 							break;
 						}
-						stateCorRoad = ((!(traceList.contains(((Point) somePointSecondLoop)))) && (maze.isRoadPoint(((Point) somePointSecondLoop))));
+						stateCorRoad = ((!(traceList.contains((somePointSecondLoop)))) && (maze.isRoadPoint((somePointSecondLoop))));
 						if (stateCorRoad == true){
 							onePointDirectionNumber++;
 						}
@@ -62,15 +56,14 @@ public class StrategyBifurcation implements IStrategy{
 					bifurcationDelta = 1;
 					onePointDirectionNumber = 0;
 				}
-				stateCorRoad = ((!(traceList.contains((Point) somePoint))) && (maze.isRoadPoint((Point) somePoint)));
+				stateCorRoad = ((!(traceList.contains(somePoint))) && (maze.isRoadPoint(somePoint)));
 				// Way state handler
 				if (stateCorRoad == true){
 					traceList.add(currentPoint);
-					currentPoint = (Point) somePoint;
+					currentPoint = somePoint;
 					startDirectionFinder = 0;
 					onePointDirectionNumber = 0;
 					deadEndCounter = 0;
-					System.out.println("Current point "+(currentPoint.getAxis(0))+" "+(currentPoint.getAxis(1)));
 					break;
 				}
 				// If hit a dead end

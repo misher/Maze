@@ -15,7 +15,6 @@ public class StrategyRecursion implements IStrategy{
 		}
 		
 		for (IPoint currentPoint : startPoint.getNeighborPoints()) {
-//			Point currentPoint = (Point) somePoint;
 			boolean stateCorrectPoint = (maze.isRoadPoint(currentPoint) || maze.isTargetPoint(currentPoint));
 			if (stateCorrectPoint && (traceHashSet.add(currentPoint))){
 				if (findNewWay(maze, currentPoint)) {
