@@ -62,15 +62,16 @@ public class SqlTest {
             for (int i = 0; i <  borderX; i++) {
                 for (int j = 0; j < borderY; j++) {
                     try {
+                        //TODO: refactor to use placeholders (read http://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html)
                         String queryInsertData = "INSERT INTO mydb.test (id, x, y, value) VALUES (" + (i*borderY+j) + ", " + i + ", " + j + ", " + mapNew[j][i] + ");";
                         stmt.executeUpdate(queryInsertData);
                     } catch (Exception e) {
-
+                        //TODO: here you are hiding exception - you have to do something when it happens.
                     }
                 }
             }
             // executing SELECT query
-            rs = stmt.executeQuery(queryColumnsCount);
+            rs = stmt.executeQuery(queryColumnsCount);//Nahuya?
             while (rs.next()) {
                 int columns = rs.getInt(1);
                 System.out.println("Total number of columns in the table : " + columns);
@@ -83,8 +84,8 @@ public class SqlTest {
                 numberOfRecs = count;
             }
         } catch (SQLException sqlEx) {
-            sqlEx.printStackTrace();
-        } finally {
+            sqlEx.printStackTrace();//TODO: anyway you are hiding excpetion. Who will analyze text output when tests are executed? Test should fail when exception catched.
+        } finally {//very good practice!
             //close connection ,stmt and result set here
             try {
                 con.close();

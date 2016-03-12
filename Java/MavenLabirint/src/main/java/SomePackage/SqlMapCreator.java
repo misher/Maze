@@ -39,6 +39,11 @@ public class SqlMapCreator {
     public  Map<Point, Integer> getMapFromSql() {
 
         int numberOfAxes = 2;
+        //TODO: I see that you trying to make your system working with any size space dimension. But looking
+        //for columns number in information_schema - is very bad. Find a way to make it working without that.
+        //One solution could be to check query result - how many columns it has - but event that it is not good solution.
+        //Think about something better if you will not find anything fix as I wrote and later we will discuss.
+
         String queryColumnsCount = "SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_NAME='" + table + "';";
         String queryStringsFromTable = "select * from " + table + " limit 100;";
         Map<Point, Integer> hashSqlMap = new HashMap<Point, Integer>();

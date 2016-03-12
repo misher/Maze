@@ -11,7 +11,7 @@ import java.sql.Statement;
 
 
 
-
+//TODO: the class was not covered by tests. How you will be sure that it does what you are expecting without running your programm?
 public class SqlInit {
 
     // JDBC URL, username and password of MySQL server
@@ -30,8 +30,14 @@ public class SqlInit {
         this.map = map;
     }
 
-    public void Init() {
+    public void Init() {//TODO: check the naming convention!
 
+        /*
+        TODO: you are using simple drop table. If the table exists it would be removed. Your next statement is
+        create if exists - it would not be existing at creation moment. But it is possible that table would not exists
+        when you will try to remove it - and it could fail - so it is better to use if not exist clause when you
+        dropping the table.
+         */
         final String queryDropTable = "Drop table mapnumberone";
 
         final String queryCreateTable = "create table if not exists mapnumberone (id int(11) not null," +
@@ -58,12 +64,13 @@ public class SqlInit {
                 for (int j = 0; j < borderY; j++) {
                     try {
                         if ((map[j][i] == '0') || (map[j][i] == '2')){
+                            //TODO: what is mapnumberone - table name. Rename it to something more clear.
                             String queryInsertData = "INSERT INTO mydb.mapnumberone (id, x, y, value) VALUES (" + counterId + ", " + i + ", " + j + ", " + map[j][i] + ");";
                             stmt.executeUpdate(queryInsertData);
                             counterId++;
                         }
                     } catch (Exception e) {
-
+                        //TODO: you are hiding exception. do something and fix that in all other code.
                     }
                 }
             }

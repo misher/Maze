@@ -2,6 +2,7 @@ package SomePackage;
 import java.util.ArrayList;
 
 
+//TODO: your class is marked as unused - which means you don't have even a test for it. Please create corresponding test.
 public class StrategyBifurcation implements IStrategy{
 
 
@@ -26,7 +27,7 @@ public class StrategyBifurcation implements IStrategy{
 
 		// Initialization of boolean constants
 		boolean stateOfWhile = true;
-		boolean stateCorRoad = false;
+		boolean stateCorRoad = false;//TODO: this variable assignment is redundant - check warnings produced by your IDE and clean all code.
 
 
 		// Loop for finding moneys
