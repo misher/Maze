@@ -46,16 +46,22 @@ public class SqlInit {
             con = DriverManager.getConnection(url, user, password);
             // getting Statement object to execute query
             stmt = con.createStatement();
+            // executing create query
+            stmt.executeUpdate(queryCreateTable);
             // executing drop query
             stmt.executeUpdate(queryDropTable);
             // executing create query
             stmt.executeUpdate(queryCreateTable);
             // executing insert queries
+            int counterId = 0;
             for (int i = 0; i <  borderX; i++) {
                 for (int j = 0; j < borderY; j++) {
                     try {
-                        String queryInsertData = "INSERT INTO mydb.mapnumberone (id, x, y, value) VALUES (" + (i*borderY+j) + ", " + i + ", " + j + ", " + map[j][i] + ");";
-                        stmt.executeUpdate(queryInsertData);
+                        if ((map[j][i] == '0') || (map[j][i] == '2')){
+                            String queryInsertData = "INSERT INTO mydb.mapnumberone (id, x, y, value) VALUES (" + counterId + ", " + i + ", " + j + ", " + map[j][i] + ");";
+                            stmt.executeUpdate(queryInsertData);
+                            counterId++;
+                        }
                     } catch (Exception e) {
 
                     }
