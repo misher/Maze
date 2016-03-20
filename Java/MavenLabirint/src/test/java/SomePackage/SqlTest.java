@@ -36,7 +36,7 @@ public class SqlTest {
     @Test
     public void connectionTest() {
 
-        String queryDropTable = "Drop table test";
+        String queryDropTable = "Drop table if exists test";
 
         String queryCreateTable = "create table if not exists test (id int(11) not null," +
                 " x int(11) not null, y int(11) not null, value int(11) not null, primary key(id))" +

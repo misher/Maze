@@ -39,12 +39,12 @@ public class Start {
 //		Point startPoint = new Point(2, startPointArray);
 //		MapMaze someMapMaze = new MapMaze(mapNew);
 //		StrategyRecursion startRecursion = new StrategyRecursion();
-//
+
 
 		String url = "jdbc:mysql://localhost:3306/mydb";
 		String user = "root";
 		String password = "mercedesg55amg";
-		String table = "mapnumberone";
+		String table = "mapMaze";
 		SqlMapCreator someMap = new SqlMapCreator(url, user, password, table);
 		HashMap<Point, Integer> mapFromSql = (HashMap<Point, Integer>) someMap.getMapFromSql();
 

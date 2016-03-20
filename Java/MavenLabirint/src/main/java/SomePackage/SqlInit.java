@@ -38,9 +38,9 @@ public class SqlInit {
         when you will try to remove it - and it could fail - so it is better to use if not exist clause when you
         dropping the table.
          */
-        final String queryDropTable = "Drop table mapnumberone";
+        final String queryDropTable = "Drop table if exists mapMaze";
 
-        final String queryCreateTable = "create table if not exists mapnumberone (id int(11) not null," +
+        final String queryCreateTable = "create table if not exists mapMaze (id int(11) not null," +
                 " x int(11) not null, y int(11) not null, value int(11) not null, primary key(id))" +
                 " engine = INNODB default charset = latin1";
 
@@ -52,8 +52,6 @@ public class SqlInit {
             con = DriverManager.getConnection(url, user, password);
             // getting Statement object to execute query
             stmt = con.createStatement();
-            // executing create query
-            stmt.executeUpdate(queryCreateTable);
             // executing drop query
             stmt.executeUpdate(queryDropTable);
             // executing create query
@@ -65,11 +63,12 @@ public class SqlInit {
                     try {
                         if ((map[j][i] == '0') || (map[j][i] == '2')){
                             //TODO: what is mapnumberone - table name. Rename it to something more clear.
-                            String queryInsertData = "INSERT INTO mydb.mapnumberone (id, x, y, value) VALUES (" + counterId + ", " + i + ", " + j + ", " + map[j][i] + ");";
+                            String queryInsertData = "INSERT INTO mydb.mapMaze (id, x, y, value) VALUES (" + counterId + ", " + i + ", " + j + ", " + map[j][i] + ");";
                             stmt.executeUpdate(queryInsertData);
                             counterId++;
                         }
-                    } catch (Exception e) {
+                    } catch (SQLException sqlEx) {
+                        sqlEx.printStackTrace();
                         //TODO: you are hiding exception. do something and fix that in all other code.
                     }
                 }

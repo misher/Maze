@@ -27,7 +27,7 @@ public class StrategyBifurcation implements IStrategy{
 
 		// Initialization of boolean constants
 		boolean stateOfWhile = true;
-		boolean stateCorRoad = false;//TODO: this variable assignment is redundant - check warnings produced by your IDE and clean all code.
+		boolean stateCorRoad; //TODO: this variable assignment is redundant - check warnings produced by your IDE and clean all code.
 
 
 		// Loop for finding moneys
