@@ -4,11 +4,7 @@ package SomePackage;
  * Created by A.V.Tsaplin on 03.03.2016.
  */
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-
+import java.sql.*;
 
 
 //TODO: the class was not covered by tests. How you will be sure that it does what you are expecting without running your programm?
@@ -33,7 +29,7 @@ public class SqlInit {
     public void Init() {//TODO: check the naming convention!
 
         /*
-        TODO: you are using simple drop table. If the table exists it would be removed. Your next statement is
+        TODO: fixed! you are using simple drop table. If the table exists it would be removed. Your next statement is
         create if exists - it would not be existing at creation moment. But it is possible that table would not exists
         when you will try to remove it - and it could fail - so it is better to use if not exist clause when you
         dropping the table.
@@ -57,22 +53,43 @@ public class SqlInit {
             // executing create query
             stmt.executeUpdate(queryCreateTable);
             // executing insert queries
+
+            // executing insert queries
+            PreparedStatement updateemp = con.prepareStatement
+                    ("insert into mydb.mapMaze values(?,?,?,?)");
+
             int counterId = 0;
             for (int i = 0; i <  borderX; i++) {
                 for (int j = 0; j < borderY; j++) {
-                    try {
-                        if ((map[j][i] == '0') || (map[j][i] == '2')){
-                            //TODO: what is mapnumberone - table name. Rename it to something more clear.
-                            String queryInsertData = "INSERT INTO mydb.mapMaze (id, x, y, value) VALUES (" + counterId + ", " + i + ", " + j + ", " + map[j][i] + ");";
-                            stmt.executeUpdate(queryInsertData);
-                            counterId++;
-                        }
-                    } catch (SQLException sqlEx) {
-                        sqlEx.printStackTrace();
-                        //TODO: you are hiding exception. do something and fix that in all other code.
+                    if ((map[j][i] == '0') || (map[j][i] == '2')) {
+                        updateemp.setInt(1, counterId);
+                        updateemp.setInt(2, i);
+                        updateemp.setInt(3, j);
+                        updateemp.setInt(4, Character.getNumericValue(map[j][i]));
+                        updateemp.executeUpdate();
+                        counterId++;
                     }
                 }
             }
+
+//            int counterId = 0;
+//            for (int i = 0; i <  borderX; i++) {
+//                for (int j = 0; j < borderY; j++) {
+//                    try {
+//                        if ((map[j][i] == '0') || (map[j][i] == '2')){
+//                            //TODO: what is mapnumberone - table name. Rename it to something more clear.
+//                            String queryInsertData = "INSERT INTO mydb.mapMaze (id, x, y, value) VALUES (" + counterId + ", " + i + ", " + j + ", " + map[j][i] + ");";
+//                            stmt.executeUpdate(queryInsertData);
+//                            counterId++;
+//                        }
+//                    } catch (SQLException sqlEx) {
+//                        sqlEx.printStackTrace();
+//                        //TODO: you are hiding exception. do something and fix that in all other code.
+//                    }
+//                }
+//            }
+
+
         } catch (SQLException sqlEx) {
             sqlEx.printStackTrace();
         } finally {

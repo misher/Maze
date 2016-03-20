@@ -58,20 +58,23 @@ public class SqlTest {
             stmt.executeUpdate(queryDropTable);
             // executing create query
             stmt.executeUpdate(queryCreateTable);
+
             // executing insert queries
+            PreparedStatement updateemp = con.prepareStatement
+                    ("insert into mydb.test values(?,?,?,?)");
+
             for (int i = 0; i <  borderX; i++) {
                 for (int j = 0; j < borderY; j++) {
-                    try {
-                        //TODO: refactor to use placeholders (read http://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html)
-                        String queryInsertData = "INSERT INTO mydb.test (id, x, y, value) VALUES (" + (i*borderY+j) + ", " + i + ", " + j + ", " + mapNew[j][i] + ");";
-                        stmt.executeUpdate(queryInsertData);
-                    } catch (Exception e) {
-                        //TODO: here you are hiding exception - you have to do something when it happens.
-                    }
+                    updateemp.setInt(1, i*borderY+j );
+                    updateemp.setInt(2, i );
+                    updateemp.setInt(3, j );
+                    updateemp.setInt(4, mapNew[j][i] );
+                    updateemp.executeUpdate();
+                    //TODO: fixed ! refactor to use placeholders (read http://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html)
                 }
             }
             // executing SELECT query
-            rs = stmt.executeQuery(queryColumnsCount);//Nahuya?
+            rs = stmt.executeQuery(queryColumnsCount); // Nahuya?  UPD: why?
             while (rs.next()) {
                 int columns = rs.getInt(1);
                 System.out.println("Total number of columns in the table : " + columns);
@@ -84,7 +87,8 @@ public class SqlTest {
                 numberOfRecs = count;
             }
         } catch (SQLException sqlEx) {
-            sqlEx.printStackTrace();//TODO: anyway you are hiding excpetion. Who will analyze text output when tests are executed? Test should fail when exception catched.
+            // hz what can i do with this exception
+            sqlEx.printStackTrace();//TODO: not fixed! anyway you are hiding excpetion. Who will analyze text output when tests are executed? Test should fail when exception catched.
         } finally {//very good practice!
             //close connection ,stmt and result set here
             try {
