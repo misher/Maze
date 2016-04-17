@@ -59,16 +59,6 @@ public class PointTest {
 		assertEquals("compare of all points", testPoint.getDirPoint(1, AbstractDirection.LEFT), testArray.get(3));
 		assertEquals("compare of all points", testPoint.getDirPoint(2, AbstractDirection.RIGHT), testArray.get(4));
 		assertEquals("compare of all points", testPoint.getDirPoint(2, AbstractDirection.LEFT), testArray.get(5));
-//		boolean b = false;
-//		for (int i = 0; i < testArray.size(); i++) {
-//			if (b) {
-//				assertEquals("compare of all points", testPoint.getDirPoint(i, AbstractDirection.RIGHT), testArray.get(i));
-//			}
-//			if (!b) {
-//				assertEquals("compare of all points", testPoint.getDirPoint(i, AbstractDirection.LEFT), testArray.get(i));
-//			}
-//			b = !b;
-//		}
 	}
 
 	@Test
@@ -80,7 +70,6 @@ public class PointTest {
 		traceHashSet.add(somePointOne);
 		traceHashSet.add(somePointTwo);
 		assertEquals("Test for set", 1, traceHashSet.size());
-
 	}
 	
 }

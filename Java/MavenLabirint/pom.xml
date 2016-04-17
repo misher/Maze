@@ -3,8 +3,20 @@
   <groupId>ru.javaxblog</groupId>
   <artifactId>MavenExample</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  
-  <properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <properties>
         <hibernate.version>4.1.11.Final</hibernate.version>
         <mysql.version>5.1.24</mysql.version>
   </properties>
