@@ -1,6 +1,9 @@
 package SomePackage;
 
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -32,10 +35,17 @@ public class Start {
 		String user = "root";
 		String password = "mercedesg55amg";
 		String table = "mapMaze";
+		ArrayList<ParePointValue> parePointValueMap = new ArrayList<>();
 
 		// Start file parser
-		FileParser someFileParser = new FileParser("C:/Maze/Java/maze.txt");
-		ArrayList<ParePointValue> parePointValueMap = someFileParser.parseFile();
+		try {
+			InputStream input = new FileInputStream("C:\\Maze\\Java\\Maze.txt");
+			FileParser someFileParser = new FileParser(input);
+			parePointValueMap = someFileParser.parseFile();
+		} catch (IOException ioEx){
+			System.out.println("InputStream exception. Check file exist.");
+			ioEx.printStackTrace();
+		}
 
 		// DataBase initialization
 		SqlInit newSqlInit = new SqlInit(url, table, user, password);

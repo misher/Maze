@@ -9,18 +9,18 @@ import java.util.ArrayList;
 
 public class FileParser {
 
-    String FileDirectory = "";
+    InputStream someFileStream;
 
-    public FileParser(String FileDirectory) {
+    public FileParser(InputStream someFileStream) {
         super();
-        this.FileDirectory = FileDirectory;
+        this.someFileStream = someFileStream;
     }
 
     public ArrayList<ParePointValue> parseFile() {
 
         ArrayList<ParePointValue> mapFromFile = new ArrayList<>();
 
-        try(FileReader reader = new FileReader(FileDirectory))
+        try( Reader readerIO = new InputStreamReader(someFileStream))
         {
             int xAxis = 0;
             int yAxis = 0;
@@ -28,7 +28,7 @@ public class FileParser {
             int [] somePointArray = {2,0};
             Point somePointFromFile;
             ParePointValue someSqlPare;
-            while((c=reader.read())!=-1){
+            while((c=readerIO.read())!=-1){
                 if ((char) c == '\n') {
                     yAxis++;
                     xAxis = -1;
@@ -41,19 +41,10 @@ public class FileParser {
                     mapFromFile.add(someSqlPare);
                 }
                 xAxis++;
-//                System.out.print((char)c);
             }
         }
         catch(IOException ex){
             System.out.println(ex.getMessage());
-        }
-        finally {
-//            for(int i = 0; i < mapFromFile.size(); i++) {
-//                System.out.print("\n"+"Coordinate X: ");
-//                System.out.print(mapFromFile.get(i).getSomePoint().getAxis(0));
-//                System.out.print(" Y: ");
-//                System.out.print(mapFromFile.get(i).getSomePoint().getAxis(1));
-//            }
         }
         return mapFromFile;
     }
