@@ -1,4 +1,4 @@
-package SomePackage;
+package org.maze;
 
 /**
  * Created by A.V.Tsaplin on 15.04.2016.

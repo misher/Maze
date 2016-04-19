@@ -1,4 +1,4 @@
-package SomePackage;
+package org.maze;
 
 
 import org.junit.Test;

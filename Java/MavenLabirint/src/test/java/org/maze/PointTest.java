@@ -1,4 +1,4 @@
-package SomePackage;
+package org.maze;
 
 import static org.junit.Assert.*;
 
@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import org.junit.Test;
-
-import SomePackage.AbstractDirection;
-import SomePackage.Point;
 
 public class PointTest {
 

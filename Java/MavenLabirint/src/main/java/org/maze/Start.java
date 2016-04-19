@@ -1,4 +1,4 @@
-package SomePackage;
+package org.maze;
 
 
 import java.io.FileInputStream;

@@ -1,7 +1,7 @@
-package SomePackage;
+package org.maze;
 
 /**
- * Created by A.V.Tsaplin on 13.04.2016.
+ * Created by A.V.Tsaplin on 11.03.2016.
  */
 
 import java.sql.Connection;
@@ -10,8 +10,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class SqlOnePointPickUp {
+
+public class SqlMapPickUp {
 
     // JDBC URL, username and password of MySQL server
     private String url;
@@ -19,7 +22,7 @@ public class SqlOnePointPickUp {
     private String password;
     private String table;
 
-    public SqlOnePointPickUp(String url, String user, String password, String table) {
+    public SqlMapPickUp(String url, String user, String password, String table) {
         super();
         this.url = url;
         this.user = user;
@@ -32,15 +35,18 @@ public class SqlOnePointPickUp {
     private static Statement stmt;
     private static ResultSet rs;
 
-
-    // method which working with query which select one string from db - to pick up one point
-    public ParePointValue getPointFromSql(int x, int y, int mazeId) {
+    // method which one time queries all strings from db - to pick up all points and make a map
+    public  Map<Point, Integer> getMapFromSql() {
 
         int numberOfAxes = 2;
-        String queryStringFromTable = "select * from " + table + " WHERE x = \"" + x + "\" AND y = \"" + y + "\" AND mazeId = \"" + mazeId + "\";";
-        int [] someAxis = {-1,-1};
-        Point sp = new Point(2, someAxis);
-        ParePointValue retPare = new ParePointValue(sp, -1);
+        //TODO: not fixed! I see that you trying to make your system working with any size space dimension. But looking
+        //for columns number in information_schema - is very bad. Find a way to make it working without that.
+        //One solution could be to check query result - how many columns it has - but event that it is not good solution.
+        //Think about something better if you will not find anything fix as I wrote and later we will discuss.
+
+        String queryColumnsCount = "SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_NAME='" + table + "';";
+        String queryStringsFromTable = "select * from " + table + " limit 100;";
+        Map<Point, Integer> hashSqlMap = new HashMap<Point, Integer>();
 
         try {
             // opening database connection to MySQL server
@@ -48,18 +54,23 @@ public class SqlOnePointPickUp {
             // getting Statement object to execute query
             stmt = con.createStatement();
             // executing SELECT query
-            rs = stmt.executeQuery(queryStringFromTable);
+            rs = stmt.executeQuery(queryColumnsCount);
+            while (rs.next()) {
+                int columns = rs.getInt(1);
+                System.out.println("Total number of columns in the table : " + columns);
+                numberOfAxes = columns - 2;
+            }
+            rs = stmt.executeQuery(queryStringsFromTable);
             while (rs.next()) {
                 ArrayList<Integer> somePointAxes = new ArrayList<Integer>();
                 for (int i = 0; i < numberOfAxes; i++) {
                     somePointAxes.add(rs.getInt(i+2));
                 }
                 Point somePoint = new Point(numberOfAxes, somePointAxes);
-                retPare = new ParePointValue(somePoint, rs.getInt(4));
+                hashSqlMap.put(somePoint, rs.getInt(numberOfAxes + 2));
             }
         } catch (SQLException sqlEx) {
             sqlEx.printStackTrace();
-            throw new RuntimeException("SQL Exception occurred", sqlEx);
         } finally {
             //close connection ,stmt and result set here
             try {
@@ -72,7 +83,6 @@ public class SqlOnePointPickUp {
                 rs.close();
             } catch (SQLException se) { /*can't do anything */ }
         }
-        return retPare;
+        return hashSqlMap;
     }
 }
-
