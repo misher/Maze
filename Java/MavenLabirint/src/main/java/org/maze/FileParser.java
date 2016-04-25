@@ -33,7 +33,7 @@ public class FileParser {
                     yAxis++;
                     xAxis = -1;
                 }
-                if (((char)c == '0') || ((char)c == '2')) {
+                if (((char)c == '0') || ((char)c == '2') || ((char)c == '3')) {
                     somePointArray[0] = xAxis;
                     somePointArray[1] = yAxis;
                     somePointFromFile = new Point (2, somePointArray);

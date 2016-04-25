@@ -31,19 +31,15 @@ public class SqlMapPickUp {
     }
 
     // JDBC variables for opening and managing connection
-    private static Connection con;
-    private static Statement stmt;
-    private static ResultSet rs;
+    private Connection con;
+    private Statement stmt;
+    private ResultSet rs;
 
     // method which one time queries all strings from db - to pick up all points and make a map
     public  Map<Point, Integer> getMapFromSql() {
 
         int numberOfAxes = 2;
-        //TODO: not fixed! I see that you trying to make your system working with any size space dimension. But looking
-        //for columns number in information_schema - is very bad. Find a way to make it working without that.
-        //One solution could be to check query result - how many columns it has - but event that it is not good solution.
-        //Think about something better if you will not find anything fix as I wrote and later we will discuss.
-
+        //TODO: deny information_schema columns pick-up
         String queryColumnsCount = "SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_NAME='" + table + "';";
         String queryStringsFromTable = "select * from " + table + " limit 100;";
         Map<Point, Integer> hashSqlMap = new HashMap<Point, Integer>();
@@ -58,7 +54,7 @@ public class SqlMapPickUp {
             while (rs.next()) {
                 int columns = rs.getInt(1);
                 System.out.println("Total number of columns in the table : " + columns);
-                numberOfAxes = columns - 2;
+                numberOfAxes = columns - 4;
             }
             rs = stmt.executeQuery(queryStringsFromTable);
             while (rs.next()) {
@@ -72,16 +68,10 @@ public class SqlMapPickUp {
         } catch (SQLException sqlEx) {
             sqlEx.printStackTrace();
         } finally {
-            //close connection ,stmt and result set here
-            try {
-                con.close();
-            } catch (SQLException se) { /*can't do anything */ }
-            try {
-                stmt.close();
-            } catch (SQLException se) { /*can't do anything */ }
-            try {
-                rs.close();
-            } catch (SQLException se) { /*can't do anything */ }
+            // close connection, statement and result set
+            try { con.close(); } catch (SQLException se) { /*can't do anything */ }
+            try { stmt.close(); } catch (SQLException se) { /*can't do anything */ }
+            try { rs.close(); } catch (SQLException se) { /*can't do anything */ }
         }
         return hashSqlMap;
     }

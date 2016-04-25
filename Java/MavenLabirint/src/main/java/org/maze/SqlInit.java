@@ -10,26 +10,26 @@ import java.sql.*;
 public class SqlInit {
 
     // JDBC URL, username and password of MySQL server
-    private String url = "jdbc:mysql://localhost:3306/mydb";
-    private String table = "mapMaze";
-    private String user = "root";
-    private String password = "mercedesg55amg";
+    private String url;
+    private String user;
+    private String password;
+    private String table;
 
     // JDBC variables for opening and managing connection
-    private static Connection con;
-    private static Statement stmt;
+    private Connection con;
+    private Statement stmt;
 
-    public SqlInit (String url, String table, String user, String password) {
+    public SqlInit (String url, String user, String password, String table) {
         super();
         this.url = url;
-        this.table = table;
         this.user = user;
         this.password = password;
+        this.table = table;
     }
 
     public void Init() throws SQLException {
 
-        final String queryDropTable = "Drop table if exists " + table;
+        final String queryDropTable = "drop table if exists " + table;
 
         final String queryCreateTable = "create table if not exists " + table + " (id int(11) not null," +
                 " x int(11) not null, y int(11) not null, value int(11) not null, mazeId int(11) not null," +
@@ -49,7 +49,7 @@ public class SqlInit {
             sqlEx.printStackTrace();
             throw sqlEx;
         } finally {
-            //close connection ,stmt and result set here
+            // close connection and statement
             try { con.close(); } catch(SQLException se) { /*can't do anything */ }
             try { stmt.close(); } catch(SQLException se) { /*can't do anything */ }
         }

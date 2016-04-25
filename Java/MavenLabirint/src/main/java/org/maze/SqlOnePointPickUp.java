@@ -28,16 +28,16 @@ public class SqlOnePointPickUp {
     }
 
     // JDBC variables for opening and managing connection
-    private static Connection con;
-    private static Statement stmt;
-    private static ResultSet rs;
+    private Connection con;
+    private Statement stmt;
+    private ResultSet rs;
 
 
     // method which working with query which select one string from db - to pick up one point
     public ParePointValue getPointFromSql(int x, int y, int mazeId) {
 
         int numberOfAxes = 2;
-        String queryStringFromTable = "select * from " + table + " WHERE x = \"" + x + "\" AND y = \"" + y + "\" AND mazeId = \"" + mazeId + "\";";
+        String queryStringFromTable = "select * from " + table + " WHERE x = " + x + " AND y = " + y + " AND mazeId = " + mazeId + ";";
         int [] someAxis = {-1,-1};
         Point sp = new Point(2, someAxis);
         ParePointValue retPare = new ParePointValue(sp, -1);
@@ -61,16 +61,10 @@ public class SqlOnePointPickUp {
             sqlEx.printStackTrace();
             throw new RuntimeException("SQL Exception occurred", sqlEx);
         } finally {
-            //close connection ,stmt and result set here
-            try {
-                con.close();
-            } catch (SQLException se) { /*can't do anything */ }
-            try {
-                stmt.close();
-            } catch (SQLException se) { /*can't do anything */ }
-            try {
-                rs.close();
-            } catch (SQLException se) { /*can't do anything */ }
+            // close connection, statement and result set here
+            try { con.close(); } catch (SQLException se) { /*can't do anything */ }
+            try { stmt.close(); } catch (SQLException se) { /*can't do anything */ }
+            try { rs.close(); } catch (SQLException se) { /*can't do anything */ }
         }
         return retPare;
     }

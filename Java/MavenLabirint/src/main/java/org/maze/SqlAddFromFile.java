@@ -11,13 +11,13 @@ public class SqlAddFromFile {
     ArrayList<ParePointValue> map;
 
     // JDBC URL, username and password of MySQL server
-    private static String url = "jdbc:mysql://localhost:3306/mydb";
-    private static String user = "root";
-    private static String password = "mercedesg55amg";
+    private String url;
+    private String user;
+    private String password;
 
     // JDBC variables for opening and managing connection
-    private static Connection con;
-    private static Statement stmt;
+    private Connection con;
+    private Statement stmt;
 
     public SqlAddFromFile(ArrayList<ParePointValue> map, String url, String user, String password) {
         super();
@@ -47,7 +47,7 @@ public class SqlAddFromFile {
             sqlEx.printStackTrace();
             throw sqlEx;
         } finally {
-            //close connection ,stmt and resultset here
+            // close connection and statement
             try { con.close(); } catch(SQLException se) { /*can't do anything */ }
             try { stmt.close(); } catch(SQLException se) { /*can't do anything */ }
         }
