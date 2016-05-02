@@ -1,6 +1,9 @@
 package org.maze;
 
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +14,7 @@ import java.util.ArrayList;
 public class Start {
 
 
-	static char[][] mapArray = {{'1', '1', '3', '1', '1', '1', '1', '1', '1'},
+	private static char[][] mapArray = {{'1', '1', '3', '1', '1', '1', '1', '1', '1'},
 								{'1', '0', '0', '0', '0', '0', '0', '0', '1'},
 								{'1', '1', '1', '1', '0', '1', '1', '1', '1'},
 								{'1', '1', '1', '1', '0', '0', '0', '0', '1'},
@@ -23,7 +26,7 @@ public class Start {
 
 
 
-	public void drawMap(){
+	private static void drawMap(){
 		for(char[] g1 : mapArray) {
 			for(char g2 : g1) {
 				System.out.print(g2);
@@ -35,6 +38,8 @@ public class Start {
 
 	public static void main(String[] args) throws SQLException {
 
+		ApplicationContext context = new ClassPathXmlApplicationContext("SpringConfig.xml");
+
 
 		String url = "jdbc:mysql://localhost:3306/mydb";
 		String user = "root";
@@ -44,7 +49,7 @@ public class Start {
 
 		ArrayList<ParePointValue> parePointValueMap;
 
-		int indexOfMaze = 0;
+		int mazeId = 0;
 		int quantityOfMaps;
 
 
@@ -63,25 +68,26 @@ public class Start {
 				parePointValueMap = someFileParser.parseFile();
 				// Write map to db from side-file
 				SqlAddFromFile toSqlFromFile = new SqlAddFromFile(parePointValueMap, url, user, password);
-				toSqlFromFile.addFromFile(indexOfMaze, db);
+				toSqlFromFile.addFromFile(mazeId, db);
 			} catch (IOException ioEx){
 				System.out.println("InputStream exception. Check file exist.");
 				ioEx.printStackTrace();
 			}
-			indexOfMaze++;
+			mazeId++;
 		}
 
 
 		// Write map to db from array
 		SqlAddFromArray toSqlFromArray = new SqlAddFromArray(mapArray, url, user, password);
-		toSqlFromArray.addFromArray(indexOfMaze, db, table);
-		quantityOfMaps = indexOfMaze;
+		toSqlFromArray.addFromArray(mazeId, db, table);
+		quantityOfMaps = mazeId;
 
 
 		// Let's calculate all maps in db
-		for ( indexOfMaze = 0; indexOfMaze <= quantityOfMaps; indexOfMaze++) {
-			SqlGetStartPoint getStartPoint = new SqlGetStartPoint(url, user, password, table, indexOfMaze);
-			SqlOnePointMaze someSqlMaze = new SqlOnePointMaze(url, user, password, table, indexOfMaze);
+		for ( mazeId = 0; mazeId <= quantityOfMaps; mazeId++) {
+			SqlGetStartPoint getStartPoint = new SqlGetStartPoint(url, user, password, table, mazeId);
+			IMaze someSqlMaze = (IMaze) context.getBean("someOnePointMaze");
+//			SqlOnePointMaze someSqlMaze = new SqlOnePointMaze(url, user, password, table, indexOfMaze);
 			StrategyRecursion startRecursion = new StrategyRecursion();
 			startRecursion.findNewWay(someSqlMaze, getStartPoint.sqlGetStartPoint());
 		}

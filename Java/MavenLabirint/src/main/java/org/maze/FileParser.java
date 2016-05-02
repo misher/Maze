@@ -28,6 +28,7 @@ public class FileParser {
             int [] somePointArray = {2,0};
             Point somePointFromFile;
             ParePointValue someSqlPare;
+
             while((c=readerIO.read())!=-1){
                 if ((char) c == '\n') {
                     yAxis++;
