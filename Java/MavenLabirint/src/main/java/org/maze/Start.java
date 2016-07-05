@@ -47,10 +47,10 @@ public class Start {
 		String db = "mydb";
 		String table = "mapMaze";
 
-		ArrayList<ParePointValue> parePointValueMap;
+//		ArrayList<ParePointValue> parePointValueMap;
 
-		int mazeId = 0;
-		int quantityOfMaps;
+		int mazeId;
+		int quantityOfMaps = 1;
 
 
 		// DataBase initialization
@@ -58,37 +58,40 @@ public class Start {
 		newSqlInit.Init();
 
 
-		// Handle of input arguments, which is file directories, record mazes to db
-		for (String someFileDirectory: args) {
-			// Start file parser
-			System.out.println(someFileDirectory);
-			try {
-				InputStream input = new FileInputStream(someFileDirectory);
-				FileParser someFileParser = new FileParser(input);
-				parePointValueMap = someFileParser.parseFile();
-				// Write map to db from side-file
-				SqlAddFromFile toSqlFromFile = new SqlAddFromFile(parePointValueMap, url, user, password);
-				toSqlFromFile.addFromFile(mazeId, db);
-			} catch (IOException ioEx){
-				System.out.println("InputStream exception. Check file exist.");
-				ioEx.printStackTrace();
-			}
-			mazeId++;
-		}
+//		// Handle of input arguments, which is file directories, record mazes to db
+//		for (String someFileDirectory: args) {
+//			// Start file parser
+//			System.out.println(someFileDirectory);
+//			try {
+//				InputStream input = new FileInputStream(someFileDirectory);
+//				FileParser someFileParser = new FileParser(input);
+//				parePointValueMap = someFileParser.parseFile();
+//				// Write map to db from side-file
+//				SqlAddFromFile toSqlFromFile = new SqlAddFromFile(parePointValueMap, url, user, password);
+//				toSqlFromFile.addFromFile(mazeId, db);
+//			} catch (IOException ioEx){
+//				System.out.println("InputStream exception. Check file exist.");
+//				ioEx.printStackTrace();
+//			}
+//			mazeId++;
+//		}
+//
+//
+//		// Write map to db from array
+//		SqlAddFromArray toSqlFromArray = new SqlAddFromArray(mapArray, url, user, password);
+//		toSqlFromArray.addFromArray(mazeId, db, table);
+//		quantityOfMaps = mazeId;
 
 
-		// Write map to db from array
-		SqlAddFromArray toSqlFromArray = new SqlAddFromArray(mapArray, url, user, password);
-		toSqlFromArray.addFromArray(mazeId, db, table);
-		quantityOfMaps = mazeId;
+		BuilderDirector builderDirector = new BuilderDirector(mapArray);
+		builderDirector.BuildSomeMap(0);
 
 
 		// Let's calculate all maps in db
 		for ( mazeId = 0; mazeId <= quantityOfMaps; mazeId++) {
 			SqlGetStartPoint getStartPoint = new SqlGetStartPoint(url, user, password, table, mazeId);
-			IMaze someSqlMaze = (IMaze) context.getBean("someOnePointMaze");
-//			SqlOnePointMaze someSqlMaze = new SqlOnePointMaze(url, user, password, table, indexOfMaze);
-			StrategyRecursion startRecursion = new StrategyRecursion();
+			SqlOnePointMaze someSqlMaze = new SqlOnePointMaze(url, user, password, table, mazeId);
+			IStrategy startRecursion = (IStrategy) context.getBean("startRecursion");
 			startRecursion.findNewWay(someSqlMaze, getStartPoint.sqlGetStartPoint());
 		}
 	}

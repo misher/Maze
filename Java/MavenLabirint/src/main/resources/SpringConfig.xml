@@ -3,12 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-    <bean id="someOnePointMaze"
-          class="org.maze.SqlOnePointMaze">
-        <property name="url" value="jdbc:mysql://localhost:3306/mydb" />
-        <property name="user" value="root" />
-        <property name="password" value="mercedesg55amg" />
-        <property name="table" value="mapMaze" />
-        <property name="mazeId" ref="mazeId" />
+    <bean id="startRecursion"
+          class="org.maze.StrategyRecursion">
     </bean>
 </beans>
