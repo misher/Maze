@@ -4,11 +4,7 @@ package org.maze;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.*;
-import java.util.ArrayList;
 
 
 public class Start {
@@ -84,7 +80,7 @@ public class Start {
 
 
 		BuilderDirector builderDirector = new BuilderDirector(mapArray);
-		builderDirector.BuildSomeMap(0);
+		builderDirector.buildSomeMap(0);
 
 
 		// Let's calculate all maps in db

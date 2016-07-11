@@ -18,12 +18,11 @@ public class BuilderDirector {
         this.paramObjectArray = paramObjectArray;
     }
 
-    public void BuildSomeMap(int mazeId) {
-        if (paramObjectStr != null) {
+    public void buildSomeMap(int mazeId) {
+        if ((paramObjectStr != null) && (paramObjectArray == null)) {
             BuilderStr oneBuilderStr = new BuilderStr(paramObjectStr);
             oneBuilderStr.doBuild(mazeId);
-        }
-        if (paramObjectArray != null) {
+        } else if ((paramObjectArray != null) && (paramObjectStr == null)) {
             BuilderArray oneBuilderArray = new BuilderArray(paramObjectArray);
             oneBuilderArray.doBuild(mazeId);
         }
