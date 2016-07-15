@@ -1,4 +1,4 @@
-package org.chat;
+package org.chat.common;
 
 import java.sql.*;
 
@@ -24,15 +24,15 @@ public class DataBaseInit {
         this.password = password;
     }
 
-    public void init() throws SQLException {
+    public void dataBaseInit() throws SQLException {
 
-        final String queryCreateTable = "create table if not exists chatTableUpd (id_message int(11) not null  AUTO_INCREMENT," +
+        final String queryCreateTable = "create table if not exists chatTable (id_message int(11) not null  AUTO_INCREMENT," +
                 " id_Session int(11) not null, id_Message_This_Session int (11) not null, message varchar(45) not null, primary key(id_message))" +
                 " engine = INNODB default charset = latin1";
-        final String queryCreateSessionId = "create table if not exists chatSessionIdUpd (id int(11) not null  AUTO_INCREMENT," +
+        final String queryCreateSessionId = "create table if not exists chatSessionId (id int(11) not null  AUTO_INCREMENT," +
                 "message char(1) not null, primary key(id))" +
                 " engine = INNODB default charset = latin1";
-        final  String incrementQuery = "insert into chatBase.chatSessionIdUpd ( message) values('X')";
+        final  String incrementQuery = "insert into chatBase.chatSessionId ( message) values('X')";
 
         try {
             // opening database connection to MySQL server
@@ -53,7 +53,5 @@ public class DataBaseInit {
             try { con.close(); } catch(SQLException se) { /*can't do anything */ }
             try { stmt.close(); } catch(SQLException se) { /*can't do anything */ }
         }
-
     }
-
 }

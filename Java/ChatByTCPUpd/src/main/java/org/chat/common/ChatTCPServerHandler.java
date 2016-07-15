@@ -1,4 +1,4 @@
-package org.chat;
+package org.chat.common;
 
 /**
  * Created by A.V.Tsaplin on 08.07.2016.
@@ -6,7 +6,6 @@ package org.chat;
 
 import java.io.*;
 import java.net.*;
-import java.sql.SQLException;
 
 
 public class ChatTCPServerHandler extends Thread {
