@@ -28,8 +28,8 @@ public class DataBaseInit {
     public int dataBaseInit() throws SQLException {
 
         final String queryCreateTable = "create table if not exists chatTable (id_message int(11) not null  AUTO_INCREMENT," +
-                " id_Session int(11) not null, id_Message_This_Session int (11) not null, message varchar(45) not null, primary key(id_message))" +
-                " engine = INNODB default charset = latin1";
+                " id_session int(11) not null, connect_numbers int (11) not null, message varchar(45) not null, author varchar(25) not null, " +
+                "local_address varchar(40) not null, primary key(id_message)) engine = INNODB default charset = latin1";
         final String queryCreateSessionId = "create table if not exists chatSessionId (id int(11) not null  AUTO_INCREMENT," +
                 "message char(1) not null, primary key(id))" +
                 " engine = INNODB default charset = latin1";
@@ -61,5 +61,6 @@ public class DataBaseInit {
             try { stmt.close(); } catch(SQLException se) { /*can't do anything */ }
             return sessionId;
         }
+
     }
 }

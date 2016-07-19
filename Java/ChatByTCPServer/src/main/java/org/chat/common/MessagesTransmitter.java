@@ -47,7 +47,7 @@ public class MessagesTransmitter extends Thread {
             // show 5 last messages to client when it just connected
             List<ChatTable> lastChatTable = session.createQuery("from " + ChatTable.class.getName() + " order by id_message desc").setMaxResults(5).list();
             for (int i = 0; i < lastChatTable.size(); i++) {
-                os.write((lastChatTable.get(lastChatTable.size() - 1 - i).getMessage() + '\n').getBytes());
+                os.write((lastChatTable.get(lastChatTable.size() - 1 - i).getAuthor() + ": " + lastChatTable.get(lastChatTable.size() - 1 - i).getMessage() + '\n').getBytes());
             }
             if (lastChatTable.size() != 0) {
                 lastMessageIndex = lastChatTable.get(0).getIdMessage();
@@ -62,7 +62,7 @@ public class MessagesTransmitter extends Thread {
                 }
                 if (realMessageIndex > lastMessageIndex) {
                     for (int i = 0; i < (realMessageIndex - lastMessageIndex); i++) {
-                        os.write((lastChatTable.get((realMessageIndex - lastMessageIndex - 1) - i).getMessage() + '\n').getBytes());
+                        os.write((lastChatTable.get((realMessageIndex - lastMessageIndex - 1) - i).getAuthor() + ": " + lastChatTable.get((realMessageIndex - lastMessageIndex - 1) - i).getMessage() + '\n').getBytes());
                     }
                     lastMessageIndex = realMessageIndex;
                 }

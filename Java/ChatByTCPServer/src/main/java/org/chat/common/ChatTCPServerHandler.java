@@ -8,7 +8,11 @@ package org.chat.common;
 
 import org.chat.persistence.HibernateUtil;
 import org.hibernate.Session;
+
+import java.io.IOException;
 import java.net.*;
+import java.util.concurrent.TimeUnit;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
@@ -34,6 +38,10 @@ public class ChatTCPServerHandler extends Thread {
 
 
     public void run() {
+
+        // create variables to transmitter thread
+        MessagesTransmitter messagesTransmitter = null;
+
         try {
 
             // create db session
@@ -45,7 +53,7 @@ public class ChatTCPServerHandler extends Thread {
 
             if (!data.equals("")) {
 
-                // json string data to object
+                // json string auth data to object
                 ObjectMapper mapper = new ObjectMapper();
                 ChatUsers currentUser = mapper.readValue(data, ChatUsers.class);
 
@@ -55,11 +63,26 @@ public class ChatTCPServerHandler extends Thread {
 
                 // compare data's
                 if ((currentUser.getUser().equals(checkUser.getUser()))&&(currentUser.getPassword().equals(checkUser.getPassword()))){
+
+                    // send confirmation about correct authorization
                     socket.getOutputStream().write("auth correct".getBytes());
                     System.out.println("Authorization is correct!");
+
+                    // thread which show all messages to client
+                    messagesTransmitter =  new MessagesTransmitter(socket, session);
+
                     // start messages receiver
                     UserMessageReceiver userMessageReceiver = new UserMessageReceiver(socket, session, num, sessionId);
                     userMessageReceiver.userMessageReceiver();
+
+                    // stop transmitter thread
+                    messagesTransmitter.stopThread();
+
+                    // wait to stop messages-transmitter and close session and connection
+                    TimeUnit.SECONDS.sleep(1);
+                    session.close();
+                    socket.close();
+
                 } else {
                     System.out.println("Authorization is failed. User not match!");
                     session.close();
@@ -71,6 +94,20 @@ public class ChatTCPServerHandler extends Thread {
         }
         catch(Exception exception) { // exception handling
             System.out.println("ChatTCPServerHandler error: " + exception);
+            // stop transmitter thread
+            messagesTransmitter.stopThread();
+            // wait to stop messages-transmitter and close session and connection
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            session.close();
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } finally {
             System.out.println("ChatTCPHandler thread was stopped.");
         }

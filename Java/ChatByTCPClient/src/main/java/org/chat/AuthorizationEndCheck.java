@@ -38,7 +38,7 @@ public class AuthorizationEndCheck {
 
             if ((auth == false) && (delayThread.getTimeOut() == true)) {
                 socket.close();
-                System.out.println("Authorization crash");
+                System.out.println("Authorization crash.");
                 System.exit(0);
             }
 

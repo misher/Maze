@@ -40,7 +40,7 @@ public class ShowMessages extends Thread{
 
         }
         catch(Exception exception) { // exception handling
-            System.out.println("init error: " + exception);
+            System.out.println("Stop to show messages.");
         }
     }
 }

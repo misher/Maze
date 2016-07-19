@@ -7,7 +7,7 @@ package org.chat;
 import java.io.Console;
 import java.io.IOException;
 import java.net.Socket;
-
+import java.util.concurrent.TimeUnit;
 
 
 public class ChatTCPClient {
@@ -18,6 +18,7 @@ public class ChatTCPClient {
         Console console = System.console();
         ReadUserData readUserData = new ReadUserData(console);
         readUserData.ReadUserData();
+        User user = readUserData.getUser();
 
         // start connection
         Socket socket = new Socket("localhost", 3128);
@@ -26,7 +27,7 @@ public class ChatTCPClient {
         JSonConverter jSonConverter = new JSonConverter(readUserData.getUser());
         socket.getOutputStream().write(jSonConverter.converte().getBytes());
 
-        // authorization end check TODO: Timer fix!
+        // authorization end check
         AuthorizationEndCheck authorizationEndCheck = new AuthorizationEndCheck(socket);
         authorizationEndCheck.authorizationEndCheck();
 
@@ -35,27 +36,19 @@ public class ChatTCPClient {
         // start to show messages to client
         new ShowMessages(socket);
 
-        // TODO: to realize by json
-        TransmitMessages transmitMessages = new TransmitMessages(socket, console);
+        // start to send messages to chat
+        TransmitMessages transmitMessages = new TransmitMessages(socket, console, user);
         transmitMessages.transmitMessages();
+
+        // close socket after 'exit' and stop system
+        socket.close();
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.exit(0);
     }
 }
 
 
-
-
-
-
-
-//        while (!writeString.equals("exit")) {
-//            writeString = console.readLine();
-//            if (!writeString.equals("exit")) {
-//
-//                writeString = writeString + "  " + socket.getInetAddress().getHostAddress() + ":" +socket.getLocalPort();
-//                socket.getOutputStream().write(writeString.getBytes());
-//                writeString = "";
-//            }
-//        }
-//        System.out.println("Close app. Bye!");
-//        socket.getOutputStream().write("exit".getBytes());
-//        socket.close();

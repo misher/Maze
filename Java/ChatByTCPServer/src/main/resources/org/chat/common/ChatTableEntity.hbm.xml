@@ -9,13 +9,19 @@
             <generator class="identity" />
         </id>
         <property name="idSession" type="integer">
-            <column name="id_Session" length="11" not-null="true" unique="false" />
+            <column name="id_session" length="11" not-null="true" unique="false" />
         </property>
-        <property name="idMessageThisSession" type="integer">
-            <column name="id_Message_This_Session" length="11" not-null="true" unique="false" />
+        <property name="connectNumbers" type="integer">
+            <column name="connect_numbers" length="11" not-null="true" unique="false" />
         </property>
         <property name="message" type="string">
             <column name="message" length="45" not-null="true" unique="false" />
+        </property>
+        <property name="author" type="string">
+            <column name="author" length="25" not-null="true" unique="false" />
+        </property>
+        <property name="localAddress" type="string">
+            <column name="local_address" length="40" not-null="true" unique="false" />
         </property>
     </class>
 </hibernate-mapping>

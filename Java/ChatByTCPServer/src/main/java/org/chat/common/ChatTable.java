@@ -10,16 +10,20 @@ public class ChatTable implements java.io.Serializable {
 
     private Integer idMessage;
     private Integer idSession;
-    private Integer idMessageThisSession;
+    private Integer connectNumbers;
     private String message;
+    private String author;
+    private String localAddress;
 
     public ChatTable() {
     }
 
-    public ChatTable(int idSession, int idMessageThisSession, String message) {
+    public ChatTable(int idSession, int connectNumbers, String message, String author, String localAddress) {
         this.idSession = idSession;
-        this.idMessageThisSession = idMessageThisSession;
+        this.connectNumbers = connectNumbers;
         this.message = message;
+        this.author = author;
+        this.localAddress = localAddress;
     }
 
     public Integer getIdMessage() {
@@ -30,14 +34,6 @@ public class ChatTable implements java.io.Serializable {
         this.idMessage = idMessage;
     }
 
-    public Integer getIdMessageThisSession() {
-        return idMessageThisSession;
-    }
-
-    public void setIdMessageThisSession(Integer idMessageThisSession) {
-        this.idMessageThisSession = idMessageThisSession;
-    }
-
     public Integer getIdSession() {
         return idSession;
     }
@@ -46,12 +42,36 @@ public class ChatTable implements java.io.Serializable {
         this.idSession = idSession;
     }
 
+    public Integer getConnectNumbers() {
+        return connectNumbers;
+    }
+
+    public void setConnectNumbers(Integer connectNumbers) {
+        this.connectNumbers = connectNumbers;
+    }
+
     public String getMessage() {
         return message;
     }
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getLocalAddress() {
+        return localAddress;
+    }
+
+    public void setLocalAddress(String localAddress) {
+        this.localAddress = localAddress;
     }
 
 }

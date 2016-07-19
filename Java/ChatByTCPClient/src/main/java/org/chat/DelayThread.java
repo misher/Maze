@@ -8,22 +8,18 @@ import java.util.concurrent.TimeUnit;
  */
 public class DelayThread implements Runnable {
 
-    private int time = 1;
-    private Thread thread;
-    private static volatile boolean timeOut = false;
+    Thread thread;
+    volatile boolean timeOut = false;
+    int time = 1;
 
     public DelayThread(int time) {
         this.time = time;
-        thread = new Thread(this, "serverThread");
+        thread = new Thread(this, "delayServerThread");
         thread.start();
     }
 
-    public static boolean getTimeOut() {
+    public boolean getTimeOut() {
         return timeOut;
-    }
-
-    public static void setTimeOut(boolean timeOut) {
-        DelayThread.timeOut = timeOut;
     }
 
     @Override
@@ -32,7 +28,9 @@ public class DelayThread implements Runnable {
             TimeUnit.SECONDS.sleep(time);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            timeOut = true;
+            System.out.println("Time out for user's authorization data receive!");
         }
-        timeOut = true;
     }
 }
