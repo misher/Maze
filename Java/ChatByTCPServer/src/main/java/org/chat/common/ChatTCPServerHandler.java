@@ -58,11 +58,11 @@ public class ChatTCPServerHandler extends Thread {
                 ChatUsers currentUser = mapper.readValue(data, ChatUsers.class);
 
                 // check authorization
-                Authorization authorization = new Authorization(socket, session);
+                Authorization authorization = new Authorization(session, currentUser);
                 ChatUsers checkUser = authorization.authorization();
 
                 // compare data's
-                if ((currentUser.getUser().equals(checkUser.getUser()))&&(currentUser.getPassword().equals(checkUser.getPassword()))){
+                if (checkUser != null){
 
                     // send confirmation about correct authorization
                     socket.getOutputStream().write("auth correct".getBytes());
@@ -82,6 +82,7 @@ public class ChatTCPServerHandler extends Thread {
                     TimeUnit.SECONDS.sleep(1);
                     session.close();
                     socket.close();
+                    System.out.println("Session is closed. Socket is closed.");
 
                 } else {
                     System.out.println("Authorization is failed. User not match!");
@@ -108,6 +109,7 @@ public class ChatTCPServerHandler extends Thread {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            System.out.println("Session is closed. Socket is closed.");
         } finally {
             System.out.println("ChatTCPHandler thread was stopped.");
         }

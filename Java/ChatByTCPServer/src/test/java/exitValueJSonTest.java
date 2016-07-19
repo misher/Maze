@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class exitValueJSonTest {
+public class ExitValueJSonTest {
 
     @Test
     public void exitValueJSonTest() throws IOException {

@@ -11,22 +11,24 @@ import java.util.List;
  */
 public class Authorization {
 
-    private Socket socket;
     private Session session;
+    private ChatUsers currentUser;
 
-    public Authorization(Socket socket, Session session) {
+    public Authorization(Session session, ChatUsers currentUser) {
         super();
-        this.socket = socket;
         this.session = session;
+        this.currentUser = currentUser;
     }
 
     public ChatUsers authorization() {
 
         session.beginTransaction();
         List<ChatUsers> chatUsers;
-        chatUsers = session.createQuery("from " + ChatUsers.class.getName() + " where (user = 'Artur' and password = 'mercedesg55amg')").list();
+        chatUsers = session.createQuery("from " + ChatUsers.class.getName() + " where (user = '" + currentUser.getUser() + "' and password = '" + currentUser.getPassword() + "')").list();
         session.getTransaction().commit();
-        return chatUsers.get(0);
-
+        if (!chatUsers.isEmpty()) {
+            return chatUsers.get(0);
+        }
+        return null;
     }
 }

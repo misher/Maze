@@ -28,8 +28,6 @@ public class UserMessageReceiver {
 
     public void userMessageReceiver() throws IOException, InterruptedException {
 
-
-
         // data to zero
         String dataExit = "";
         String data;
