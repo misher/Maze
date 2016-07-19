@@ -1,4 +1,5 @@
 package org.chat;
+
 /**
  * Created by A.V.Tsaplin on 08.07.2016.
  */
@@ -8,67 +9,53 @@ import java.io.IOException;
 import java.net.Socket;
 
 
+
 public class ChatTCPClient {
+
     public static void main(String args[]) throws IOException {
 
-        String writeString = "";
+        // write user's data from console
         Console console = System.console();
-        String username = console.readLine("User Name: ");
-        String password = console.readLine("User Password: ");
+        ReadUserData readUserData = new ReadUserData(console);
+        readUserData.ReadUserData();
 
+        // start connection
         Socket socket = new Socket("localhost", 3128);
 
-        // TODO: user and password check!
+        // convert obj to json and send to server
+        JSonConverter jSonConverter = new JSonConverter(readUserData.getUser());
+        socket.getOutputStream().write(jSonConverter.converte().getBytes());
+
+        // authorization end check TODO: Timer fix!
+        AuthorizationEndCheck authorizationEndCheck = new AuthorizationEndCheck(socket);
+        authorizationEndCheck.authorizationEndCheck();
 
         System.out.println("Application was started! Write your messages." + '\n');
 
+        // start to show messages to client
         new ShowMessages(socket);
 
-        while (!writeString.equals("exit")) {
-            writeString = console.readLine();
-            if (!writeString.equals("exit")) {
-                writeString = writeString + "  " + socket.getInetAddress().getHostAddress() + ":" +socket.getLocalPort();
-                socket.getOutputStream().write(writeString.getBytes());
-                writeString = "";
-            }
-        }
-        System.out.println("Close app. Bye!");
-        socket.getOutputStream().write("exit".getBytes());
-        socket.close();
+        // TODO: to realize by json
+        TransmitMessages transmitMessages = new TransmitMessages(socket, console);
+        transmitMessages.transmitMessages();
     }
 }
 
 
 
-//        try
-//        {
-//            // open socket and connect to localhost 3128
-//            // answer from socket
-//            Socket socket = new Socket("localhost", 3128);
+
+
+
+
+//        while (!writeString.equals("exit")) {
+//            writeString = console.readLine();
+//            if (!writeString.equals("exit")) {
 //
-//            Console console = System.console();
-//
-//            String username = console.readLine("User Name? ");
-//
-//            char[] password = console.readPassword("Password? ");
-//
-//            // write first argument to outputstream
-//            // specified in the call, the address of the socket and open its port
-//            args[0] = args[0] + "  " + socket.getInetAddress().getHostAddress() + ":" +socket.getLocalPort();
-//            socket.getOutputStream().write(args[0].getBytes());
-//
-//
-//
-//
-//            // read answer
-//            byte buf[] = new byte[64*1024];
-//            int read = socket.getInputStream().read(buf);
-//            String data = new String(buf, 0, read);
-//
-//            // write answer
-//            System.out.println(data);
+//                writeString = writeString + "  " + socket.getInetAddress().getHostAddress() + ":" +socket.getLocalPort();
+//                socket.getOutputStream().write(writeString.getBytes());
+//                writeString = "";
+//            }
 //        }
-//        catch(Exception e)
-//        {System.out.println("init error: "+e);} // exception handling
-//    }
-//}
+//        System.out.println("Close app. Bye!");
+//        socket.getOutputStream().write("exit".getBytes());
+//        socket.close();

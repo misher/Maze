@@ -1,10 +1,14 @@
 package org.chat.common;
 
 import org.chat.persistence.HibernateUtil;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.List;
 
 
 /**
@@ -15,8 +19,6 @@ public class ChatTCPServerManyThread implements Runnable {
 
     private int connectCounter = 0;
     private int sessionId;
-    private Session session;
-
     Thread thread;
 
     public ChatTCPServerManyThread(int sessionId) {
@@ -28,23 +30,23 @@ public class ChatTCPServerManyThread implements Runnable {
 
     @Override
     public void run()  {
-        try
-        {
+        try {
+
             // set socket to localhost and port 3128
             ServerSocket server = new ServerSocket(3128, 0, InetAddress.getByName("localhost"));
             System.out.println("server is started");
-            // create db session
-            session = HibernateUtil.getSessionFactory().openSession();
+
             // listen port
-            while(true)
-            {
+            while(true) {
                 // wait a new connect and then handle client
                 // new calculation thread and counter increment
-                new ChatTCPServerHandler(session, connectCounter, server.accept(), sessionId);
+                Socket socket = server.accept();
+                new ChatTCPServerHandler(connectCounter, socket, sessionId);
                 connectCounter++;
             }
         }
-        catch(Exception exception)
-        {System.out.println("init error: " + exception);} // exception handling
+        catch(Exception exception) { // exception handling
+            System.out.println("ChatTCPServerManyThread error: " + exception);
+        }
     }
 }

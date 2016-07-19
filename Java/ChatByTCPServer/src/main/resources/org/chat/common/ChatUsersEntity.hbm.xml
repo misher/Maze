@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.chat.common.ChatUsers" table="chatUsers" catalog="chatBase">
+        <id name="idUser" type="java.lang.Integer">
+            <column name="id_user" />
+            <generator class="identity" />
+        </id>
+        <property name="user" type="string">
+            <column name="user" length="25" not-null="true" unique="false" />
+        </property>
+        <property name="password" type="string">
+            <column name="password" length="25" not-null="true" unique="false" />
+        </property>
+    </class>
+</hibernate-mapping>

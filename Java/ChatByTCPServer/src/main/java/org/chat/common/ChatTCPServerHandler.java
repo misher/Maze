@@ -1,16 +1,19 @@
 package org.chat.common;
 
+
 /**
  * Created by A.V.Tsaplin on 08.07.2016.
  */
 
-import org.hibernate.Session;
 
-import java.io.*;
+import org.chat.persistence.HibernateUtil;
+import org.hibernate.Session;
 import java.net.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 public class ChatTCPServerHandler extends Thread {
+
 
     private Session session;
     private int  sessionId;
@@ -18,87 +21,59 @@ public class ChatTCPServerHandler extends Thread {
     private Socket socket;
 
 
-
-    public ChatTCPServerHandler(Session session, int num, Socket socket, int sessionId) {
+    public ChatTCPServerHandler(int num, Socket socket, int sessionId) {
         // data copy
-        this.session = session;
         this.sessionId = sessionId;
         this.num = num;
         this.socket = socket;
         // start new calculation thread (f-ion run)
-        setDaemon(true);
+        setDaemon(false);
         setPriority(NORM_PRIORITY);
         start();
     }
 
 
-    public void run()
-    {
-        try
-        {
-            // take entering data stream from client socket
-            InputStream is = socket.getInputStream();
+    public void run() {
+        try {
 
-            // thence - data stream from server to client
-            OutputStream os = socket.getOutputStream();
+            // create db session
+            session = HibernateUtil.getSessionFactory().openSession();
 
-            // data buffer 64kb
-            byte buf[] = new byte[64*1024];
+            // listen client for receiving user's data
+            UserDataReceiver userDataReceiver = new UserDataReceiver(socket);
+            String data = userDataReceiver.userDataReceiver();
 
-            // read 64kb from client, result - count of really received data
-            int bufLength = is.read(buf);
+            if (!data.equals("")) {
 
-            // new string with a received from client data
-            String data = new String(buf, 0, bufLength);
+                // json string data to object
+                ObjectMapper mapper = new ObjectMapper();
+                ChatUsers currentUser = mapper.readValue(data, ChatUsers.class);
 
-            // write data
-            os.write(data.getBytes());
+                // check authorization
+                Authorization authorization = new Authorization(socket, session);
+                ChatUsers checkUser = authorization.authorization();
 
-            // at this place is data-base transmit function
-            session.beginTransaction();
-            ChatTable chatTable = new ChatTable();
-            chatTable.setIdMessageThisSession(num);
-            chatTable.setIdSession(sessionId);
-            chatTable.setMessage(data);
-            session.save(chatTable);
-            session.getTransaction().commit();
-
-            // close connection
-            socket.close();
+                // compare data's
+                if ((currentUser.getUser().equals(checkUser.getUser()))&&(currentUser.getPassword().equals(checkUser.getPassword()))){
+                    socket.getOutputStream().write("auth correct".getBytes());
+                    System.out.println("Authorization is correct!");
+                    // start messages receiver
+                    UserMessageReceiver userMessageReceiver = new UserMessageReceiver(socket, session, num, sessionId);
+                    userMessageReceiver.userMessageReceiver();
+                } else {
+                    System.out.println("Authorization is failed. User not match!");
+                    session.close();
+                    socket.close();
+                }
+            } else {
+                System.out.println("Authorization is failed. Authorization data is empty!");
+            }
         }
         catch(Exception exception) { // exception handling
-            System.out.println("init error: " + exception);
+            System.out.println("ChatTCPServerHandler error: " + exception);
+        } finally {
+            System.out.println("ChatTCPHandler thread was stopped.");
         }
     }
 }
-
-
-
-
-
-
-//    public static void main(String args[]) throws SQLException {
-//
-//        DataBaseInit init = new DataBaseInit("jdbc:mysql://localhost:3306/chatBase", "root", "mercedesg55amg");
-//        init.init();
-//        SessionIdPickUp sessionIdPickUp = new SessionIdPickUp("jdbc:mysql://localhost:3306/chatBase", "root", "mercedesg55amg");
-//        sessionId = sessionIdPickUp.pickUp();
-//
-//        try
-//        {
-//            // set socket to localhost and port 3128
-//            ServerSocket server = new ServerSocket(3128, 0, InetAddress.getByName("localhost"));
-//            System.out.println("server is started");
-//            // listen port
-//            while(true)
-//            {
-//                // wait a new connect and then handle client
-//                // new calculation thread and counter increment
-//                new ChatTCPServerHandler(connectCounter, server.accept());
-//                connectCounter++;
-//            }
-//        }
-//        catch(Exception exception)
-//        {System.out.println("init error: " + exception);} // exception handling
-//    }
 

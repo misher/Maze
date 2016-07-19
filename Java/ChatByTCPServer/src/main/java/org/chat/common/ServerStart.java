@@ -25,24 +25,3 @@ public class ServerStart {
     }
 }
 
-
-
-//        chatTable = (ChatTable) session.load(ChatTable.class, 1);
-//
-//        System.out.println("Message Id " + stock.getMessageId());
-//        System.out.print("Message " + stock.getMessage());
-
-
-//        // Try to load message into chatTable
-//        Session session = HibernateUtil.getSessionFactory().openSession();
-//
-//        session.beginTransaction();
-//
-//        ChatTable chatTable = new ChatTable();
-//
-//        chatTable.setIdMessageThisSession(1);
-//        chatTable.setIdSession(sessionId);
-//        chatTable.setMessage("Hello");
-//
-//        session.save(chatTable);
-//        session.getTransaction().commit();
