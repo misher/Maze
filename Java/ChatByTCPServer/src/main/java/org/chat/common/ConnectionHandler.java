@@ -1,39 +1,31 @@
 package org.chat.common;
 
-
-/**
- * Created by A.V.Tsaplin on 08.07.2016.
- */
-
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.chat.persistence.HibernateUtil;
 import org.hibernate.Session;
 
 import java.io.IOException;
-import java.net.*;
 import java.util.concurrent.TimeUnit;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+/**
+ * Created by A.V.Tsaplin on 20.07.2016.
+ */
+public class ConnectionHandler extends Thread implements IConnectionHandler {
 
-
-public class ChatTCPServerHandler extends Thread {
-
-
+    private ServerData serverData;
     private Session session;
-    private int  sessionId;
-    private int num;
-    private Socket socket;
 
+    public ConnectionHandler() {
 
-    public ChatTCPServerHandler(int num, Socket socket, int sessionId) {
-        // data copy
-        this.sessionId = sessionId;
-        this.num = num;
-        this.socket = socket;
-        // start new calculation thread (f-ion run)
+    }
+
+    @Override
+    public void doHandle(ServerData serverData) {
+        this.serverData = serverData;
+        Thread thread = new Thread(this, "serverThread");
         setDaemon(false);
         setPriority(NORM_PRIORITY);
-        start();
+        thread.start();
     }
 
 
@@ -48,7 +40,7 @@ public class ChatTCPServerHandler extends Thread {
             session = HibernateUtil.getSessionFactory().openSession();
 
             // listen client for receiving user's data
-            UserDataReceiver userDataReceiver = new UserDataReceiver(socket);
+            UserDataReceiver userDataReceiver = new UserDataReceiver(serverData.getSocket());
             String data = userDataReceiver.userDataReceiver();
 
             if (!data.equals("")) {
@@ -65,14 +57,14 @@ public class ChatTCPServerHandler extends Thread {
                 if (checkUser != null){
 
                     // send confirmation about correct authorization
-                    socket.getOutputStream().write("auth correct".getBytes());
+                    serverData.getSocket().getOutputStream().write("auth correct".getBytes());
                     System.out.println("Authorization is correct!");
 
                     // thread which show all messages to client
-                    messagesTransmitter =  new MessagesTransmitter(socket, session);
+                    messagesTransmitter =  new MessagesTransmitter(serverData.getSocket(), session);
 
                     // start messages receiver
-                    UserMessageReceiver userMessageReceiver = new UserMessageReceiver(socket, session, num, sessionId);
+                    UserMessageReceiver userMessageReceiver = new UserMessageReceiver(serverData.getSocket(), session, serverData.getConnectCounter(), serverData.getSessionId());
                     userMessageReceiver.userMessageReceiver();
 
                     // stop transmitter thread
@@ -81,13 +73,13 @@ public class ChatTCPServerHandler extends Thread {
                     // wait to stop messages-transmitter and close session and connection
                     TimeUnit.SECONDS.sleep(1);
                     session.close();
-                    socket.close();
+                    serverData.getSocket().close();
                     System.out.println("Session is closed. Socket is closed.");
 
                 } else {
                     System.out.println("Authorization is failed. User not match!");
                     session.close();
-                    socket.close();
+                    serverData.getSocket().close();
                 }
             } else {
                 System.out.println("Authorization is failed. Authorization data is empty!");
@@ -105,14 +97,13 @@ public class ChatTCPServerHandler extends Thread {
             }
             session.close();
             try {
-                socket.close();
+                serverData.getSocket().close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
             System.out.println("Session is closed. Socket is closed.");
         } finally {
-            System.out.println("ChatTCPHandler thread was stopped.");
+            System.out.println("ChatTCPHandler thread was stopped. 1");
         }
     }
 }
-

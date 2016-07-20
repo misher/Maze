@@ -27,6 +27,9 @@ public class DataBaseInit {
 
     public int dataBaseInit() throws SQLException {
 
+        final String queryCreateUsers = "create table if not exists chatusers (id_user int(11) not null  AUTO_INCREMENT," +
+                "user varchar(25) not null, password varchar(25) not null, primary key(id_user))" +
+                " engine = INNODB default charset = latin1";
         final String queryCreateTable = "create table if not exists chatTable (id_message int(11) not null  AUTO_INCREMENT," +
                 " id_session int(11) not null, connect_numbers int (11) not null, message varchar(45) not null, author varchar(25) not null, " +
                 "local_address varchar(40) not null, primary key(id_message)) engine = INNODB default charset = latin1";
@@ -43,6 +46,8 @@ public class DataBaseInit {
             stmt = con.createStatement();
             // executing table create query
             stmt.executeUpdate(queryCreateTable);
+            // executing users
+            stmt.executeUpdate(queryCreateUsers);
             // executing session_Id table create query
             stmt.executeUpdate(queryCreateSessionId);
             // executing session_Id table insert query
