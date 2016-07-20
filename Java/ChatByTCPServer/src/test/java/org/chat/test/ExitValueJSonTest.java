@@ -1,3 +1,5 @@
+package org.chat.test;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.chat.common.ChatMessages;
 import org.junit.Test;
@@ -13,6 +15,7 @@ public class ExitValueJSonTest {
         ChatMessages chatMessages = mapper.readValue(data, ChatMessages.class);
         String dataExit = chatMessages.getMessage();
         System.out.println(dataExit);
+        // huy
     }
 }
 

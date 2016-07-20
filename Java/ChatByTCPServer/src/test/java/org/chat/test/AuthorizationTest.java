@@ -1,3 +1,5 @@
+package org.chat.test;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.chat.common.Authorization;
 import org.chat.common.ChatMessages;
