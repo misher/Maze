@@ -3,6 +3,7 @@ package org.chat.common;
 import java.util.concurrent.TimeUnit;
 
 /**
+ *
  * Created by A.V.Tsaplin on 18.07.2016.
  */
 

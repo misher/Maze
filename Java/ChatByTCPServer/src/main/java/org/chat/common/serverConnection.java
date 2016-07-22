@@ -2,11 +2,12 @@ package org.chat.common;
 
 import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.net.Socket;
 
 /**
+ *
  * Created by A.V.Tsaplin on 20.07.2016.
  */
+
 public class ServerConnection extends Thread implements IConnection {
 
     private int connectCounter = 0;
@@ -26,6 +27,7 @@ public class ServerConnection extends Thread implements IConnection {
     @Override
     public void run()  {
         try {
+
             // set socket to localhost and port 3128
             ServerSocket server = new ServerSocket(3128, 0, InetAddress.getByName("localhost"));
             System.out.println("server is started");
@@ -34,9 +36,8 @@ public class ServerConnection extends Thread implements IConnection {
             while(true) {
                 // wait a new connect and then handle client
                 // new calculation thread and counter increment
-//                Socket socket = server.accept();
-//                serverData = new ServerData(sessionId, connectCounter, server.accept());
-                connectionHandler.doHandle(new ServerData(sessionId, connectCounter, server.accept()));
+                serverData = new ServerData(sessionId, connectCounter, server.accept());
+                connectionHandler.doHandle(serverData);
                 connectCounter++;
             }
         }

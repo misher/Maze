@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+import static org.junit.Assert.assertEquals;
+
 public class ExitValueJSonTest {
 
     @Test
@@ -14,8 +16,7 @@ public class ExitValueJSonTest {
         ObjectMapper mapper = new ObjectMapper();
         ChatMessages chatMessages = mapper.readValue(data, ChatMessages.class);
         String dataExit = chatMessages.getMessage();
-        System.out.println(dataExit);
-        // huy
+        assertEquals("Exit value check: ", "exit", dataExit);
     }
 }
 

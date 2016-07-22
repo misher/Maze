@@ -3,9 +3,11 @@ package org.chat.common;
 import java.net.Socket;
 
 /**
+ *
  * Created by A.V.Tsaplin on 20.07.2016.
  */
-public class ServerData extends Object {
+
+public class ServerData {
 
     private int connectCounter = 0;
     private int sessionId;
@@ -21,23 +23,12 @@ public class ServerData extends Object {
         return connectCounter;
     }
 
-    public void setConnectCounter(int connectCounter) {
-        this.connectCounter = connectCounter;
-    }
-
     public int getSessionId() {
         return sessionId;
-    }
-
-    public void setSessionId(int sessionId) {
-        this.sessionId = sessionId;
     }
 
     public Socket getSocket() {
         return socket;
     }
 
-    public void setSocket(Socket socket) {
-        this.socket = socket;
-    }
 }

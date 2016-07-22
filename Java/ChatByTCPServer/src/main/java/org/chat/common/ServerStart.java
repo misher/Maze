@@ -1,9 +1,9 @@
 package org.chat.common;
 
 import java.sql.SQLException;
-import java.util.concurrent.TimeUnit;
 
 /**
+ *
  * Created by A.V.Tsaplin on 11.07.2016.
  */
 

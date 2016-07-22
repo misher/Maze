@@ -2,9 +2,12 @@ package org.chat.common;
 
 import java.sql.*;
 
+
 /**
+ *
  * Created by A.V.Tsaplin on 08.07.2016.
  */
+
 public class DataBaseInit {
 
     // JDBC URL, username and password of MySQL server
@@ -13,10 +16,6 @@ public class DataBaseInit {
     private String password;
     private int sessionId;
 
-
-    // JDBC variables for opening and managing connection
-    private Connection con;
-    private Statement stmt;
 
     public DataBaseInit (String url, String user, String password) {
         super();
@@ -39,12 +38,8 @@ public class DataBaseInit {
         final  String incrementQuery = "insert into chatBase.chatSessionId (message) values('X')";
         final  String selectMaxInt = "SELECT * FROM chatSessionId ORDER BY id DESC LIMIT 1";
 
-        try {
-            // opening database connection to MySQL server
-            con = DriverManager.getConnection(url, user, password);
-            // getting Statement object to execute query
-            stmt = con.createStatement();
-            // executing table create query
+        try (Connection con = DriverManager.getConnection(url, user, password); Statement stmt = con.createStatement()) {
+
             stmt.executeUpdate(queryCreateTable);
             // executing users
             stmt.executeUpdate(queryCreateUsers);
@@ -52,20 +47,26 @@ public class DataBaseInit {
             stmt.executeUpdate(queryCreateSessionId);
             // executing session_Id table insert query
             stmt.executeUpdate(incrementQuery);
+
             // executing table select query
             ResultSet resultSet = stmt.executeQuery(selectMaxInt);
             while (resultSet.next()) {
                 sessionId = resultSet.getInt(1);
             }
+
         } catch (SQLException sqlEx) {
             sqlEx.printStackTrace();
             throw sqlEx;
-        } finally {
-            // close connection and statement
-            try { con.close(); } catch(SQLException se) { /*can't do anything */ }
-            try { stmt.close(); } catch(SQLException se) { /*can't do anything */ }
-            return sessionId;
         }
-
+        return sessionId;
     }
 }
+
+
+
+
+// opening database connection to MySQL server
+//            con = DriverManager.getConnection(url, user, password);
+// getting Statement object to execute query
+//            stmt = con.createStatement();
+// executing table create query

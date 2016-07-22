@@ -3,6 +3,7 @@ package org.chat.common;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
+ *
  * Created by A.V.Tsaplin on 19.07.2016.
  */
 public class ChatMessages{

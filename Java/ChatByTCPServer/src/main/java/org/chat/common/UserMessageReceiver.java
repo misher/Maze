@@ -5,22 +5,22 @@ import org.hibernate.Session;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.Socket;
-import java.util.concurrent.TimeUnit;
+
 
 /**
+ *
  * Created by A.V.Tsaplin on 18.07.2016.
  */
 
 public class UserMessageReceiver {
 
-    private Socket socket;
+    private InputStream inputStream;
     private Session session;
     private int num;
     private int sessionId;
 
-    public UserMessageReceiver(Socket socket, Session session, int num, int sessionId) {
-        this.socket = socket;
+    public UserMessageReceiver(InputStream inputStream, Session session, int num, int sessionId) {
+        this.inputStream = inputStream;
         this.session = session;
         this.num = num;
         this.sessionId = sessionId;
@@ -35,14 +35,11 @@ public class UserMessageReceiver {
         // messages receiver
         while (!dataExit.equals("exit")) {
 
-            // take entering data stream from client socket
-            InputStream is = socket.getInputStream();
-
             // data buffer 64kb
             byte buf[] = new byte[64*1024];
 
             // read 64kb from client, result - count of really received data
-            int bufLength = is.read(buf);
+            int bufLength = inputStream.read(buf);
 
             // new string with a received from client data
             data = new String(buf, 0, bufLength);

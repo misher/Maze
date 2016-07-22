@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
+ *
  * Created by A.V.Tsaplin on 18.07.2016.
  */
+
 public class ChatUsers implements java.io.Serializable  {
 
     @JsonIgnore
