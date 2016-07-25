@@ -7,5 +7,5 @@ import java.sql.SQLException;
  */
 
 public interface IServer {
-    void startServerApp(IConnection serverConnection) throws SQLException, InterruptedException;
+    void startServerApp(IConnection serverConnection, IConnectionHandler connectionHandler) throws SQLException, InterruptedException;
 }

@@ -62,11 +62,3 @@ public class DataBaseInit {
     }
 }
 
-
-
-
-// opening database connection to MySQL server
-//            con = DriverManager.getConnection(url, user, password);
-// getting Statement object to execute query
-//            stmt = con.createStatement();
-// executing table create query

@@ -40,6 +40,7 @@ public class ConnectionHandler extends Thread implements IConnectionHandler {
 
                 // create variables to transmitter thread
                 MessagesTransmitter messagesTransmitter = null;
+                UserMessageReceiver userMessageReceiver = null;
 
                 try (Session session = HibernateUtil.getSessionFactory().openSession(); Socket socket = getServerData().getSocket()) {
 
@@ -66,17 +67,25 @@ public class ConnectionHandler extends Thread implements IConnectionHandler {
 
                             // thread which show all messages to client
                             messagesTransmitter =  new MessagesTransmitter(socket.getOutputStream(), session);
+                            messagesTransmitter.messageTransmitter();
 
                             // start messages receiver
-                            UserMessageReceiver userMessageReceiver = new UserMessageReceiver(socket.getInputStream(), session, getServerData().getConnectCounter(), getServerData().getSessionId());
+                            userMessageReceiver = new UserMessageReceiver(socket.getInputStream(), session, getServerData().getConnectCounter(), getServerData().getSessionId());
                             userMessageReceiver.userMessageReceiver();
 
-                            // stop transmitter thread
-                            messagesTransmitter.stopThread();
+                            while (true) {
+                                if (userMessageReceiver.getStopped()) {
+                                    // stop transmitter thread
+                                    messagesTransmitter.stopThread();
 
-                            // wait to stop messages-transmitter and close session and connection
-                            TimeUnit.SECONDS.sleep(1);
-                            System.out.println("Session is closed. Socket is closed.");
+                                    // wait to stop messages-transmitter and close session and connection
+                                    TimeUnit.MILLISECONDS.sleep(300);
+                                    System.out.println("Session is closed. Socket is closed.");
+
+                                    // stop this loop
+                                    break;
+                                }
+                            }
 
                         } else {
                             System.out.println("Authorization is failed. User not match!");
@@ -88,9 +97,12 @@ public class ConnectionHandler extends Thread implements IConnectionHandler {
                 catch(Exception exception) {
                     // exception handling
                     System.out.println("ChatTCPServerHandler error: " + exception);
-                    // stop transmitter thread
+                    // stop receiver - transmitter threads
                     if (messagesTransmitter != null) {
                         messagesTransmitter.stopThread();
+                    }
+                    if (userMessageReceiver != null) {
+                        userMessageReceiver.stopThread();
                     }
                     // wait to stop messages-transmitter and close session and connection
                     try {

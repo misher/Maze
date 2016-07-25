@@ -20,39 +20,33 @@ public class ServerConnection extends Thread implements IConnection {
         this.connectCounter = connectCounter;
     }
 
-    public ServerConnection() {
-
-    }
 
     @Override
-    public void run()  {
-        try {
+    public Object toAcceptConnection(IConnectionHandler connectionHandlerIn) {
+        this.connectionHandler = connectionHandlerIn;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // set socket to localhost and port 3128
+                    ServerSocket server = new ServerSocket(3128, 0, InetAddress.getByName("localhost"));
+                    System.out.println("server is started");
 
-            // set socket to localhost and port 3128
-            ServerSocket server = new ServerSocket(3128, 0, InetAddress.getByName("localhost"));
-            System.out.println("server is started");
-
-            // listen port
-            while(true) {
-                // wait a new connect and then handle client
-                // new calculation thread and counter increment
-                serverData = new ServerData(sessionId, connectCounter, server.accept());
-                connectionHandler.doHandle(serverData);
-                connectCounter++;
+                    // listen port
+                    while(true) {
+                        // wait a new connect and then handle client
+                        // new calculation thread and counter increment
+                        serverData = new ServerData(sessionId, connectCounter, server.accept());
+                        connectionHandler.doHandle(serverData);
+                        connectCounter++;
+                    }
+                }
+                catch(Exception exception) { // exception handling
+                    exception.printStackTrace();
+                    System.out.println("ServerConnection error 1: " + exception);
+                }
             }
-        }
-        catch(Exception exception) { // exception handling
-            exception.printStackTrace();
-            System.out.println("ServerConnection error 1: " + exception);
-        }
-    }
-
-    @Override
-    public Object toAcceptConnection(IConnectionHandler connectionHandler) {
-        this.connectionHandler = connectionHandler;
-        setDaemon(false);
-        setPriority(NORM_PRIORITY);
-        start();
+        }).start();
         return serverData;
     }
 }
