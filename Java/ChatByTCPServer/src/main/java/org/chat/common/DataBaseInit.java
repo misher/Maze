@@ -11,17 +11,10 @@ import java.sql.*;
 public class DataBaseInit {
 
     // JDBC URL, username and password of MySQL server
-    private String url;
-    private String user;
-    private String password;
-    private int sessionId;
+    private final DataBaseInfo dataBaseInfo;
 
-
-    public DataBaseInit (String url, String user, String password) {
-        super();
-        this.url = url;
-        this.user = user;
-        this.password = password;
+    public DataBaseInit (DataBaseInfo dataBaseInfo) {
+        this.dataBaseInfo = dataBaseInfo;
     }
 
     public int dataBaseInit() throws SQLException {
@@ -38,7 +31,9 @@ public class DataBaseInit {
         final  String incrementQuery = "insert into chatBase.chatSessionId (message) values('X')";
         final  String selectMaxInt = "SELECT * FROM chatSessionId ORDER BY id DESC LIMIT 1";
 
-        try (Connection con = DriverManager.getConnection(url, user, password); Statement stmt = con.createStatement()) {
+        int sessionId = 0;
+
+        try (Connection con = DriverManager.getConnection(dataBaseInfo.getAddress(), dataBaseInfo.getUser(), dataBaseInfo.getPassword()); Statement stmt = con.createStatement()) {
 
             stmt.executeUpdate(queryCreateTable);
             // executing users

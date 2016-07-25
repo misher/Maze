@@ -1,9 +1,10 @@
 package org.chat.test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.chat.common.Authorization;
-import org.chat.common.ChatMessages;
 import org.chat.common.ChatUsers;
+import org.chat.common.DataBaseInfo;
+import org.chat.common.DataBaseInit;
 import org.chat.persistence.HibernateUtil;
 import org.hibernate.Session;
 import org.junit.Test;
@@ -14,12 +15,19 @@ import java.sql.*;
 import static org.junit.Assert.assertEquals;
 
 /**
+ *
  * Created by A.V.Tsaplin on 20.07.2016.
  */
+
 public class AuthorizationTest {
 
     @Test
     public void authorizationTest() throws IOException, SQLException {
+
+        // Initialization for dataBases
+        DataBaseInfo dataBaseInfo = new DataBaseInfo("jdbc:mysql://localhost:3306/chatBase", "root", "mercedesg55amg");
+        new DataBaseInit(dataBaseInfo).dataBaseInit();
+
 
         int idValue = 0;
 
@@ -43,5 +51,6 @@ public class AuthorizationTest {
         Authorization authorization = new Authorization(session, chatUsers);
         assertEquals("User match", chatUsers.getUser(), authorization.authorization().getUser());
         assertEquals("Password match", chatUsers.getPassword(), authorization.authorization().getPassword());
+
     }
 }
