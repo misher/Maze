@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by A.V.Tsaplin on 19.07.2016.
  */
-public class jsonTest {
+public class JSonTest {
 
     User user = new User("Artur", "mercedesg55amg");
     Message message = new Message(user.getUsername(), user.getPassword(), "exit", "addresEx");

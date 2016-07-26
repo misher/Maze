@@ -25,7 +25,7 @@ public class TransmitMessages {
         while (!writeString.equals("exit")) {
             writeString = console.readLine();
             Message message = new Message(user.getUsername(), user.getPassword(), writeString, address);
-            socket.getOutputStream().write(new JSonConverter(message).converte().getBytes());
+            socket.getOutputStream().write((new JSonConverter(message).converte() + "^end^").getBytes());
         }
         System.out.println("Close app. Bye!");
     }
