@@ -15,24 +15,13 @@ import java.util.concurrent.TimeUnit;
 
 public class ConnectionHandler extends Thread implements IConnectionHandler {
 
-    private ServerData serverData;
-
-    public ServerData getServerData() {
-        return serverData;
-    }
-
-    public void setServerData(ServerData serverData) {
-        this.serverData = serverData;
-    }
 
     public ConnectionHandler() {
 
     }
 
     @Override
-    public void doHandle(ServerData serverData) {
-
-        setServerData(serverData);
+    public void doHandle(final ServerData serverData) {
 
         new Thread(new Runnable() {
 
@@ -42,13 +31,13 @@ public class ConnectionHandler extends Thread implements IConnectionHandler {
                 MessagesTransmitter messagesTransmitter = null;
                 UserMessageReceiver userMessageReceiver = null;
 
-                try (Session session = HibernateUtil.getSessionFactory().openSession(); Socket socket = getServerData().getSocket()) {
+                try (Session session = HibernateUtil.getSessionFactory().openSession(); Socket socket = serverData.getSocket()) {
 
                     // listen client for receiving user's data
                     UserDataReceiver userDataReceiver = new UserDataReceiver(socket.getInputStream());
                     String data = userDataReceiver.userDataReceiver();
 
-                    if (!data.equals("")) {
+                    if (data != null) {
 
                         // json string auth data to object
                         ObjectMapper mapper = new ObjectMapper();
@@ -70,7 +59,7 @@ public class ConnectionHandler extends Thread implements IConnectionHandler {
                             messagesTransmitter.messageTransmitter();
 
                             // start messages receiver
-                            userMessageReceiver = new UserMessageReceiver(socket.getInputStream(), session, getServerData().getConnectCounter(), getServerData().getSessionId());
+                            userMessageReceiver = new UserMessageReceiver(socket.getInputStream(), session, serverData.getConnectCounter(), serverData.getSessionId());
                             userMessageReceiver.userMessageReceiver();
 
                             while (true) {

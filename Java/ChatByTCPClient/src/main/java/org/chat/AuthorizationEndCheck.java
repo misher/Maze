@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.Socket;
 
 /**
+ *
  * Created by A.V.Tsaplin on 18.07.2016.
  */
 public class AuthorizationEndCheck {
@@ -22,7 +23,7 @@ public class AuthorizationEndCheck {
         // Timer start
         DelayThread delayThread = new DelayThread(10);
 
-        while (auth == false) {
+        while (!auth) {
 
             // take entering data stream from server socket
             InputStream is = socket.getInputStream();
@@ -36,7 +37,7 @@ public class AuthorizationEndCheck {
             // new string with a received from client data
             String data = new String(buf, 0, bufLength);
 
-            if ((auth == false) && (delayThread.getTimeOut() == true)) {
+            if (delayThread.getTimeOut()) {
                 socket.close();
                 System.out.println("Authorization crash.");
                 System.exit(0);
@@ -44,11 +45,10 @@ public class AuthorizationEndCheck {
 
             if (data.equals("auth correct")) {
                 auth = true;
-                break;
             }
         }
 
-        return auth;
+        return true;
 
 
     }

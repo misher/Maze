@@ -1,6 +1,7 @@
 package org.chat;
 
 /**
+ *
  * Created by A.V.Tsaplin on 08.07.2016.
  */
 
@@ -17,7 +18,7 @@ public class ChatTCPClient {
         // write user's data from console
         Console console = System.console();
         ReadUserData readUserData = new ReadUserData(console);
-        readUserData.ReadUserData();
+        readUserData.readUserData();
         User user = readUserData.getUser();
 
         // start connection
@@ -25,7 +26,7 @@ public class ChatTCPClient {
 
         // convert obj to json and send to server
         JSonConverter jSonConverter = new JSonConverter(readUserData.getUser());
-        socket.getOutputStream().write(jSonConverter.converte().getBytes());
+        socket.getOutputStream().write((jSonConverter.converte() + "^end^").getBytes());
 
         // authorization end check
         AuthorizationEndCheck authorizationEndCheck = new AuthorizationEndCheck(socket);

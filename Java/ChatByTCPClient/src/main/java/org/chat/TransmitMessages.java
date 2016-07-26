@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.net.Socket;
 
 /**
+ *
  * Created by A.V.Tsaplin on 18.07.2016.
  */
+
 public class TransmitMessages {
 
     private Socket socket;
@@ -31,6 +33,3 @@ public class TransmitMessages {
     }
 }
 
-
-//                writeString = writeString + "  " + socket.getInetAddress().getHostAddress() + ":" +socket.getLocalPort();
-//                socket.getOutputStream().write(writeString.getBytes());

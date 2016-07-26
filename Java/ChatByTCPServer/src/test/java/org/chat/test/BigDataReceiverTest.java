@@ -1,6 +1,5 @@
 package org.chat.test;
 
-import junit.framework.Assert;
 import org.chat.common.BigDataReceiver;
 import org.junit.Test;
 
@@ -77,6 +76,9 @@ public class BigDataReceiverTest {
         BigDataReceiver.StringIndexPare stringIndexPare1 = bigDataReceiver2.bigDataReceiver(str2);
         String huy = bigDataReceiver2.toParse(stringIndexPare1);
         assertEquals("One test: ", huy.length(), 180);
+
+
+
 
     }
 }

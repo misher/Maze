@@ -1,4 +1,4 @@
-package org.chat.common;
+package org.chat;
 
 
 

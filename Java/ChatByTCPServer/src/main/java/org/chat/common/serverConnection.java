@@ -8,22 +8,22 @@ import java.net.ServerSocket;
  * Created by A.V.Tsaplin on 20.07.2016.
  */
 
-public class ServerConnection extends Thread implements IConnection {
+public class ServerConnection implements IConnection {
 
-    private int connectCounter = 0;
     private int sessionId;
+    private int connectCounter = 0;
     private IConnectionHandler connectionHandler;
-    private ServerData serverData;
 
-    public ServerConnection(int sessionId, int connectCounter) {
+
+    public ServerConnection(int sessionId, int connectCounter, IConnectionHandler iConnectionHandlerIn) {
         this.sessionId = sessionId;
         this.connectCounter = connectCounter;
+        this.connectionHandler = iConnectionHandlerIn;
     }
 
 
     @Override
-    public Object toAcceptConnection(IConnectionHandler connectionHandlerIn) {
-        this.connectionHandler = connectionHandlerIn;
+    public void toAcceptConnection() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -31,11 +31,11 @@ public class ServerConnection extends Thread implements IConnection {
                     // set socket to localhost and port 3128
                     ServerSocket server = new ServerSocket(3128, 0, InetAddress.getByName("localhost"));
                     System.out.println("server is started");
-
                     // listen port
                     while(true) {
                         // wait a new connect and then handle client
                         // new calculation thread and counter increment
+                        final ServerData serverData;
                         serverData = new ServerData(sessionId, connectCounter, server.accept());
                         connectionHandler.doHandle(serverData);
                         connectCounter++;
@@ -47,6 +47,5 @@ public class ServerConnection extends Thread implements IConnection {
                 }
             }
         }).start();
-        return serverData;
     }
 }

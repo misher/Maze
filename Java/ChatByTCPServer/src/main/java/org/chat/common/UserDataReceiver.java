@@ -18,13 +18,16 @@ public class UserDataReceiver {
 
     public String userDataReceiver() throws IOException {
 
-        String data = "";
+        String retData = null;
 
         // timer start
         DelayThread delayThread = new DelayThread(10);
 
+        // Big data receiver init
+        BigDataReceiver bigDataReceiver = new BigDataReceiver(256);
+
         // listen port to json
-        while ((data.equals("")) && (!delayThread.timeOut)) {
+        while ((retData == null) && (!delayThread.timeOut)) {
 
             // data buffer 64kb
             byte buf[] = new byte[64*1024];
@@ -33,8 +36,13 @@ public class UserDataReceiver {
             int bufLength = inputStream.read(buf);
 
             // new string with a received from client data
-            data = new String(buf, 0, bufLength);
+            String incomingData = new String(buf, 0, bufLength);
+
+            if (!incomingData.isEmpty()) {
+                BigDataReceiver.StringIndexPare stringIndexPare = bigDataReceiver.bigDataReceiver(incomingData);
+                retData = bigDataReceiver.toParse(stringIndexPare);
+            }
         }
-        return data;
+        return retData;
     }
 }

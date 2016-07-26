@@ -28,9 +28,7 @@ public class MessagesTransmitter extends Thread {
         stopped = true;
     }
 
-    public OutputStream getOutputStream() {
-        return outputStream;
-    }
+
 
     public void messageTransmitter() {
         new Thread(new Runnable() {
@@ -44,7 +42,7 @@ public class MessagesTransmitter extends Thread {
                     // show 5 last messages to client when it just connected
                     List<ChatTable> lastChatTable = session.createQuery("from " + ChatTable.class.getName() + " order by id_message desc").setMaxResults(5).list();
                     for (int i = 0; i < lastChatTable.size(); i++) {
-                        outputStream.write((lastChatTable.get(lastChatTable.size() - 1 - i).getAuthor() + ": " + lastChatTable.get(lastChatTable.size() - 1 - i).getMessage() + '\n').getBytes());
+                        outputStream.write((lastChatTable.get(lastChatTable.size() - 1 - i).getAuthor() + ": " + lastChatTable.get(lastChatTable.size() - 1 - i).getMessage() + '\n' + "^end^").getBytes());
                     }
                     if (lastChatTable.size() != 0) {
                         lastMessageIndex = lastChatTable.get(0).getIdMessage();
@@ -59,7 +57,7 @@ public class MessagesTransmitter extends Thread {
                         }
                         if (realMessageIndex > lastMessageIndex) {
                             for (int i = 0; i < (realMessageIndex - lastMessageIndex); i++) {
-                                outputStream.write((lastChatTable.get((realMessageIndex - lastMessageIndex - 1) - i).getAuthor() + ": " + lastChatTable.get((realMessageIndex - lastMessageIndex - 1) - i).getMessage() + '\n').getBytes());
+                                outputStream.write((lastChatTable.get((realMessageIndex - lastMessageIndex - 1) - i).getAuthor() + ": " + lastChatTable.get((realMessageIndex - lastMessageIndex - 1) - i).getMessage() + '\n' + "^end^").getBytes());
                             }
                             lastMessageIndex = realMessageIndex;
                         }
