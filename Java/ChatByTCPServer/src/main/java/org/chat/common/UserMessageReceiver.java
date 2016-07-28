@@ -47,7 +47,7 @@ public class UserMessageReceiver {
                 String data;
 
                 // tcp / ip packet's receiver
-                BigDataReceiver bigDataReceiver = new BigDataReceiver(256);
+                IncomingDataContainer incomingDataContainer = new IncomingDataContainer(512);
 
                 // messages receiver
                 while ((!dataExit.equals("exit")) || (!stopped)) {
@@ -67,34 +67,35 @@ public class UserMessageReceiver {
                     data = new String(buf, 0, bufLength);
 
                     // add incoming data to circular buffer
-                    BigDataReceiver.StringIndexPare stringIndexPare = bigDataReceiver.bigDataReceiver(data);
-                    String resString = bigDataReceiver.toParse(stringIndexPare);
-
-                    if (resString != null) {
-                        // json string data to object
-                        ObjectMapper mapper = new ObjectMapper();
-                        if (!resString.isEmpty()) {
-                            ChatMessages chatMessages = null;
-                            try {
-                                chatMessages = mapper.readValue(resString, ChatMessages.class);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            if (chatMessages != null) {
-                                dataExit = chatMessages.getMessage();
-                                // write incoming data's to base
-                                if (!dataExit.equals("exit")) {
-                                    session.beginTransaction();
-                                    ChatTable chatTable = new ChatTable();
-                                    chatTable.setConnectNumbers(num);
-                                    chatTable.setIdSession(sessionId);
-                                    chatTable.setMessage(chatMessages.getMessage());
-                                    chatTable.setAuthor(chatMessages.getUsername());
-                                    chatTable.setLocalAddress(chatMessages.getLocalAddress());
-                                    session.save(chatTable);
-                                    session.getTransaction().commit();
-                                } else {
-                                    break;
+                    if (incomingDataContainer.incomingDataContainer(data)) {
+                        String resString = incomingDataContainer.toParse("^end^");
+                        if (resString != null) {
+                            incomingDataContainer.clearBuffer();
+                            // json string data to object
+                            ObjectMapper mapper = new ObjectMapper();
+                            if (!resString.isEmpty()) {
+                                ChatMessages chatMessages = null;
+                                try {
+                                    chatMessages = mapper.readValue(resString, ChatMessages.class);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                if (chatMessages != null) {
+                                    dataExit = chatMessages.getMessage();
+                                    // write incoming data's to base
+                                    if (!dataExit.equals("exit")) {
+                                        session.beginTransaction();
+                                        ChatTable chatTable = new ChatTable();
+                                        chatTable.setConnectNumbers(num);
+                                        chatTable.setIdSession(sessionId);
+                                        chatTable.setMessage(chatMessages.getMessage());
+                                        chatTable.setAuthor(chatMessages.getUsername());
+                                        chatTable.setLocalAddress(chatMessages.getLocalAddress());
+                                        session.save(chatTable);
+                                        session.getTransaction().commit();
+                                    } else {
+                                        break;
+                                    }
                                 }
                             }
                         }
