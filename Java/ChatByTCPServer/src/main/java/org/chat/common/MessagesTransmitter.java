@@ -1,5 +1,6 @@
 package org.chat.common;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
 import java.io.OutputStream;
@@ -17,6 +18,8 @@ public class MessagesTransmitter {
     private Session session;
     private volatile boolean stopped;
 
+    private static Logger logMesTrans = Logger.getLogger(MessagesTransmitter.class.getName());
+
     public MessagesTransmitter (OutputStream outputStream, Session session) {
         super();
         this.outputStream = outputStream;
@@ -28,7 +31,9 @@ public class MessagesTransmitter {
         stopped = true;
     }
 
-
+    public boolean getStopped() {
+        return stopped;
+    }
 
     public void messageTransmitter() {
         new Thread(new Runnable() {
@@ -62,10 +67,12 @@ public class MessagesTransmitter {
                             lastMessageIndex = realMessageIndex;
                         }
                     }
-                    System.out.println("Messages Transmitter was stopped.");
+                    logMesTrans.info("Messages Transmitter was stopped.");
                 }
                 catch(Exception exception) { // exception handling
-                    System.out.println("Messages Transmitter error: " + exception);
+                    logMesTrans.error("Messages Transmitter error: " + exception);
+                    stopThread();
+                    exception.printStackTrace();
                 }
             }
         }).start();

@@ -31,7 +31,7 @@ public class UserDataReceiverTest {
     public void userDataReceiverTest() {
 
 
-        final InputStream anyInputStream = new ByteArrayInputStream("test data".getBytes());
+        final InputStream anyInputStream = new ByteArrayInputStream("test data^end^".getBytes());
 
         UserDataReceiver userDataReceiver = new UserDataReceiver(anyInputStream);
 

@@ -1,5 +1,7 @@
 package org.chat.common;
 
+import org.apache.log4j.Logger;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -18,16 +20,16 @@ public class UserDataReceiver {
 
     public String userDataReceiver() throws IOException {
 
-        String retData = null;
+        String retString = null;
 
         // timer start
         DelayThread delayThread = new DelayThread(10);
 
-        // Big data receiver init
-        BigDataReceiver bigDataReceiver = new BigDataReceiver(256);
+        // Create buffer
+        IncomingDataContainer incomingDataContainer = new IncomingDataContainer(512);
 
         // listen port to json
-        while ((retData == null) && (!delayThread.timeOut)) {
+        while ((retString == null) && (!delayThread.timeOut)) {
 
             // data buffer 64kb
             byte buf[] = new byte[64*1024];
@@ -39,10 +41,15 @@ public class UserDataReceiver {
             String incomingData = new String(buf, 0, bufLength);
 
             if (!incomingData.isEmpty()) {
-                BigDataReceiver.StringIndexPare stringIndexPare = bigDataReceiver.bigDataReceiver(incomingData);
-                retData = bigDataReceiver.toParse(stringIndexPare);
+                if (incomingDataContainer.incomingDataContainer(incomingData)) {
+                    String resString = incomingDataContainer.toParse("^end^");
+                    if (resString != null) {
+                        incomingDataContainer.clearBuffer();
+                        return resString;
+                    }
+                }
             }
         }
-        return retData;
+        return retString;
     }
 }

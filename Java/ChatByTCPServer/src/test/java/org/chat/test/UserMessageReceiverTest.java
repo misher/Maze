@@ -23,7 +23,7 @@ public class UserMessageReceiverTest {
     @Test
     public void userMessageReceiverTest() throws IOException, InterruptedException {
 
-        String messageDataJSon = "{\"username\":\"test\",\"password\":\"test\",\"message\":\"test\",\"localAddress\":\"test\"}";
+        String messageDataJSon = "{\"username\":\"test\",\"password\":\"test\",\"message\":\"test\",\"localAddress\":\"test\"}^end^";
         InputStream inputStream = new ByteArrayInputStream(messageDataJSon.getBytes());
 
         Session session = HibernateUtil.getSessionFactory().openSession();

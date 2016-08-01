@@ -1,7 +1,8 @@
 package org.chat.common;
 
+import org.apache.log4j.PropertyConfigurator;
+
 import java.sql.SQLException;
-import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -11,6 +12,10 @@ import java.util.concurrent.TimeUnit;
 public class ServerStart {
 
     public static void main (String[] args) throws SQLException, InterruptedException {
+
+
+        PropertyConfigurator.configure("log4j.properties");
+
 
         // Initialization for dataBases
         DataBaseInfo dataBaseInfo = new DataBaseInfo("jdbc:mysql://localhost:3306/chatBase", "root", "mercedesg55amg");

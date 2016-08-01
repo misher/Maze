@@ -1,5 +1,7 @@
 package org.chat.common;
 
+import org.apache.log4j.Logger;
+
 import java.net.InetAddress;
 import java.net.ServerSocket;
 
@@ -13,6 +15,8 @@ public class ServerConnection implements IConnection {
     private int sessionId;
     private int connectCounter = 0;
     private IConnectionHandler connectionHandler;
+
+    private static Logger logServerCon = Logger.getLogger(ServerConnection.class.getName());
 
 
     public ServerConnection(int sessionId, int connectCounter, IConnectionHandler iConnectionHandlerIn) {
@@ -30,7 +34,7 @@ public class ServerConnection implements IConnection {
                 try {
                     // set socket to localhost and port 3128
                     ServerSocket server = new ServerSocket(3128, 0, InetAddress.getByName("localhost"));
-                    System.out.println("server is started");
+                    logServerCon.info("server is started");
                     // listen port
                     while(true) {
                         // wait a new connect and then handle client
@@ -43,7 +47,7 @@ public class ServerConnection implements IConnection {
                 }
                 catch(Exception exception) { // exception handling
                     exception.printStackTrace();
-                    System.out.println("ServerConnection error 1: " + exception);
+                    logServerCon.error("ServerConnection error 1: " + exception);
                 }
             }
         }).start();

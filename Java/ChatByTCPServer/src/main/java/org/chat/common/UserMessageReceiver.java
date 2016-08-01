@@ -1,6 +1,7 @@
 package org.chat.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
 import java.io.IOException;
@@ -19,6 +20,8 @@ public class UserMessageReceiver {
     private int num;
     private int sessionId;
     private volatile boolean stopped;
+
+    private static Logger logUserMessageRec = Logger.getLogger(UserMessageReceiver.class.getName());
 
     public UserMessageReceiver(InputStream inputStream, Session session, int num, int sessionId) {
         this.inputStream = inputStream;
@@ -49,6 +52,7 @@ public class UserMessageReceiver {
                 // tcp / ip packet's receiver
                 IncomingDataContainer incomingDataContainer = new IncomingDataContainer(512);
 
+
                 // messages receiver
                 while ((!dataExit.equals("exit")) || (!stopped)) {
 
@@ -60,13 +64,15 @@ public class UserMessageReceiver {
                     try {
                         bufLength = inputStream.read(buf);
                     } catch (IOException e) {
+                        stopThread();
+                        logUserMessageRec.error("User messages receiver IO error. Code 1.");
                         e.printStackTrace();
                     }
 
                     // new string with a received from client data
                     data = new String(buf, 0, bufLength);
 
-                    // add incoming data to circular buffer
+                    // add incoming data to buffer
                     if (incomingDataContainer.incomingDataContainer(data)) {
                         String resString = incomingDataContainer.toParse("^end^");
                         if (resString != null) {
@@ -78,6 +84,8 @@ public class UserMessageReceiver {
                                 try {
                                     chatMessages = mapper.readValue(resString, ChatMessages.class);
                                 } catch (IOException e) {
+                                    stopThread();
+                                    logUserMessageRec.error("User messages receiver IO error. Code 2.");
                                     e.printStackTrace();
                                 }
                                 if (chatMessages != null) {
@@ -101,9 +109,9 @@ public class UserMessageReceiver {
                         }
                     }
                 }
-                System.out.println("Current client is disconnected.");
+                logUserMessageRec.info("Current client is disconnected.");
                 stopped = true;
-                System.out.println("User message receiver thread was stopped.");
+                logUserMessageRec.info("User message receiver thread was stopped.");
             }
         }).start();
     }

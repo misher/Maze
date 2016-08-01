@@ -1,6 +1,7 @@
 package org.chat.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.log4j.Logger;
 import org.chat.persistence.HibernateUtil;
 import org.hibernate.Session;
 
@@ -15,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ConnectionHandler extends Thread implements IConnectionHandler {
 
+    private static  Logger logConHndl = Logger.getLogger(ConnectionHandler.class.getName());
 
     public ConnectionHandler() {
 
@@ -52,7 +54,7 @@ public class ConnectionHandler extends Thread implements IConnectionHandler {
 
                             // send confirmation about correct authorization
                             socket.getOutputStream().write("auth correct".getBytes());
-                            System.out.println("Authorization is correct!");
+                            logConHndl.info("Authorization is correct!");
 
                             // thread which show all messages to client
                             messagesTransmitter =  new MessagesTransmitter(socket.getOutputStream(), session);
@@ -63,29 +65,29 @@ public class ConnectionHandler extends Thread implements IConnectionHandler {
                             userMessageReceiver.userMessageReceiver();
 
                             while (true) {
-                                if (userMessageReceiver.getStopped()) {
-                                    // stop transmitter thread
+                                if (userMessageReceiver.getStopped() || messagesTransmitter.getStopped()) {
+                                    // stop threads
                                     messagesTransmitter.stopThread();
+                                    userMessageReceiver.stopThread();
 
                                     // wait to stop messages-transmitter and close session and connection
                                     TimeUnit.MILLISECONDS.sleep(300);
-                                    System.out.println("Session is closed. Socket is closed.");
-
+                                    logConHndl.info("Session is closed. Socket is closed.");
                                     // stop this loop
                                     break;
                                 }
                             }
 
                         } else {
-                            System.out.println("Authorization is failed. User not match!");
+                            logConHndl.info("Authorization is failed. User not match!");
                         }
                     } else {
-                        System.out.println("Authorization is failed. Authorization data is empty!");
+                        logConHndl.info("Authorization is failed. Authorization data is empty!");
                     }
                 }
                 catch(Exception exception) {
                     // exception handling
-                    System.out.println("ChatTCPServerHandler error: " + exception);
+                    logConHndl.error("ChatTCPServerHandler error: " + exception);
                     // stop receiver - transmitter threads
                     if (messagesTransmitter != null) {
                         messagesTransmitter.stopThread();
@@ -97,11 +99,12 @@ public class ConnectionHandler extends Thread implements IConnectionHandler {
                     try {
                         TimeUnit.SECONDS.sleep(1);
                     } catch (InterruptedException e) {
+                        logConHndl.error("Timer error. 1.");
                         e.printStackTrace();
                     }
-                    System.out.println("Session is closed. Socket is closed.");
+                    logConHndl.info("Session is closed. Socket is closed.");
                 } finally {
-                    System.out.println("ChatTCPHandler thread was stopped. 1.");
+                    logConHndl.info("ChatTCPHandler thread was stopped. 1.");
                 }
             }
         }).start();
