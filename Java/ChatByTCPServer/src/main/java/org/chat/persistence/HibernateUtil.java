@@ -4,17 +4,20 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.springframework.stereotype.Component;
 
 
 /**
+ *
  * Created by A.V.Tsaplin on 14.07.2016.
  */
 
+@Component ("hibernateUtil")
 public class HibernateUtil {
 
     private static SessionFactory sessionFactory = buildSessionFactory();
 
-    protected static SessionFactory buildSessionFactory() {
+    public static SessionFactory buildSessionFactory() {
 
         // A SessionFactory is set up once for an application!
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();

@@ -3,11 +3,17 @@ package org.chat.common;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.persistence.*;
+
+import static javax.persistence.GenerationType.IDENTITY;
+
 /**
  *
  * Created by A.V.Tsaplin on 18.07.2016.
  */
 
+@Entity
+@Table(name = "chatUsers", catalog = "chatbase")
 public class ChatUsers implements java.io.Serializable  {
 
     @JsonIgnore
@@ -26,6 +32,7 @@ public class ChatUsers implements java.io.Serializable  {
         this.password = password;
     }
 
+    @Column(name = "user", length = 25, nullable = false)
     public String getUser() {
         return user;
     }
@@ -34,6 +41,7 @@ public class ChatUsers implements java.io.Serializable  {
         this.user = user;
     }
 
+    @Column(name = "password", length = 25, nullable = false)
     public String getPassword() {
         return password;
     }
@@ -42,6 +50,9 @@ public class ChatUsers implements java.io.Serializable  {
         this.password = password;
     }
 
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id_user", length = 11, nullable = false)
     public Integer getIdUser() {
         return idUser;
     }

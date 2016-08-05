@@ -1,10 +1,19 @@
 package org.chat.common;
 
+import javax.persistence.*;
+import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.Id;
+import org.springframework.stereotype.Component;
+
 /**
  *
  * Created by A.V.Tsaplin on 14.07.2016.
  */
 
+
+@Entity
+@Table(name = "chatTable", catalog = "chatbase")
+@Component
 public class ChatTable implements java.io.Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -27,6 +36,9 @@ public class ChatTable implements java.io.Serializable {
         this.localAddress = localAddress;
     }
 
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id_message", length = 11, nullable = false)
     public Integer getIdMessage() {
         return idMessage;
     }
@@ -35,6 +47,7 @@ public class ChatTable implements java.io.Serializable {
         this.idMessage = idMessage;
     }
 
+    @Column(name = "id_session", length = 11, nullable = false)
     public Integer getIdSession() {
         return idSession;
     }
@@ -43,6 +56,7 @@ public class ChatTable implements java.io.Serializable {
         this.idSession = idSession;
     }
 
+    @Column(name = "connect_numbers", length = 11, nullable = false)
     public Integer getConnectNumbers() {
         return connectNumbers;
     }
@@ -51,6 +65,7 @@ public class ChatTable implements java.io.Serializable {
         this.connectNumbers = connectNumbers;
     }
 
+    @Column(name = "message", length = 45, nullable = false)
     public String getMessage() {
         return message;
     }
@@ -59,6 +74,7 @@ public class ChatTable implements java.io.Serializable {
         this.message = message;
     }
 
+    @Column(name = "author", length = 25, nullable = false)
     public String getAuthor() {
         return author;
     }
@@ -67,6 +83,7 @@ public class ChatTable implements java.io.Serializable {
         this.author = author;
     }
 
+    @Column(name = "local_address", length = 40, nullable = false)
     public String getLocalAddress() {
         return localAddress;
     }

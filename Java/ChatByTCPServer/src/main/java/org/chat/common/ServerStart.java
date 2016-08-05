@@ -13,7 +13,7 @@ public class ServerStart {
 
     public static void main (String[] args) throws SQLException, InterruptedException {
 
-
+        // To configure logger (log4j) properties
         PropertyConfigurator.configure("log4j.properties");
 
 

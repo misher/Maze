@@ -1,9 +1,16 @@
 package org.chat.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
+import org.chat.persistence.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 
+
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -44,6 +51,21 @@ public class UserMessageReceiver {
         new Thread(new Runnable() {
             @Override
             public void run() {
+
+                AbstractApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+//                ApplicationContext appContext = new ClassPathXmlApplicationContext("spring/config/BeanLocations.xml");
+//                AbstractApplicationContext appContext = new ClassPathXmlApplicationContext("spring/config/BeanLocations.xml");
+//                ChatTableDao chatTableDao = (ChatTableDao) appContext.getBean("chatTableDao");
+//                context.getBean("sessionFactory", context.getBean("dataSource"));
+//                Object obj = context.getBean("chatTableDao",  context.getBean("sessionFactory", context.getBean("dataSource")));
+
+//                BasicDataSource basicDataSource = (BasicDataSource) context.getBean("dataSource");
+//                SessionFactory sessionFactory = (SessionFactory) context.getBean("sessionFactory", basicDataSource);
+
+
+                IChatTableDao chatTableDao = (IChatTableDao) context.getBean("chatTableDao");
+
+//                ChatTableDao chatTableDao = (ChatTableDao) context.getBean("chatTableDao",  context.getBean("sessionFactory", context.getBean("dataSource"))) ;
 
                 // data to zero
                 String dataExit = "";
@@ -92,15 +114,17 @@ public class UserMessageReceiver {
                                     dataExit = chatMessages.getMessage();
                                     // write incoming data's to base
                                     if (!dataExit.equals("exit")) {
-                                        session.beginTransaction();
+//                                        session.beginTransaction();
+//                                        ChatTable chatTable = (ChatTable) context.getBean("chatTable");
                                         ChatTable chatTable = new ChatTable();
                                         chatTable.setConnectNumbers(num);
                                         chatTable.setIdSession(sessionId);
                                         chatTable.setMessage(chatMessages.getMessage());
                                         chatTable.setAuthor(chatMessages.getUsername());
                                         chatTable.setLocalAddress(chatMessages.getLocalAddress());
-                                        session.save(chatTable);
-                                        session.getTransaction().commit();
+//                                        session.save(chatTable);
+//                                        session.getTransaction().commit();
+                                        chatTableDao.save(chatTable);
                                     } else {
                                         break;
                                     }
