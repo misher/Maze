@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.chat.persistence.HibernateUtil;
 import org.hibernate.Session;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 
 
 import java.net.Socket;
@@ -33,7 +35,14 @@ public class ConnectionHandler extends Thread implements IConnectionHandler {
                 MessagesTransmitter messagesTransmitter = null;
                 UserMessageReceiver userMessageReceiver = null;
 
-                try (Session session = HibernateUtil.getSessionFactory().openSession(); Socket socket = serverData.getSocket()) {
+//                Session session = HibernateUtil.getSessionFactory().openSession();
+                try ( Socket socket = serverData.getSocket()) {
+
+                    // App context
+                    AbstractApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+
+                    // Create new session
+                    Session session = (Session) context.getBean("session");
 
                     // listen client for receiving user's data
                     UserDataReceiver userDataReceiver = new UserDataReceiver(socket.getInputStream());
@@ -61,7 +70,7 @@ public class ConnectionHandler extends Thread implements IConnectionHandler {
                             messagesTransmitter.messageTransmitter();
 
                             // start messages receiver
-                            userMessageReceiver = new UserMessageReceiver(socket.getInputStream(), session, serverData.getConnectCounter(), serverData.getSessionId());
+                            userMessageReceiver = new UserMessageReceiver(socket.getInputStream(), session, serverData.getConnectCounter(), serverData.getSessionId(), context);
                             userMessageReceiver.userMessageReceiver();
 
                             while (true) {
@@ -69,7 +78,6 @@ public class ConnectionHandler extends Thread implements IConnectionHandler {
                                     // stop threads
                                     messagesTransmitter.stopThread();
                                     userMessageReceiver.stopThread();
-
                                     // wait to stop messages-transmitter and close session and connection
                                     TimeUnit.MILLISECONDS.sleep(300);
                                     logConHndl.info("Session is closed. Socket is closed.");
@@ -77,7 +85,6 @@ public class ConnectionHandler extends Thread implements IConnectionHandler {
                                     break;
                                 }
                             }
-
                         } else {
                             logConHndl.info("Authorization is failed. User not match!");
                         }

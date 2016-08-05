@@ -17,7 +17,7 @@ public class HibernateUtil {
 
     private static SessionFactory sessionFactory = buildSessionFactory();
 
-    public static SessionFactory buildSessionFactory() {
+    protected static SessionFactory buildSessionFactory() {
 
         // A SessionFactory is set up once for an application!
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
