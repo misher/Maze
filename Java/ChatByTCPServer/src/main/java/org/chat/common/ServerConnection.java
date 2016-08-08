@@ -1,6 +1,7 @@
 package org.chat.common;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.DisposableBean;
 
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -10,7 +11,7 @@ import java.net.ServerSocket;
  * Created by A.V.Tsaplin on 20.07.2016.
  */
 
-public class ServerConnection implements IConnection {
+public class ServerConnection implements IConnection, DisposableBean {
 
     private int sessionId;
     private int connectCounter = 0;
@@ -51,5 +52,10 @@ public class ServerConnection implements IConnection {
                 }
             }
         }).start();
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        logServerCon.info("Server was stopped.");
     }
 }

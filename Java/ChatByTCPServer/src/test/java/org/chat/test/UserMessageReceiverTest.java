@@ -1,10 +1,14 @@
 package org.chat.test;
 
 import org.chat.common.ChatTable;
+import org.chat.common.ChatTableDao;
+import org.chat.common.SpringConfig;
 import org.chat.common.UserMessageReceiver;
 import org.chat.persistence.HibernateUtil;
 import org.hibernate.Session;
 import org.junit.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -20,27 +24,33 @@ import static junit.framework.TestCase.assertEquals;
  */
 public class UserMessageReceiverTest {
 
-//    @Test
-//    public void userMessageReceiverTest() throws IOException, InterruptedException {
-//
-//        String messageDataJSon = "{\"username\":\"test\",\"password\":\"test\",\"message\":\"test\",\"localAddress\":\"test\"}^end^";
-//        InputStream inputStream = new ByteArrayInputStream(messageDataJSon.getBytes());
-//
-//        Session session = HibernateUtil.getSessionFactory().openSession();
-//
-//        UserMessageReceiver userMessagesReceiver = new UserMessageReceiver(inputStream, session, 0, 0);
-//        userMessagesReceiver.userMessageReceiver();
-//
-//        // wait a few time
-//        TimeUnit.SECONDS.sleep(2);
-//
-//        userMessagesReceiver.stopThread();
-//
-//        List<ChatTable> lastChatTable = session.createQuery("from " + ChatTable.class.getName() + " order by id_message desc").setMaxResults(1).list();
-//        assertEquals("Author ", lastChatTable.get(0).getAuthor(), "test");
-//        assertEquals("Password ", lastChatTable.get(0).getAuthor(), "test");
-//        assertEquals("Message ", lastChatTable.get(0).getAuthor(), "test");
-//        assertEquals("Address ", lastChatTable.get(0).getAuthor(), "test");
-//
-//    }
+    @Test
+    public void userMessageReceiverTest() throws IOException, InterruptedException {
+
+        String messageDataJSon = "{\"username\":\"test\",\"password\":\"test\",\"message\":\"test\",\"localAddress\":\"test\"}^end^";
+        InputStream inputStream = new ByteArrayInputStream(messageDataJSon.getBytes());
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        // App context
+        AbstractApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+
+        // Get DAO
+        ChatTableDao chatTableDao = (ChatTableDao) context.getBean("chatTableDao", session);
+
+        UserMessageReceiver userMessagesReceiver = new UserMessageReceiver(inputStream, session, 0, 0, chatTableDao);
+        userMessagesReceiver.userMessageReceiver();
+
+        // wait a few time
+        TimeUnit.SECONDS.sleep(2);
+
+        userMessagesReceiver.stopThread();
+
+        List<ChatTable> lastChatTable = session.createQuery("from " + ChatTable.class.getName() + " order by id_message desc").setMaxResults(1).list();
+        assertEquals("Author ", lastChatTable.get(0).getAuthor(), "test");
+        assertEquals("Password ", lastChatTable.get(0).getAuthor(), "test");
+        assertEquals("Message ", lastChatTable.get(0).getAuthor(), "test");
+        assertEquals("Address ", lastChatTable.get(0).getAuthor(), "test");
+
+    }
 }

@@ -55,16 +55,19 @@ public class MessagesTransmitter {
 
                     // refresh client messages list
                     while (!stopped) {
-                        TimeUnit.SECONDS.sleep(1);
-                        lastChatTable = session.createQuery("from " + ChatTable.class.getName() + " order by id_message desc").setMaxResults(5).list();
-                        if (lastChatTable.size() != 0) {
-                            realMessageIndex = lastChatTable.get(0).getIdMessage();
-                        }
-                        if (realMessageIndex > lastMessageIndex) {
-                            for (int i = 0; i < (realMessageIndex - lastMessageIndex); i++) {
-                                outputStream.write((lastChatTable.get((realMessageIndex - lastMessageIndex - 1) - i).getAuthor() + ": " + lastChatTable.get((realMessageIndex - lastMessageIndex - 1) - i).getMessage() + '\n' + "^end^").getBytes());
+//                        TimeUnit.SECONDS.sleep(1);
+                        if (AllowCachig.getAllow() == true) {
+                            lastChatTable = session.createQuery("from " + ChatTable.class.getName() + " order by id_message desc").setMaxResults(5).list();
+                            if (lastChatTable.size() != 0) {
+                                realMessageIndex = lastChatTable.get(0).getIdMessage();
                             }
-                            lastMessageIndex = realMessageIndex;
+                            if (realMessageIndex > lastMessageIndex) {
+                                for (int i = 0; i < (realMessageIndex - lastMessageIndex); i++) {
+                                    outputStream.write((lastChatTable.get((realMessageIndex - lastMessageIndex - 1) - i).getAuthor() + ": " + lastChatTable.get((realMessageIndex - lastMessageIndex - 1) - i).getMessage() + '\n' + "^end^").getBytes());
+                                }
+                                lastMessageIndex = realMessageIndex;
+                            }
+                            AllowCachig.toDisable();
                         }
                     }
                     logMesTrans.info("Messages Transmitter was stopped.");

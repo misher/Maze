@@ -2,12 +2,15 @@ package org.chat.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
-import org.chat.persistence.HibernateUtil;
 import org.hibernate.Session;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
@@ -16,12 +19,17 @@ import java.util.concurrent.TimeUnit;
  * Created by A.V.Tsaplin on 20.07.2016.
  */
 
-public class ConnectionHandler extends Thread implements IConnectionHandler {
+public class ConnectionHandler extends Thread implements IConnectionHandler, DisposableBean, ApplicationContextAware {
 
     private static  Logger logConHndl = Logger.getLogger(ConnectionHandler.class.getName());
 
-    public ConnectionHandler() {
+    private Session session;
+    private ChatTableDao chatTableDao;
+    private ApplicationContext applicationContext;
 
+    public ConnectionHandler(Session session, ChatTableDao chatTableDao) {
+        this.session = session;
+        this.chatTableDao = chatTableDao;
     }
 
     @Override
@@ -37,12 +45,6 @@ public class ConnectionHandler extends Thread implements IConnectionHandler {
 
 //                Session session = HibernateUtil.getSessionFactory().openSession();
                 try ( Socket socket = serverData.getSocket()) {
-
-                    // App context
-                    AbstractApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
-
-                    // Create new session
-                    Session session = (Session) context.getBean("session");
 
                     // listen client for receiving user's data
                     UserDataReceiver userDataReceiver = new UserDataReceiver(socket.getInputStream());
@@ -62,21 +64,31 @@ public class ConnectionHandler extends Thread implements IConnectionHandler {
                         if (checkUser != null){
 
                             // send confirmation about correct authorization
-                            socket.getOutputStream().write("auth correct".getBytes());
+                            OutputStream socketOutputStream = socket.getOutputStream();
+                            InputStream socketInputStream = socket.getInputStream();
+                            socketOutputStream.write("auth correct".getBytes());
                             logConHndl.info("Authorization is correct!");
 
                             // thread which show all messages to client
-                            messagesTransmitter =  new MessagesTransmitter(socket.getOutputStream(), session);
+                            messagesTransmitter =  new MessagesTransmitter(socketOutputStream, session);
                             messagesTransmitter.messageTransmitter();
 
                             // start messages receiver
-                            userMessageReceiver = new UserMessageReceiver(socket.getInputStream(), session, serverData.getConnectCounter(), serverData.getSessionId(), context);
+                            userMessageReceiver = new UserMessageReceiver(socketInputStream, session, serverData.getConnectCounter(), serverData.getSessionId(), chatTableDao);
                             userMessageReceiver.userMessageReceiver();
+
+                            IErrorHandler userMessageReceiverErrHdlr = new IErrorHandler() {
+                                @Override
+                                public void errorHappened(Throwable t) {
+                                    messagesTransmitter.stopThread();
+                                }
+                            };
+
 
                             while (true) {
                                 if (userMessageReceiver.getStopped() || messagesTransmitter.getStopped()) {
                                     // stop threads
-                                    messagesTransmitter.stopThread();
+
                                     userMessageReceiver.stopThread();
                                     // wait to stop messages-transmitter and close session and connection
                                     TimeUnit.MILLISECONDS.sleep(300);
@@ -84,6 +96,7 @@ public class ConnectionHandler extends Thread implements IConnectionHandler {
                                     // stop this loop
                                     break;
                                 }
+                                TimeUnit.MILLISECONDS.sleep(500);
                             }
                         } else {
                             logConHndl.info("Authorization is failed. User not match!");
@@ -116,4 +129,19 @@ public class ConnectionHandler extends Thread implements IConnectionHandler {
             }
         }).start();
     }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+
+        this.applicationContext = applicationContext;
+    }
 }
+
+
+
+
+//                    // App context
+//                    AbstractApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+//
+//                    // Create new session
+//                    Session session = (Session) context.getBean("session");

@@ -3,7 +3,6 @@ package org.chat.common;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
-import org.springframework.context.support.AbstractApplicationContext;
 
 
 
@@ -22,18 +21,18 @@ public class UserMessageReceiver {
     private Session session;
     private int num;
     private int sessionId;
+    private ChatTableDao chatTableDao;
     private volatile boolean stopped;
-    private final  AbstractApplicationContext context;
 
     private static Logger logUserMessageRec = Logger.getLogger(UserMessageReceiver.class.getName());
 
-    public UserMessageReceiver(InputStream inputStream, Session session, int num, int sessionId,  AbstractApplicationContext context) {
+    public UserMessageReceiver(InputStream inputStream, Session session, int num, int sessionId, ChatTableDao chatTableDao) {
         this.inputStream = inputStream;
         this.session = session;
         this.num = num;
         this.sessionId = sessionId;
+        this.chatTableDao = chatTableDao;
         this.stopped = false;
-        this.context = context;
     }
 
     public void stopThread () {
@@ -50,15 +49,12 @@ public class UserMessageReceiver {
             @Override
             public void run() {
 
-                IChatTableDao chatTableDao = (IChatTableDao) context.getBean("chatTableDao", session);
-
                 // data to zero
                 String dataExit = "";
                 String data;
 
                 // tcp / ip packet's receiver
                 IncomingDataContainer incomingDataContainer = new IncomingDataContainer(512);
-
 
                 // messages receiver
                 while ((!dataExit.equals("exit")) || (!stopped)) {
@@ -101,6 +97,7 @@ public class UserMessageReceiver {
                                     if (!dataExit.equals("exit")) {
                                         ChatTable chatTable = new ChatTable(num, sessionId, chatMessages.getMessage(), chatMessages.getUsername(), chatMessages.getLocalAddress());
                                         chatTableDao.save(chatTable);
+                                        AllowCachig.toAllow();
                                     } else {
                                         break;
                                     }
