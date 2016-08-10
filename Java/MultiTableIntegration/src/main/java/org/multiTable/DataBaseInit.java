@@ -1,8 +1,5 @@
 package org.multiTable;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
 import java.sql.*;
 
 /**
@@ -21,9 +18,12 @@ public class DataBaseInit {
 
     public void dataBaseInit() throws SQLException {
 
+        final String queryToDropUsers = "drop table IF EXISTS users";
+        final String queryToDropRoles = "drop table IF EXISTS roles";
+
         final String queryCreateUsersTable = "create table if not exists users (id int(11) not null  AUTO_INCREMENT," +
                 "login varchar(25) not null, password varchar(25) not null, name varchar(25) not null, surname varchar(25) not null, " +
-                "rolename varchar(25) not null, primary key(id)) engine = INNODB default charset = latin1";
+                "rolename varchar(25) not null, primary key(id), FOREIGN KEY (rolename) REFERENCES roles(role)) engine = INNODB default charset = latin1";
 
         final String queryCreateRolesTable = "create table if not exists roles (role varchar(11) not null," +
                 " actionsjson varchar(512) not null, primary key(role)) engine = INNODB default charset = latin1";
@@ -62,19 +62,27 @@ public class DataBaseInit {
 
         try (Connection con = DriverManager.getConnection(dataBaseInfo.getAddress(), dataBaseInfo.getUser(), dataBaseInfo.getPassword()); Statement stmt = con.createStatement()) {
 
-            // executing users
-            stmt.executeUpdate(queryCreateUsersTable);
+            //drop!
+            stmt.executeUpdate(queryToDropUsers);
+            stmt.executeUpdate(queryToDropRoles);
+
             // executing roles
             stmt.executeUpdate(queryCreateRolesTable);
+            // executing users
+            stmt.executeUpdate(queryCreateUsersTable);
+
             // executing insert query
-            stmt.executeUpdate(insertQueryMisher);
-            stmt.executeUpdate(insertQueryIlya);
-            stmt.executeUpdate(insertQueryArtem);
-            stmt.executeUpdate(insertQueryArtur);
             stmt.executeUpdate(insertQueryOwner);
             stmt.executeUpdate(insertQueryTopManager);
             stmt.executeUpdate(insertQuerySystemAdmin);
             stmt.executeUpdate(insertQueryProgrammer);
+
+            stmt.executeUpdate(insertQueryMisher);
+            stmt.executeUpdate(insertQueryIlya);
+            stmt.executeUpdate(insertQueryArtem);
+            stmt.executeUpdate(insertQueryArtur);
+
+
 
         } catch (SQLException sqlEx) {
             sqlEx.printStackTrace();

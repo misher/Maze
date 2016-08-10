@@ -18,29 +18,25 @@ import java.io.InputStream;
 public class UserMessageReceiver {
 
     private InputStream inputStream;
-    private Session session;
     private int num;
     private int sessionId;
-    private ChatTableDao chatTableDao;
     private volatile boolean stopped;
+    private IExitHandler exitHandler;
 
     private static Logger logUserMessageRec = Logger.getLogger(UserMessageReceiver.class.getName());
 
-    public UserMessageReceiver(InputStream inputStream, Session session, int num, int sessionId, ChatTableDao chatTableDao) {
+    private IDaoFactory daoFactory;
+
+    public UserMessageReceiver(InputStream inputStream, int num, int sessionId, IDaoFactory daoFactory) {
         this.inputStream = inputStream;
-        this.session = session;
         this.num = num;
         this.sessionId = sessionId;
-        this.chatTableDao = chatTableDao;
         this.stopped = false;
+        this.daoFactory = daoFactory;
     }
 
     public void stopThread () {
         this.stopped = true;
-    }
-
-    public boolean getStopped() {
-        return stopped;
     }
 
     public void userMessageReceiver() {
@@ -67,9 +63,11 @@ public class UserMessageReceiver {
                     try {
                         bufLength = inputStream.read(buf);
                     } catch (IOException e) {
-                        stopThread();
+                        exitHandler.exitByError("InputStream error.", e);
                         logUserMessageRec.error("User messages receiver IO error. Code 1.");
                         e.printStackTrace();
+                        stopped = true;
+                        return;
                     }
 
                     // new string with a received from client data
@@ -87,18 +85,22 @@ public class UserMessageReceiver {
                                 try {
                                     chatMessages = mapper.readValue(resString, ChatMessages.class);
                                 } catch (IOException e) {
-                                    stopThread();
+                                    exitHandler.exitByError("Json parsing error", e);
+                                    stopped = true;
                                     logUserMessageRec.error("User messages receiver IO error. Code 2.");
                                     e.printStackTrace();
+                                    return;
                                 }
                                 if (chatMessages != null) {
                                     dataExit = chatMessages.getMessage();
                                     // write incoming data's to base
                                     if (!dataExit.equals("exit")) {
                                         ChatTable chatTable = new ChatTable(num, sessionId, chatMessages.getMessage(), chatMessages.getUsername(), chatMessages.getLocalAddress());
+                                        ChatTableDao chatTableDao = daoFactory.createChatTableDao();
                                         chatTableDao.save(chatTable);
                                         AllowCachig.toAllow();
                                     } else {
+                                        exitHandler.exitByRequest();
                                         break;
                                     }
                                 }
@@ -107,9 +109,17 @@ public class UserMessageReceiver {
                     }
                 }
                 logUserMessageRec.info("Current client is disconnected.");
-                stopped = true;
+                stopThread();
                 logUserMessageRec.info("User message receiver thread was stopped.");
             }
         }).start();
+    }
+
+    public void setExitHandler(IExitHandler exitHandler) {
+        this.exitHandler = exitHandler;
+    }
+
+    public IExitHandler getExitHandler() {
+        return exitHandler;
     }
 }

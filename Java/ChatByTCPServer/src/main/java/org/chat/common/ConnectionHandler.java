@@ -9,10 +9,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -24,28 +24,25 @@ public class ConnectionHandler extends Thread implements IConnectionHandler, Dis
     private static  Logger logConHndl = Logger.getLogger(ConnectionHandler.class.getName());
 
     private Session session;
-    private ChatTableDao chatTableDao;
     private ApplicationContext applicationContext;
 
-    public ConnectionHandler(Session session, ChatTableDao chatTableDao) {
+    public ConnectionHandler(Session session, ApplicationContext applicationContext) {
         this.session = session;
-        this.chatTableDao = chatTableDao;
+        this.applicationContext = applicationContext;
     }
+
 
     @Override
     public void doHandle(final ServerData serverData) {
 
         new Thread(new Runnable() {
 
+            private Socket socket;
+
             public void run() {
 
-                // create variables to transmitter thread
-                MessagesTransmitter messagesTransmitter = null;
-                UserMessageReceiver userMessageReceiver = null;
-
-//                Session session = HibernateUtil.getSessionFactory().openSession();
-                try ( Socket socket = serverData.getSocket()) {
-
+                try {
+                    socket = serverData.getSocket();
                     // listen client for receiving user's data
                     UserDataReceiver userDataReceiver = new UserDataReceiver(socket.getInputStream());
                     String data = userDataReceiver.userDataReceiver();
@@ -70,61 +67,70 @@ public class ConnectionHandler extends Thread implements IConnectionHandler, Dis
                             logConHndl.info("Authorization is correct!");
 
                             // thread which show all messages to client
-                            messagesTransmitter =  new MessagesTransmitter(socketOutputStream, session);
+                            final MessagesTransmitter messagesTransmitter = new MessagesTransmitter(socketOutputStream, session);
                             messagesTransmitter.messageTransmitter();
 
                             // start messages receiver
-                            userMessageReceiver = new UserMessageReceiver(socketInputStream, session, serverData.getConnectCounter(), serverData.getSessionId(), chatTableDao);
+                            final UserMessageReceiver userMessageReceiver = new UserMessageReceiver(socketInputStream, serverData.getConnectCounter(), serverData.getSessionId(), new ChatDao(applicationContext, session));
                             userMessageReceiver.userMessageReceiver();
 
-                            IErrorHandler userMessageReceiverErrHdlr = new IErrorHandler() {
+                            IExitHandler userMessageReceiverErrHdlr = new IExitHandler() {
                                 @Override
-                                public void errorHappened(Throwable t) {
+                                public void exitByError(String s, Exception e) {
+                                    try {
+                                        socket.close();
+                                    } catch (IOException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                    messagesTransmitter.stopThread();
+                                }
+                                @Override
+                                public void exitByRequest() {
+                                    try {
+                                        socket.close();
+                                    } catch (IOException e1) {
+                                        e1.printStackTrace();
+                                    }
                                     messagesTransmitter.stopThread();
                                 }
                             };
+                            userMessageReceiver.setExitHandler(userMessageReceiverErrHdlr);
 
-
-                            while (true) {
-                                if (userMessageReceiver.getStopped() || messagesTransmitter.getStopped()) {
-                                    // stop threads
-
+                            IExitHandler userMessageTransmitterErrHdlr = new IExitHandler() {
+                                @Override
+                                public void exitByError(String s, Exception e) {
                                     userMessageReceiver.stopThread();
-                                    // wait to stop messages-transmitter and close session and connection
-                                    TimeUnit.MILLISECONDS.sleep(300);
-                                    logConHndl.info("Session is closed. Socket is closed.");
-                                    // stop this loop
-                                    break;
                                 }
-                                TimeUnit.MILLISECONDS.sleep(500);
-                            }
+                                @Override
+                                public void exitByRequest() {
+                                    userMessageReceiver.stopThread();
+                                }
+                            };
+                            messagesTransmitter.setExitHandler(userMessageTransmitterErrHdlr);
+
+
                         } else {
                             logConHndl.info("Authorization is failed. User not match!");
                         }
                     } else {
                         logConHndl.info("Authorization is failed. Authorization data is empty!");
                     }
+
                 }
                 catch(Exception exception) {
                     // exception handling
-                    logConHndl.error("ChatTCPServerHandler error: " + exception);
-                    // stop receiver - transmitter threads
-                    if (messagesTransmitter != null) {
-                        messagesTransmitter.stopThread();
-                    }
-                    if (userMessageReceiver != null) {
-                        userMessageReceiver.stopThread();
-                    }
-                    // wait to stop messages-transmitter and close session and connection
-                    try {
-                        TimeUnit.SECONDS.sleep(1);
-                    } catch (InterruptedException e) {
-                        logConHndl.error("Timer error. 1.");
-                        e.printStackTrace();
-                    }
+                    logConHndl.error("Connection handler thread error: " + exception);
                     logConHndl.info("Session is closed. Socket is closed.");
+                    if (socket != null) {
+                        try {
+                            socket.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    return;
                 } finally {
-                    logConHndl.info("ChatTCPHandler thread was stopped. 1.");
+                    logConHndl.info("Connection handler thread is over.");
                 }
             }
         }).start();
@@ -132,16 +138,6 @@ public class ConnectionHandler extends Thread implements IConnectionHandler, Dis
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-
         this.applicationContext = applicationContext;
     }
 }
-
-
-
-
-//                    // App context
-//                    AbstractApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
-//
-//                    // Create new session
-//                    Session session = (Session) context.getBean("session");

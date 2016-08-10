@@ -17,6 +17,7 @@ public class MessagesTransmitter {
     private OutputStream outputStream;
     private Session session;
     private volatile boolean stopped;
+    private IExitHandler exitHandler;
 
     private static Logger logMesTrans = Logger.getLogger(MessagesTransmitter.class.getName());
 
@@ -55,7 +56,6 @@ public class MessagesTransmitter {
 
                     // refresh client messages list
                     while (!stopped) {
-//                        TimeUnit.SECONDS.sleep(1);
                         if (AllowCachig.getAllow() == true) {
                             lastChatTable = session.createQuery("from " + ChatTable.class.getName() + " order by id_message desc").setMaxResults(5).list();
                             if (lastChatTable.size() != 0) {
@@ -76,8 +76,13 @@ public class MessagesTransmitter {
                     logMesTrans.error("Messages Transmitter error: " + exception);
                     stopThread();
                     exception.printStackTrace();
+                    exitHandler.exitByError("Connection unexpectedly closed", exception);
                 }
             }
         }).start();
+    }
+
+    public void setExitHandler(IExitHandler exitHandler) {
+        this.exitHandler = exitHandler;
     }
 }

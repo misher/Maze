@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -41,15 +42,15 @@ public class SpringConfig {
 
 
     @Bean(name = "connectionHandler")
-    public ConnectionHandler getConnectionHandler() {
+    public ConnectionHandler getConnectionHandler(ApplicationContext applicationContext) {
         Session thisSession = getSession();
-        return new ConnectionHandler(thisSession, getChatTableDao(thisSession));
+        return new ConnectionHandler(thisSession, applicationContext);
     }
 
 
     @Bean(name = "serverConnection")
-    public ServerConnection getServerConnection() throws SQLException {
-        ServerConnection serverConnection = new ServerConnection(initializeDataBase(), 0, getConnectionHandler());
+    public ServerConnection getServerConnection(ApplicationContext applicationContext) throws SQLException {
+        ServerConnection serverConnection = new ServerConnection(initializeDataBase(), 0, getConnectionHandler(applicationContext), applicationContext);
         serverConnection.toAcceptConnection();
         return serverConnection;
     }

@@ -15,6 +15,8 @@ public class ServerStart {
 
     public static void main (String[] args) throws SQLException, InterruptedException {
 
+
+
         // To configure logger (log4j) properties
         PropertyConfigurator.configure("log4j.properties");
 
@@ -22,7 +24,7 @@ public class ServerStart {
         AbstractApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
 
         // Start server
-        context.getBean("serverConnection");
+        context.getBean("serverConnection", context);
 
     }
 

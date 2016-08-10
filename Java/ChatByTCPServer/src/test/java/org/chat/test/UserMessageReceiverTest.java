@@ -1,9 +1,6 @@
 package org.chat.test;
 
-import org.chat.common.ChatTable;
-import org.chat.common.ChatTableDao;
-import org.chat.common.SpringConfig;
-import org.chat.common.UserMessageReceiver;
+import org.chat.common.*;
 import org.chat.persistence.HibernateUtil;
 import org.hibernate.Session;
 import org.junit.Test;
@@ -35,10 +32,8 @@ public class UserMessageReceiverTest {
         // App context
         AbstractApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
 
-        // Get DAO
-        ChatTableDao chatTableDao = (ChatTableDao) context.getBean("chatTableDao", session);
 
-        UserMessageReceiver userMessagesReceiver = new UserMessageReceiver(inputStream, session, 0, 0, chatTableDao);
+        UserMessageReceiver userMessagesReceiver = new UserMessageReceiver(inputStream, 0, 0, new ChatDao(context, session));
         userMessagesReceiver.userMessageReceiver();
 
         // wait a few time

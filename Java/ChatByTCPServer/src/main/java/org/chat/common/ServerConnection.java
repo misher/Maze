@@ -2,6 +2,7 @@ package org.chat.common;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.context.ApplicationContext;
 
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -16,14 +17,16 @@ public class ServerConnection implements IConnection, DisposableBean {
     private int sessionId;
     private int connectCounter = 0;
     private IConnectionHandler connectionHandler;
+    private ApplicationContext applicationContext;
 
     private static Logger logServerCon = Logger.getLogger(ServerConnection.class.getName());
 
 
-    public ServerConnection(int sessionId, int connectCounter, IConnectionHandler iConnectionHandlerIn) {
+    public ServerConnection(int sessionId, int connectCounter, IConnectionHandler iConnectionHandlerIn, ApplicationContext applicationContext) {
         this.sessionId = sessionId;
         this.connectCounter = connectCounter;
         this.connectionHandler = iConnectionHandlerIn;
+        this.applicationContext = applicationContext;
     }
 
 
