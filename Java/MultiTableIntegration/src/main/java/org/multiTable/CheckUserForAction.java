@@ -17,7 +17,7 @@ public class CheckUserForAction {
     }
 
     public boolean checkUserForAction(FieldToSearchEnum fieldToSearchEnum, String name, String actionToCheck) throws SQLException {
-        String searchBy = fieldToSearchEnum.getSearchString(fieldToSearchEnum);
+        String searchBy = fieldToSearchEnum.getSearchString();
         try (Connection con = DriverManager.getConnection(dataBaseInfo.getAddress(), dataBaseInfo.getUser(), dataBaseInfo.getPassword()); Statement stmt = con.createStatement()) {
             String queryOne = "select * from t_users join t_users_roles on t_users_roles.userid = t_users.id " +
                     "join t_roles_actions on t_users_roles.roleid = t_roles_actions.roleid join t_actions on t_roles_actions.actionid = t_actions.id" +

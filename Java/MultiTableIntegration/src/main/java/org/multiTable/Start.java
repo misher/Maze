@@ -2,6 +2,13 @@ package org.multiTable;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 
 
 /**
@@ -24,8 +31,12 @@ public class Start {
 
         System.out.println("Data base was initialized successful.");
 
-        CheckUserForAction checkUserForAction = new CheckUserForAction(dataBaseInfo);
-        System.out.print(checkUserForAction.checkUserForAction(FieldToSearchEnum.NAME, "artur", "updateRepository"));
+//        CheckUserForAction checkUserForAction = new CheckUserForAction(dataBaseInfo);
+//        System.out.print(checkUserForAction.checkUserForAction(FieldToSearchEnum.NAME, "artur", "updateRepository"));
 
+
+        Session session = new HibernateUtil().getSessionFactory().openSession();
+        List<UsersRoles> listUsers = session.createQuery(" select ur from UsersRoles ur inner join ur.user ").list();
+        System.out.println(listUsers.get(0).getUser().getName() + "  " + listUsers.get(0).getRoleId());
     }
 }

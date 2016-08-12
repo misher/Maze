@@ -7,18 +7,15 @@ package org.multiTable;
 
 public enum FieldToSearchEnum {
 
-    LOGIN, NAME, SURNAME;
+    LOGIN("login"), NAME("name"), SURNAME("surname");
 
-    public String getSearchString(FieldToSearchEnum fieldToSearchEnum) {
-        if (fieldToSearchEnum == FieldToSearchEnum.NAME) {
-            return "name";
-        }
-        if (fieldToSearchEnum == FieldToSearchEnum.SURNAME) {
-            return "surname";
-        }
-        if (fieldToSearchEnum == FieldToSearchEnum.LOGIN) {
-            return "login";
-        }
-        return null;
+    private String columnName;
+
+    FieldToSearchEnum(String cn) {
+        this.columnName = cn;
+    }
+
+    public String getSearchString() {
+        return columnName;
     }
 }

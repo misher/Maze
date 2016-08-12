@@ -12,9 +12,11 @@
         <property name="connection.username">root</property>
         <property name="connection.password">mercedesg55amg</property>
         <property name="show_sql">true</property>
-        <!--<mapping resource="org/chat/common/ChatTableEntity.hbm.xml"></mapping>-->
-        <mapping class="org.multiTable.SomeUser"></mapping>
-        <!--<mapping resource="org/chat/common/ChatUsersEntity.hbm.xml"></mapping>-->
-        <mapping class="org.multiTable.SomeRole"></mapping>
+
+        <mapping class="org.multiTable.Users"></mapping>
+        <mapping class="org.multiTable.Roles"></mapping>
+        <mapping class="org.multiTable.UsersRoles"></mapping>
+        <mapping class="org.multiTable.Actions"></mapping>
+        <mapping class="org.multiTable.RolesActions"></mapping>
     </session-factory>
 </hibernate-configuration>
