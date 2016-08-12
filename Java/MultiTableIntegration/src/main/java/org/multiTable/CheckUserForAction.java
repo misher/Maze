@@ -15,32 +15,59 @@ public class CheckUserForAction {
         this.dataBaseInfo = dataBaseInfo;
     }
 
-    public boolean checkUserForActionByName(String name, String action) throws SQLException {
-        List<Integer> rolesEnnumerate = new ArrayList<>();
-        List<String> actionsEnnumerate = new ArrayList<>();
-        int dataBaseId = 0;
+    public boolean checkUserForActionByName(String name, String actionToCheck) throws SQLException {
+        List<String> actionsList = new ArrayList<>();
         try (Connection con = DriverManager.getConnection(dataBaseInfo.getAddress(), dataBaseInfo.getUser(), dataBaseInfo.getPassword()); Statement stmt = con.createStatement()) {
-            String queryOne = "select t_users.name, t_users_roles.roleid from t_users join t_users_roles on t_users_roles.userid = t_users.id " +
-                    "where t_users.name = '" + name + "'";
+            String queryOne = "select * from t_users join t_users_roles on t_users_roles.userid = t_users.id " +
+                    "join t_roles_actions on t_users_roles.roleid = t_roles_actions.roleid join t_actions on t_roles_actions.actionid = t_actions.id where name = '" + name + "'";
             ResultSet resultSet = stmt.executeQuery(queryOne);
             while (resultSet.next()) {
-                dataBaseId = resultSet.getInt(2);
-                rolesEnnumerate.add(dataBaseId);
-            }
-            for (Integer i : rolesEnnumerate) {
-                String queryTwo = "select t_roles_actions.roleid, t_actions.action from t_roles_actions join t_actions on t_actions.id = t_roles_actions.actionid " +
-                        "where t_roles_actions.roleid = '" + i + "'";
-                ResultSet resultSetTwo = stmt.executeQuery(queryTwo);
-                while (resultSetTwo.next()) {
-                    String someAction = resultSetTwo.getString(2);
-                    actionsEnnumerate.add(someAction);
-                }
+                String action = resultSet.getString(13);
+                actionsList.add(action);
             }
         }
-        if (actionsEnnumerate.contains(action)) {
+        if (actionsList.contains(actionToCheck)) {
             return true;
         } else {
             return false;
         }
     }
+
+    public boolean checkUserForActionBySurname(String surname, String actionToCheck) throws SQLException {
+        List<String> actionsList = new ArrayList<>();
+        try (Connection con = DriverManager.getConnection(dataBaseInfo.getAddress(), dataBaseInfo.getUser(), dataBaseInfo.getPassword()); Statement stmt = con.createStatement()) {
+            String queryOne = "select * from t_users join t_users_roles on t_users_roles.userid = t_users.id " +
+                    "join t_roles_actions on t_users_roles.roleid = t_roles_actions.roleid join t_actions on t_roles_actions.actionid = t_actions.id where surname = '" + surname + "'";
+            ResultSet resultSet = stmt.executeQuery(queryOne);
+            while (resultSet.next()) {
+                String action = resultSet.getString(13);
+                actionsList.add(action);
+            }
+        }
+        if (actionsList.contains(actionToCheck)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean checkUserForActionByLogin(String login, String actionToCheck) throws SQLException {
+        List<String> actionsList = new ArrayList<>();
+        try (Connection con = DriverManager.getConnection(dataBaseInfo.getAddress(), dataBaseInfo.getUser(), dataBaseInfo.getPassword()); Statement stmt = con.createStatement()) {
+            String queryOne = "select * from t_users join t_users_roles on t_users_roles.userid = t_users.id " +
+                    "join t_roles_actions on t_users_roles.roleid = t_roles_actions.roleid join t_actions on t_roles_actions.actionid = t_actions.id where login = '" + login + "'";
+            ResultSet resultSet = stmt.executeQuery(queryOne);
+            while (resultSet.next()) {
+                String action = resultSet.getString(13);
+                actionsList.add(action);
+            }
+        }
+        if (actionsList.contains(actionToCheck)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
 }
