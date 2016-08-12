@@ -25,7 +25,7 @@ public class Start {
         System.out.println("Data base was initialized successful.");
 
         CheckUserForAction checkUserForAction = new CheckUserForAction(dataBaseInfo);
-        System.out.print(checkUserForAction.checkUserForActionByName("artur", "updateRepository"));
+        System.out.print(checkUserForAction.checkUserForAction(FieldToSearchEnum.NAME, "artur", "updateRepository"));
 
     }
 }

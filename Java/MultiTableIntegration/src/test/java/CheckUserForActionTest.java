@@ -2,6 +2,7 @@ import org.junit.Test;
 import org.multiTable.CheckUserForAction;
 import org.multiTable.DataBaseInfo;
 import org.multiTable.DataBaseInit;
+import org.multiTable.FieldToSearchEnum;
 
 import java.sql.SQLException;
 
@@ -29,10 +30,12 @@ public class CheckUserForActionTest {
         System.out.println("Data base was initialized successful.");
 
         CheckUserForAction checkUserForAction = new CheckUserForAction(dataBaseInfo);
-        assertEquals("By name: ", true, checkUserForAction.checkUserForActionByName("artur", "updateRepository"));
-        assertEquals("By surname: ", true, checkUserForAction.checkUserForActionBySurname("tsaplin", "createCompany"));
-        assertEquals("By login: ", true, checkUserForAction.checkUserForActionByLogin("misher", "hirePersonal"));
-
+        assertEquals("By name: ", true, checkUserForAction.checkUserForAction(FieldToSearchEnum.NAME, "artur", "updateRepository"));
+        assertEquals("By name: ", false, checkUserForAction.checkUserForAction(FieldToSearchEnum.NAME, "artur00", "updateRepository"));
+        assertEquals("By name: ", false, checkUserForAction.checkUserForAction(FieldToSearchEnum.NAME, "artur", "updateRepository00"));
+        assertEquals("By name: ", true, checkUserForAction.checkUserForAction(FieldToSearchEnum.NAME, "mikhail", "updateRepository"));
+        assertEquals("By surname: ", true, checkUserForAction.checkUserForAction(FieldToSearchEnum.SURNAME, "tsaplin", "createCompany"));
+        assertEquals("By login: ", true, checkUserForAction.checkUserForAction(FieldToSearchEnum.LOGIN, "misher", "destroyCompany"));
     }
 
 }
