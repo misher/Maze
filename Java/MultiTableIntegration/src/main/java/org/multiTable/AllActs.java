@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ *
  * Created by A.V.Tsaplin on 10.08.2016.
  */
 public class AllActs {
