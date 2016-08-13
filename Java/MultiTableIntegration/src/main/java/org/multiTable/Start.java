@@ -31,12 +31,9 @@ public class Start {
 
         System.out.println("Data base was initialized successful.");
 
-//        CheckUserForAction checkUserForAction = new CheckUserForAction(dataBaseInfo);
-//        System.out.print(checkUserForAction.checkUserForAction(FieldToSearchEnum.NAME, "artur", "updateRepository"));
+        CheckUserForActionHibernate checkUserForActionHibernate = new CheckUserForActionHibernate();
+        System.out.println("User able to this action: " + checkUserForActionHibernate.checkUserForActionHibernate(FieldToSearchEnum.NAME, "ilya", "createCompany"));
 
 
-        Session session = new HibernateUtil().getSessionFactory().openSession();
-        List<UsersRoles> listUsers = session.createQuery(" select ur from UsersRoles ur inner join ur.user ").list();
-        System.out.println(listUsers.get(0).getUser().getName() + "  " + listUsers.get(0).getRoleId());
     }
 }

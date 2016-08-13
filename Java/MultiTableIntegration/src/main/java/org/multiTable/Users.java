@@ -86,8 +86,5 @@ public class Users {
     public void setUsersRoles(List<UsersRoles> usersRoles) { this.usersRoles = usersRoles; }
     private List<UsersRoles> usersRoles;
 
-//    public UsersRoles getUsersRoles() { return usersRoles; }
-//    public void setCustomer(UsersRoles usersRoles) { this.usersRoles = usersRoles; }
-//    private UsersRoles usersRoles;
 
 }
