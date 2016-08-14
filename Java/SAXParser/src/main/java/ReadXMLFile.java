@@ -144,7 +144,7 @@ public class ReadXMLFile {
 
             };
 
-            saxParser.parse("c:\\example.xml", handler);
+            saxParser.parse("src\\main\\resources\\example.xml", handler);
 
         } catch (Exception e) {
             e.printStackTrace();
