@@ -39,15 +39,11 @@ public class BinaryTree {
         if (key > startApex.getKey()) {
             if (startApex.lookAtRight() != null) {
                 return get(startApex.lookAtRight(), key);
-            } else {
-                return null;
             }
         }
         if (key < startApex.getKey()) {
             if (startApex.lookAtLeft() != null) {
                 return get(startApex.lookAtLeft(), key);
-            } else {
-                return null;
             }
         }
         return null;
