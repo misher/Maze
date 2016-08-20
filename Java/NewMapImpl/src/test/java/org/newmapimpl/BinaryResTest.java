@@ -13,7 +13,7 @@ public class BinaryResTest {
 
     @Test
     public void binaryResTest() {
-        BinaryApex startBinaryApex = new BinaryApex(0, 0);
+        BinaryApex<Integer, Integer> startBinaryApex = new BinaryApex<>(0, 0);
         BinaryRes binaryRes = new BinaryRes(startBinaryApex);
         binaryRes.add(1, 12);
         binaryRes.add(-2, 13);

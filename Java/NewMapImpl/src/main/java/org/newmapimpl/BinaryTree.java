@@ -8,7 +8,7 @@ package org.newmapimpl;
 public class BinaryTree {
 
     public static boolean add(BinaryApex startApex, Object key, Object value) {
-        BinaryApex binaryApex = new BinaryApex(key, value);
+        BinaryApex<Object, Object> binaryApex = new BinaryApex<>(key, value);
         if (binaryApex.getKey().hashCode() > startApex.getKey().hashCode()) {
             if (startApex.lookAtRight() == null) {
                 startApex.setRightApex(binaryApex);

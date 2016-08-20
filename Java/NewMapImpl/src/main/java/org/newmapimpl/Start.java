@@ -9,7 +9,7 @@ public class Start {
 
     public static void main(String[] args) {
 
-        BinaryApex startBinaryApex = new BinaryApex(0, 0);
+        BinaryApex<Integer, Integer> startBinaryApex = new BinaryApex<>(0, 0);
         BinaryRes binaryRes = new BinaryRes(startBinaryApex);
 
         binaryRes.add(1, 12);
@@ -20,7 +20,7 @@ public class Start {
         binaryRes.add(-6, 100);
         binaryRes.add(-1, 90);
 
-        System.out.print(binaryRes.get("huy"));
+        System.out.print(binaryRes.get("one"));
 
     }
 }
