@@ -21,6 +21,8 @@ public class BinaryTreeTestAdd {
         assertEquals("leftt point test ", 15, startBinaryApex.lookAtLeft().getValue());
         binaryTree.add(startBinaryApex,6, 7);
         assertEquals("right point test in generation ", 7, startBinaryApex.lookAtRight().lookAtLeft().getValue());
+        binaryTree.add(startBinaryApex,6, 7);
+        assertEquals("right point test in generation ", 7, startBinaryApex.lookAtRight().lookAtLeft().getValue());
     }
 
 

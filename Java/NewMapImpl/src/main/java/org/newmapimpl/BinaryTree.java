@@ -7,7 +7,7 @@ package org.newmapimpl;
 
 public class BinaryTree {
 
-    public boolean add(BinaryApex startApex, int key, Object value) {
+    public static boolean add(BinaryApex startApex, int key, Object value) {
         BinaryApex binaryApex = new BinaryApex(key, value);
         if (binaryApex.getKey() > startApex.getKey()) {
             if (startApex.lookAtRight() == null) {
@@ -32,7 +32,7 @@ public class BinaryTree {
         return false;
     }
 
-    public Object get(BinaryApex startApex, int key) {
+    public static Object get(BinaryApex startApex, int key) {
         if (key == startApex.getKey()) {
             return startApex.getValue();
         }
