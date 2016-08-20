@@ -7,9 +7,9 @@ package org.newmapimpl;
 
 public class BinaryTree {
 
-    public static boolean add(BinaryApex startApex, int key, Object value) {
+    public static boolean add(BinaryApex startApex, Object key, Object value) {
         BinaryApex binaryApex = new BinaryApex(key, value);
-        if (binaryApex.getKey() > startApex.getKey()) {
+        if (binaryApex.getKey().hashCode() > startApex.getKey().hashCode()) {
             if (startApex.lookAtRight() == null) {
                 startApex.setRightApex(binaryApex);
                 return true;
@@ -17,7 +17,7 @@ public class BinaryTree {
                 return add(startApex.lookAtRight(), key, value);
             }
         }
-        if (binaryApex.getKey() < startApex.getKey()) {
+        if (binaryApex.getKey().hashCode() < startApex.getKey().hashCode()) {
             if (startApex.lookAtLeft() == null) {
                 startApex.setLeftApex(binaryApex);
                 return true;
@@ -32,16 +32,16 @@ public class BinaryTree {
         return false;
     }
 
-    public static Object get(BinaryApex startApex, int key) {
+    public static Object get(BinaryApex startApex, Object key) {
         if (key == startApex.getKey()) {
             return startApex.getValue();
         }
-        if (key > startApex.getKey()) {
+        if (key.hashCode() > startApex.getKey().hashCode()) {
             if (startApex.lookAtRight() != null) {
                 return get(startApex.lookAtRight(), key);
             }
         }
-        if (key < startApex.getKey()) {
+        if (key.hashCode() < startApex.getKey().hashCode()) {
             if (startApex.lookAtLeft() != null) {
                 return get(startApex.lookAtLeft(), key);
             }

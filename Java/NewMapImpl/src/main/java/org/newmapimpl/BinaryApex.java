@@ -5,15 +5,17 @@ package org.newmapimpl;
  * Created by A.V.Tsaplin on 19.08.2016.
  */
 
-public class BinaryApex {
+// TODO! Override hashcode method to deny collisions
 
-    private int key;
-    private Object value;
+public class BinaryApex<T1, T2> {
+
+    private T1 key;
+    private T2 value;
 
     private BinaryApex leftApex;
     private BinaryApex rightApex;
 
-    public BinaryApex(int key, Object value) {
+    public BinaryApex(T1 key, T2 value) {
         this.key = key;
         this.value = value;
         this.leftApex = null;
@@ -37,13 +39,13 @@ public class BinaryApex {
     }
 
     // getters and setters for key and value
-    public int getKey() {
+    public T1 getKey() {
         return key;
     }
-    public Object getValue() {
+    public T2 getValue() {
         return value;
     }
-    public void setValue(Object value) {
+    public void setValue(T2 value) {
         this.value = value;
     }
 

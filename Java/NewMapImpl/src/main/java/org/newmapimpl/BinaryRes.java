@@ -13,11 +13,11 @@ public class BinaryRes {
         this.startApex = startApex;
     }
 
-    public void add(int key, Object value) {
+    public void add(Object key, Object value) {
         BinaryTree.add(startApex, key, value);
     }
 
-    public Object get(int key) {
+    public Object get(Object key) {
         return BinaryTree.get(startApex, key);
     }
 
