@@ -7,18 +7,20 @@ package org.newmapimpl;
 
 public class BinaryRes {
 
-    BinaryApex startApex;
+    private BinaryApex startApex;
+    private BinaryTree binaryTree;
 
     public BinaryRes(BinaryApex startApex) {
         this.startApex = startApex;
+        this.binaryTree = new BinaryTree();
     }
 
     public void add(Object key, Object value) {
-        BinaryTree.add(startApex, key, value);
+        binaryTree.add(startApex, key, value);
     }
 
     public Object get(Object key) {
-        return BinaryTree.get(startApex, key);
+        return binaryTree.get(startApex, key);
     }
 
 }

@@ -5,8 +5,6 @@ package org.newmapimpl;
  * Created by A.V.Tsaplin on 19.08.2016.
  */
 
-// TODO! Override hashcode method to deny collisions
-
 public class BinaryApex<T1, T2> {
 
     private T1 key;
@@ -14,6 +12,7 @@ public class BinaryApex<T1, T2> {
 
     private BinaryApex leftApex;
     private BinaryApex rightApex;
+
 
     public BinaryApex(T1 key, T2 value) {
         this.key = key;
@@ -48,6 +47,7 @@ public class BinaryApex<T1, T2> {
     public void setValue(T2 value) {
         this.value = value;
     }
+
 
 
 }

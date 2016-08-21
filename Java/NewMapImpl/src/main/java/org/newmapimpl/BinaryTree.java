@@ -1,5 +1,8 @@
 package org.newmapimpl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * Created by A.V.Tsaplin on 19.08.2016.
@@ -7,7 +10,24 @@ package org.newmapimpl;
 
 public class BinaryTree {
 
-    public static boolean add(BinaryApex startApex, Object key, Object value) {
+    private List<BinaryApex<Object, Object>> listOfApexesWithEqualsKeys;
+
+    public BinaryTree() {
+        this.listOfApexesWithEqualsKeys = null;
+    }
+
+    public List<BinaryApex<Object, Object>> getListOfApexesWithEqualsKeys() {
+        return listOfApexesWithEqualsKeys;
+    }
+
+    public void setListOfApexesWithEqualsKeys(BinaryApex<Object, Object> binaryApex) {
+        if (listOfApexesWithEqualsKeys == null) {
+            listOfApexesWithEqualsKeys = new ArrayList<>();
+        }
+        listOfApexesWithEqualsKeys.add(binaryApex);
+    }
+
+    public boolean add(BinaryApex startApex, Object key, Object value) {
         BinaryApex<Object, Object> binaryApex = new BinaryApex<>(key, value);
         if (binaryApex.getKey().hashCode() > startApex.getKey().hashCode()) {
             if (startApex.lookAtRight() == null) {
@@ -25,16 +45,30 @@ public class BinaryTree {
                 return add(startApex.lookAtLeft(), key, value);
             }
         }
-        if (binaryApex.getKey() == startApex.getKey()) {
-            startApex.setValue(binaryApex.getValue());
-            return true;
+        if (binaryApex.getKey().hashCode() == startApex.getKey().hashCode()) {
+            if (!binaryApex.getKey().equals(startApex.getKey())) {
+                setListOfApexesWithEqualsKeys(binaryApex);
+                return true;
+            } else {
+                startApex.setValue(binaryApex.getValue());
+                return true;
+            }
         }
         return false;
     }
 
-    public static Object get(BinaryApex startApex, Object key) {
-        if (key == startApex.getKey()) {
-            return startApex.getValue();
+    public Object get(BinaryApex startApex, Object key) {
+        if (key.hashCode() == startApex.getKey().hashCode()) {
+            if (key.equals(startApex.getKey())) {
+                return startApex.getValue();
+            } else if (getListOfApexesWithEqualsKeys() != null){
+                for (int i = 0; i < getListOfApexesWithEqualsKeys().size(); i++) {
+                    if (key.equals(getListOfApexesWithEqualsKeys().get(i).getKey())) {
+                        return getListOfApexesWithEqualsKeys().get(i).getValue();
+                    }
+                }
+                return null;
+            }
         }
         if (key.hashCode() > startApex.getKey().hashCode()) {
             if (startApex.lookAtRight() != null) {

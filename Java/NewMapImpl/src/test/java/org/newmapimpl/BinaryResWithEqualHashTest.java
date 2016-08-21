@@ -1,29 +1,26 @@
 package org.newmapimpl;
 
+import org.junit.Test;
+
 import java.util.Arrays;
 import java.util.List;
 
+import static junit.framework.TestCase.assertEquals;
+
 /**
  *
- * Created by A.V.Tsaplin on 19.08.2016.
+ * Created by A.V.Tsaplin on 21.08.2016.
  */
 
-public class Start {
+public class BinaryResWithEqualHashTest {
 
-    public static void main(String[] args) {
+    @Test
+    public void binaryResWithEqualHashTest() {
 
         BinaryApex<Integer, Integer> startBinaryApex = new BinaryApex<>(0, 0);
         BinaryRes binaryRes = new BinaryRes(startBinaryApex);
-
         binaryRes.add(1, 12);
         binaryRes.add(-2, 13);
-        binaryRes.add(6, 1);
-        binaryRes.add("one", "two");
-        binaryRes.add(7, 14);
-        binaryRes.add(-6, 100);
-        binaryRes.add(-1, 90);
-        binaryRes.add(-6, 101);
-        binaryRes.add(-6, 102);
 
         List<String> list = Arrays.asList("pollinating sandboxes",
                 "amusement & hemophilias",
@@ -43,9 +40,13 @@ public class Start {
             i++;
         }
 
-
-        System.out.println("Value with non unique key 'electrolysissweeteners.net' = " + binaryRes.get("electrolysissweeteners.net"));
-        System.out.println("Value with unique key '-6' = " + binaryRes.get(-6));
+        assertEquals("Equal hashCode = '0'. Check collision container", 0, binaryRes.get("pollinating sandboxes"));
+        assertEquals("Equal hashCode = '0'. Check collision container", 1, binaryRes.get("amusement & hemophilias"));
+        assertEquals("Equal hashCode = '0'. Check collision container", 3, binaryRes.get("electrolysissweeteners.net"));
+        assertEquals("Equal hashCode = '0'. Check collision container", 11, binaryRes.get("A person who never yodelled an apology, never preened vocalizing transsexuals."));
+        assertEquals("Any get check", 12, binaryRes.get(1));
 
     }
+
+
 }
